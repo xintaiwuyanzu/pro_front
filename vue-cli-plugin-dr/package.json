@@ -1,0 +1,17 @@
+{
+  "name": "vue-cli-plugin-dr",
+  "version": "1.0.0",
+  "description": "",
+  "author": "",
+  "scripts": {},
+  "main": "index.js",
+  "dependencies": {
+    "hard-source-webpack-plugin": "^0.13.1",
+    "progress-bar-webpack-plugin": "^2.1.0"
+  },
+  "optionalDependencies": {
+    "@vue/cli-service": "~4.5.4"
+  },
+  "keywords": [],
+  "license": "ISC"
+}

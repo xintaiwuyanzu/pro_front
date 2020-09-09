@@ -1,0 +1,74 @@
+::-webkit-scrollbar {
+  -webkit-appearance: none;
+  width: 6px;
+  height: 8px
+}
+
+::-webkit-scrollbar-track {
+  background-color: inherit
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #B6B6B6;
+  border: 1px solid #fff;
+  border-radius: 4px
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #9d9d9d
+}
+
+::-webkit-scrollbar-thumb:active {
+  background-color: #838383
+}
+
+::selection {
+  background: #d7dbf0
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, "Helvetica Neue", Helvetica, "Nimbus Sans L", Arial, "Liberation Sans", "PingFang SC", "Hiragino Sans GB", "Source Han Sans CN", "Source Han Sans SC", "Microsoft YaHei", "Wenquanyi Micro Hei", "WenQuanYi Zen Hei", "ST Heiti", SimHei, "WenQuanYi Zen Hei Sharp", sans-serif;
+}
+
+html,
+body {
+  height: 100%;
+  font: caption;
+}
+
+.fade-transform-leave-active,
+.fade-transform-enter-active {
+  transition: all .5s;
+}
+
+.fade-transform-enter {
+  opacity: 0;
+  transform: translateX(-30px);
+}
+
+.fade-transform-leave-to {
+  opacity: 0;
+  transform: translateX(30px);
+}
+
+.el-table--striped .el-table__body tr
+.el-table__row--striped td {
+  background: #FAFAFA
+}
+
+.el-table--striped
+.el-table__body tr
+.el-table__row--striped.current-row td, .el-table__body tr.current-row > td,
+.el-table__body tr.hover-row.current-row > td,
+.el-table__body tr.hover-row.el-table__row--striped.current-row > td,
+.el-table__body tr.hover-row.el-table__row--striped > td,
+.el-table__body tr.hover-row > td {
+  background-color: #409eff1a;
+  /* color: #409EFF;*/
+  color: #3c96ff;
+  font-family: Kartika;
+  font-size: larger;
+}
+
