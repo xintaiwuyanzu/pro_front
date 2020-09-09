@@ -1,0 +1,16 @@
+{
+  //自助借还
+  //"url": "http://192.168.40.6:8081/autoBrrow.html",
+  //数字留声机
+  //"url": "http://yun.jygslib.com.cn/ncpa.html",
+  //有声读物
+  "url": "http://yun.jygslib.com.cn/ysdw.html",
+  //云平台
+  //"url": "http://yun.jygslib.com.cn",
+  //统计大屏
+  //"url": "http://192.168.251.151:8080/navigationservice/opac/index",
+  "node": false,
+  "worker": false,
+  "full": true,
+  "top": false
+}
