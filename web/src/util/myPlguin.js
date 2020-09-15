@@ -4,22 +4,11 @@ import qs from 'qs'
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 import AsyncValidator from 'async-validator'
-import navInfo from '../components/navInfo'
-import icon from '../components/icon'
-import iconSelect from '../components/iconSelect'
-import TreeMenu from '../components/TreeMenu'
-import selectDict from '../components/selectDict'
-import selectPerson from '../components/selectPerson'
-import selectConfig from '../components/selectConfig'
-import inputAssetsType from '../components/inputAssetsType'
-import inputAssetsPurchase from '../components/inputAssetsPurchase'
-import selectInventoryRange from '../components/selectInventoryRange'
-import selectAssets from "../components/selectAssets";
-import selectRoom from "../components/selectRoom";
-
-
 import {Message} from 'element-ui'
-import moment from 'moment'
+import dayjs from 'dayjs'
+import {registerComponent} from "@dr/lib";
+
+registerComponent()
 
 // 重定向login页面
 function routeLogin(options) {
@@ -29,9 +18,9 @@ function routeLogin(options) {
 }
 
 function varType(n) {
-    var typeStr = Object.prototype.toString.call(n)
+    const typeStr = Object.prototype.toString.call(n);
     //var typeOfName = (typeof n);
-    var typeName = ''
+    let typeName = '';
     switch (typeStr) {
         case '[object String]':
             typeName = 'string'
@@ -80,12 +69,12 @@ function httpInstance(options) {
         transformRequest(data) {
             // 用户长时间不操作即退出系统
             if (options.store.state.loginTime == 0) {
-                options.store.state.loginTime = moment().format('x')
-            } else if (moment().format('x') - options.store.state.loginTime > 60 * 60 * 1000) {
+                options.store.state.loginTime = dayjs().format('x')
+            } else if (dayjs().format('x') - options.store.state.loginTime > 60 * 60 * 1000) {
                 options.store.state.loginTime = 0
                 options.store.commit('logout')
             } else {
-                options.store.state.loginTime = moment().format('x')
+                options.store.state.loginTime = dayjs().format('x')
             }
             NProgress.start()
             return qs.stringify(data)
@@ -228,19 +217,6 @@ export default {
                 }
             }
         })
-        // 注册自定义组件
-        Vue.component('icon', icon)
-        Vue.component('iconSelect', iconSelect)
-        Vue.component('TreeMenu', TreeMenu)
-        Vue.component('nacInfo', navInfo)
-        Vue.component('selectDict', selectDict)
-        Vue.component('selectPerson', selectPerson)
-        Vue.component('selectConfig', selectConfig)
-        Vue.component('inputAssetsType', inputAssetsType)
-        Vue.component('selectInventoryRange', selectInventoryRange)
-        Vue.component('selectAssets', selectAssets)
-        Vue.component('selectRoom', selectRoom)
-        Vue.component(inputAssetsPurchase)
         // 处理validate的中文显示
         let oldMessage = AsyncValidator.prototype.messages
         AsyncValidator.prototype.messages = function (message) {
@@ -274,7 +250,7 @@ export default {
                 return v
             }
             try {
-                return moment(parseInt(v)).format(fmt)
+                return dayjs(parseInt(v)).format(fmt)
             } catch (e) {
                 return v
             }

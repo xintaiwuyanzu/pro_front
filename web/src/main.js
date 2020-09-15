@@ -6,11 +6,7 @@ import myPlguin from './util/myPlguin'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import './styles/normal.css'
-import jwebV from 'jwebv'
 
-Vue.use(jwebV)
-Vue.config.productionTip = process.env.NODE_ENV == 'development'
-Vue.config.devtools = process.env.NODE_ENV == 'development'
 Vue.use(ElementUI, {size: 'small', zIndex: 3000})
 Vue.use(myPlguin, {router, store})
 router.beforeEach((to, from, next) => {

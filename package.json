@@ -1,5 +1,5 @@
 {
-  "name": "@dr/lib",
+  "name": "@dr/preset",
   "version": "0.1.0",
   "description": "前端工具，用来辅助初始化项目",
   "author": "",

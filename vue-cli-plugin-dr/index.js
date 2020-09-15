@@ -1,43 +1,48 @@
 const hardSource = require('hard-source-webpack-plugin')
 const processPlugin = require('progress-bar-webpack-plugin')
+const webpack = require('webpack')
 module.exports = (api, options) => {
     api.chainWebpack(cfg => {
-        options.productionSourceMap = false
+        //添加缓存
         cfg.plugin('hard-source-webpack-plugin')
             .use(hardSource)
+        //添加进度条
         cfg.plugin('progress-bar-webpack-plugin')
             .use(processPlugin)
+        //添加最小限制
+        cfg.plugin('LimitChunkCountPlugin')
+            .use(webpack.optimize.LimitChunkCountPlugin,
+                [{
+                    maxChunks: 5,
+                    minChunkSize: 1000
+                }])
+        //添加代码打包
         cfg.optimization.splitChunks({
-            chunks: 'all',
             cacheGroups: {
+                ve: {
+                    name: `ve`,
+                    test: /[\\/]node_modules[\\/](vue|vue-router|vuex)[\\/]/,
+                    priority: -9,
+                    chunks: 'initial'
+                },
+                el: {
+                    name: `el`,
+                    test: /[\\/]node_modules[\\/](element-ui)[\\/]/,
+                    priority: -10,
+                    chunks: 'initial'
+                },
                 vendors: {
-                    name: `chunk-vendors`,
+                    name: `vendors`,
                     test: /[\\/]node_modules[\\/]/,
                     priority: -15,
                     chunks: 'initial',
                     reuseExistingChunk: true,
                     enforce: true
                 },
-                ve: {
-                    name: `chunk-ve`,
-                    test: /[\\/]node_modules[\\/](vue|vue-router|vuex)[\\/]/,
-                    priority: -10,
-                    chunks: 'initial',
-                    reuseExistingChunk: true,
-                    enforce: true
-                },
-                el: {
-                    name: `chunk-el`,
-                    test: /[\\/]node_modules[\\/](element-ui)[\\/]/,
-                    priority: -10,
-                    chunks: 'initial',
-                    reuseExistingChunk: true,
-                    enforce: true
-                },
                 common: {
-                    name: `chunk-common`,
+                    name: `common`,
                     minChunks: 2,
-                    priority: -5,
+                    priority: -16,
                     chunks: 'initial',
                     maxInitialRequests: 5,
                     minSize: 0,
@@ -46,5 +51,16 @@ module.exports = (api, options) => {
                 }
             }
         })
+        //如果是多页面，手动添加chunks
+        if (options.pages) {
+            Object.keys(options.pages)
+                .forEach(p => {
+                    cfg.plugin(`html-${p}`)
+                        .tap(args => {
+                            args[0].chunks = ['ve', 'el', 'vendors', 'common', ...args[0].chunks]
+                            return args
+                        })
+                })
+        }
     })
 }

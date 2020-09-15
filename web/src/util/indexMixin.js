@@ -7,10 +7,14 @@ let assetsType = []
 export default {
     props: {
         showSearch: {default: true},
-        query: {type: Object, default () {return {}}}
+        query: {
+            type: Object, default() {
+                return {}
+            }
+        }
     },
     watch: {
-        query (v) {
+        query(v) {
             if (v) {
                 this.loadMenus(v)
             }
@@ -49,7 +53,7 @@ export default {
                 }
             }
         },
-        getCount(v){
+        getCount(v) {
             if (v) {
                 let count = counts.find(d => d.houseID === v)
                 if (count) {
@@ -57,7 +61,7 @@ export default {
                 }
             }
         },
-        getAssetsType(v){
+        getAssetsType(v) {
             if (v) {
                 let type = assetsType.find(d => d.code === v)
                 if (type) {
@@ -66,7 +70,7 @@ export default {
             }
         }
     },
-    data () {
+    data() {
         return {
             data: [],
             page: {
@@ -76,7 +80,7 @@ export default {
             },
             selectIds: [],
             loading: false,
-            notFeeUser:['0059']
+            notFeeUser: ['0059']
         }
     },
     methods: {
@@ -84,7 +88,7 @@ export default {
          * 编辑或新增表单
          * @param form
          */
-        editForm (form) {
+        editForm(form) {
             if (this.$refs.form) {
                 this.$refs.form.editForm(form)
             }
@@ -93,7 +97,7 @@ export default {
          *根据传入的参数加载数据
          * @param params
          */
-        loadData (params, useSearchForm) {
+        loadData(params, useSearchForm) {
             this.loading = true
             if (useSearchForm && this.$refs.form && this.$refs.form.getSearchForm) {
                 params = this.$refs.form.getSearchForm(params)
@@ -104,8 +108,8 @@ export default {
                     this.page.index = data.data.start / data.data.size + 1
                     this.page.size = data.data.size
                     this.page.total = data.data.total
-                    if(this.$refs.form){
-                        this.$refs.form.searchForm = Object.assign(this.$refs.form.searchForm,{pageIndex:this.page.index-1})
+                    if (this.$refs.form) {
+                        this.$refs.form.searchForm = Object.assign(this.$refs.form.searchForm, {pageIndex: this.page.index - 1})
                     }
                 }
                 this.loading = false
@@ -115,7 +119,7 @@ export default {
          *删除指定的数据
          * @param id 指定的数据或者true
          */
-        remove (id) {
+        remove(id) {
             this.$confirm('此操作将删除选中数据, 是否继续?', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
@@ -146,37 +150,37 @@ export default {
             })
 
         },
-        handleTableSelect (row) {
+        handleTableSelect(row) {
             this.selectIds = row.map(r => r.id)
         },
-        getlibs(){
-            this.$http.post('library/page',{page:false}).then(({data}) => {
-                if(data.success){
+        getlibs() {
+            this.$http.post('library/page', {page: false}).then(({data}) => {
+                if (data.success) {
                     libs = data.data
-                }else{
+                } else {
                     this.$message.error(data.message)
                 }
             })
         },
-        getParkList(){
+        getParkList() {
             this.$http.post('park/getAllPark').then(({data}) => {
                 if (data.success) {
                     parks = data.data
-                }else{
+                } else {
                     this.$message.error(data.message)
                 }
             })
         },
-        getBuildList(){
+        getBuildList() {
             this.$http.post('building/getAllBuilding').then(({data}) => {
                 if (data.success) {
                     buildings = data.data
-                }else{
+                } else {
                     this.$message.error(data.message)
                 }
             })
         },
-        getOrgList(){
+        getOrgList() {
             this.loading = true
             this.$http.post('organise/getAllDepartment').then(({data}) => {
                 if (data.success) {
@@ -185,37 +189,23 @@ export default {
                 this.loading = false
             })
         },
-        getCountList(){
+        getCountList() {
             this.$http.post('housePerson/getCountByHouseId').then(({data}) => {
                 if (data.success) {
                     counts = data.data
-                }else{
+                } else {
                     this.$message.error(data.message)
                 }
             })
         },
-        getAssetsTypeList(){
-            this.$http.post('assetsType/page',{parentCode:'root',page:false}).then(({data}) => {
+        getAssetsTypeList() {
+            this.$http.post('assetsType/page', {parentCode: 'root', page: false}).then(({data}) => {
                 if (data.success) {
                     assetsType = data.data
-                }else{
+                } else {
                     this.$message.error(data.message)
                 }
             })
-        },
-        multiply(a, b) {
-            let m = 0,
-                c = a.toString(),
-                d = b.toString();
-            try {
-                m += c.split(".")[1].length
-            } catch (e) {
-            }
-            try {
-                m += d.split(".")[1].length
-            } catch (e) {
-            }
-            return Number(c.replace(".", "")) * Number(d.replace(".", "")) / Math.pow(10, m)
         }
     }
 }

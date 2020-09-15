@@ -1,5 +1,5 @@
 export default {
-    data () {
+    data() {
         return {
             //  是否正在编辑（dialog）
             edit: false,
@@ -21,25 +21,25 @@ export default {
         /**
          *尝试根据搜索表单条件调用父组件搜索
          */
-        search () {
+        search() {
             this.searchForm.pageIndex = 0
             this.$store.commit('setSearchForm', this.searchForm)
-            this.$store.commit('setSearchFormUrl',this.$route.path)
+            this.$store.commit('setSearchFormUrl', this.$route.path)
             if (this.$parent && this.$parent.loadData) {
                 this.$parent.loadData(this.getSearchForm())
-            }else{
+            } else {
                 // 如果form获取不到父组件的loadData方法，则采用事件的方式进行触发加载数据
                 this.$emit('search', this.getSearchForm())
             }
         },
-        getSearchForm (param) {
+        getSearchForm(param) {
             return Object.assign({}, this.searchForm, param)
         },
         /**
          *编辑表单
          * @param formData
          */
-        editForm (formData) {
+        editForm(formData) {
             if (formData) {
                 this.editFormData = Object.assign({}, formData)
                 this.form = Object.assign({}, formData)
@@ -52,7 +52,7 @@ export default {
         /**
          *保存表单
          */
-        saveForm () {
+        saveForm() {
             if (this.$refs.form) {
                 this.loading = true
                 this.$refs.form.validate(valid => {
@@ -72,7 +72,7 @@ export default {
                                 }
                                 if (this.$parent && this.$parent.loadData) {
                                     this.$parent.loadData(this.getSearchForm())
-                                }else{
+                                } else {
                                     // 如果form获取不到父组件的loadData方法，则采用事件的方式进行触发加载数据
                                     this.$emit('search', this.getSearchForm())
                                 }
@@ -90,7 +90,7 @@ export default {
         /**
          * 取消编辑弹窗
          */
-        cancel () {
+        cancel() {
             if (this.$refs.form) {
                 this.$refs.form.resetFields()
                 this.edit = false
@@ -99,29 +99,15 @@ export default {
         /**
          * 初始化表单数据
          */
-        initForm () {
+        initForm() {
             if (this.defaultForm) {
                 this.form = Object.assign({}, this.defaultForm)
             } else {
                 this.form = {}
             }
-        },
-        multiply(a, b) {
-            let m = 0,
-                c = a.toString(),
-                d = b.toString();
-            try {
-                m += c.split(".")[1].length
-            } catch (e) {
-            }
-            try {
-                m += d.split(".")[1].length
-            } catch (e) {
-            }
-            return Number(c.replace(".", "")) * Number(d.replace(".", "")) / Math.pow(10, m)
         }
     },
-    mounted () {
+    mounted() {
         this.initForm()
     }
 }

@@ -1,7 +1,9 @@
 module.exports = {
     productionSourceMap: false,
     pages: {
-        index: {entry: './src/main.js', title: '资产信息化管理系统'},
+        index: {
+            entry: './src/main.js', title: '达融基础开发平台'
+        },
     },
     devServer: {
         port: 80,

@@ -2,6 +2,7 @@
   "name": "front2",
   "version": "0.1.0",
   "private": true,
+  "description": "达融基础开发平台",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build --report",
@@ -9,13 +10,13 @@
     "inspect": "vue-cli-service inspect"
   },
   "dependencies": {
+    "@dr/lib": "0.0.1",
     "async-validator": "^3.4.0",
     "axios": "^0.20.0",
     "core-js": "^3.6.5",
+    "dayjs": "^1.8.35",
     "element-ui": "^2.13.2",
     "js-base64": "^3.4.5",
-    "jwebv": "^1.0.34",
-    "moment": "^2.27.0",
     "nprogress": "^0.2.0",
     "qs": "^6.9.4",
     "uuid": "^8.3.0",

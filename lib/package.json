@@ -1,0 +1,16 @@
+{
+  "name": "@dr/lib",
+  "version": "0.0.1",
+  "description": "通用工具库",
+  "main": "index.js",
+  "dependencies": {
+    "axios": "^0.20.0",
+    "element-ui": "^2.13.2",
+    "js-base64": "^3.4.5",
+    "nprogress": "^0.2.0",
+    "qs": "^6.9.4",
+    "vue": "^2.6.12",
+    "vue-router": "^3.4.3",
+    "vuex": "^3.5.1"
+  }
+}
