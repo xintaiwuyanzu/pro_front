@@ -13,8 +13,8 @@ module.exports = (api, options) => {
         cfg.plugin('LimitChunkCountPlugin')
             .use(webpack.optimize.LimitChunkCountPlugin,
                 [{
-                    maxChunks: 5,
-                    minChunkSize: 1000
+                    maxChunks: 200,
+                    minChunkSize: 5120
                 }])
         //添加代码打包
         cfg.optimization.splitChunks({
@@ -25,19 +25,23 @@ module.exports = (api, options) => {
                     priority: -9,
                     chunks: 'initial'
                 },
+                ec: {
+                    name: `ec`,
+                    test: /[\\/]node_modules[\\/](echarts|v-charts)[\\/]/,
+                    priority: -9,
+                    chunks: 'initial'
+                },
                 el: {
                     name: `el`,
                     test: /[\\/]node_modules[\\/](element-ui)[\\/]/,
-                    priority: -10,
+                    priority: -9,
                     chunks: 'initial'
                 },
                 vendors: {
                     name: `vendors`,
                     test: /[\\/]node_modules[\\/]/,
                     priority: -15,
-                    chunks: 'initial',
-                    reuseExistingChunk: true,
-                    enforce: true
+                    chunks: 'initial'
                 },
                 common: {
                     name: `common`,
@@ -57,7 +61,7 @@ module.exports = (api, options) => {
                 .forEach(p => {
                     cfg.plugin(`html-${p}`)
                         .tap(args => {
-                            args[0].chunks = ['ve', 'el', 'vendors', 'common', ...args[0].chunks]
+                            args[0].chunks = ['ve', 'el', 'ec', 'vendors', 'common', ...args[0].chunks]
                             return args
                         })
                 })
