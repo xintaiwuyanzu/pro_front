@@ -2,13 +2,9 @@ import axios from 'axios'
 import {mapActions, mapGetters, mapMutations, mapState} from 'vuex'
 import qs from 'qs'
 import NProgress from 'nprogress'
-import 'nprogress/nprogress.css'
 import AsyncValidator from 'async-validator'
 import {Message} from 'element-ui'
 import dayjs from 'dayjs'
-import {registerComponent} from "@dr/lib";
-
-registerComponent()
 
 // 重定向login页面
 function routeLogin(options) {

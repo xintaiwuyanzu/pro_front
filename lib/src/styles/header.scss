@@ -1,0 +1,28 @@
+.header {
+  background-image: linear-gradient(#337bea, #116cdc);
+  vertical-align: middle;
+  height: $--header-height !important;
+
+  .header-content {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    color: white;
+
+    .userName {
+      font-size: 16px;
+      font-weight: bold;
+      margin-right: 10px;
+    }
+
+    .section {
+      display: flex;
+      align-items: center;
+      margin-left: auto;
+
+      .el-tag {
+        color: #ffffff;
+      }
+    }
+  }
+}

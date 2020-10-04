@@ -24,3 +24,4 @@ pnpm-debug.log*
 *.iml
 */package-lock.json
 /web/dist
+*/yarn.lock
