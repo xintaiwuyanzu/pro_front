@@ -6,7 +6,7 @@ module.exports = {
     /**
      *文件匹配正则
      */
-    fileNameMatcher: '+(*.js|*/index.js)',
+    fileNameMatcher: ['+(*.js|*.jsx)', '*/+(index.js|index.jsx)'],
     /**
      * 判断是否能够替换
      */

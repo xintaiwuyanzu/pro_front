@@ -1,19 +1,28 @@
-<script lang="jsx">
+<template>
+  <section class="leftMenu">
+    <el-menu class="menu"
+             :loading="loading"
+             unique-opened
+             :text-color="textColor"
+             :active-text-color="activeTextColor"
+             :background-color="backgroundColor">
+      <tree-menu :menu-data="menus"/>
+    </el-menu>
+  </section>
+</template>
+<script>
+import AbstractMenu from "./AbstractMenu";
 import TreeMenu from "./TreeMenu";
 import {Menu} from 'element-ui'
+import '../../styles/left.scss'
 
 export default {
-  components: {TreeMenu, ElMenu: Menu},
-  render() {
-    return <section className="leftMenu">
-      <el-menu className="menu"
-               unique-opened
-               text-color="#000000"
-               active-text-color="#e0efff"
-               background-color="#FFFFFF">
-        <tree-menu/>
-      </el-menu>
-    </section>
-  }
+  props: {
+    textColor: {default: "#000000"},
+    activeTextColor: {default: "#e0efff"},
+    backgroundColor: {default: "#FFFFFF"}
+  },
+  extends: AbstractMenu,
+  components: {TreeMenu, ElMenu: Menu}
 }
 </script>

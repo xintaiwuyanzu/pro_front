@@ -1,26 +1,23 @@
 {
   "name": "vue-cli-plugin-dr",
   "version": "1.0.0",
-  "description": "",
-  "author": "",
-  "scripts": {},
+  "description": "达融自动辅助前端模块化//TODO 这里可以处理成自动扫描的",
   "main": "index.js",
   "dependencies": {
     "buffer-json": "^2.0.0",
+    "core-js": "^3.6.5",
     "find-cache-dir": "^3.3.1",
     "glob": "^7.1.6",
     "graceful-fs": "^4.2.4",
     "hard-source-webpack-plugin": "^0.13.1",
-    "write-json-file": "^4.3.0",
     "sass": "^1.26.5",
-    "sass-loader": "^10.0.2"
+    "sass-loader": "^10.0.2",
+    "write-json-file": "^4.3.0"
   },
   "optionalDependencies": {
-    "@vue/cli-service": "^4.5.4"
-  },
-  "keywords": [],
-  "license": "ISC",
-  "devDependencies": {
-    "loader-utils": "^2.0.0"
+    "@vue/cli-service": "^4.5.4",
+    "@vue/cli-shared-utils": "^4.5.6",
+    "loader-utils": "^2.0.0",
+    "webpack": "^4.44.2"
   }
 }

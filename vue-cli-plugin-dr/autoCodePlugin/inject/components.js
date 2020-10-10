@@ -21,7 +21,7 @@ module.exports = {
      * @returns {string}
      */
     template({name, path, fullPath}) {
-        return `vue.component("${name}",require("${fullPath}").default)`
+        return `vue.component("${name}",()=>import(/* webpackChunkName: "${name}" */"${fullPath}"))`
     },
     /**
      * join连接符

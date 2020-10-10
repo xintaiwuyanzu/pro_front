@@ -38,12 +38,14 @@ module.exports = {
     },
     cacheWrite(key, data, callback) {
         const {result} = data
-        const sources = result[1].sources
-        for (const s in sources) {
-            const p = path.resolve(sources[s])
-            if (nocacheSet.has(p)) {
-                callback()
-                return;
+        if (result[1]) {
+            const sources = result[1].sources
+            for (const s in sources) {
+                const p = path.resolve(sources[s])
+                if (nocacheSet.has(p)) {
+                    callback()
+                    return;
+                }
             }
         }
         write(key, data, callback)
@@ -68,7 +70,14 @@ module.exports = {
         }
 
         const transpileDepRegex = genTranspileDepRegex(options.transpileDependencies)
-        const dirName = p => path.dirname(require.resolve(p))
+        const dirName = p => {
+            try {
+                p = require.resolve(p)
+            } catch (e) {
+                p = path.resolve(process.cwd(), 'node_modules/', p)
+            }
+            return path.dirname(p)
+        }
         const cliServicePath = dirName('@vue/cli-service')
 
         const excludePkgs = drOptions.libs.map(dirName)

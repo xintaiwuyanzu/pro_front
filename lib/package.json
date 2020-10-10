@@ -5,14 +5,21 @@
   "main": "index.js",
   "dlib": true,
   "dependencies": {
+    "@types/js-cookie": "^2.2.6",
     "axios": "^0.20.0",
     "element-ui": "^2.13.2",
     "js-base64": "^3.4.5",
+    "js-cookie": "^2.2.1",
     "nprogress": "^0.2.0",
     "qs": "^6.9.4",
     "vue": "^2.6.12",
     "vue-icon": "^2.1.2",
     "vue-router": "^3.4.3",
     "vuex": "^3.5.1"
+  },
+  "devDependencies": {
+    "babel-eslint": "^10.1.0",
+    "eslint": "^7.8.1",
+    "eslint-plugin-vue": "^6.2.2"
   }
 }

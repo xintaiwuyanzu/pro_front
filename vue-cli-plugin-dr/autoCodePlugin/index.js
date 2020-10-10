@@ -9,6 +9,7 @@ const utils = require('./utils')
 module.exports = function (content, map, meta) {
     let options = loadUtils.getOptions(this);
     options.context = this.context
+    options.resourcePath = this.resourcePath
     //确定异步执行
     const callback = this.async();
     //异步判断是否需要修改代码

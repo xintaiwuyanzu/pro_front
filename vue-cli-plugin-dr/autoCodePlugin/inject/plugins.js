@@ -6,7 +6,7 @@ module.exports = {
     /**
      *文件匹配正则
      */
-    fileNameMatcher: '*.js',
+    fileNameMatcher: ['+(*.js|*.jsx)', '*/+(index.js|index.jsx)'],
     /**
      * 判断是否能够替换
      */
@@ -17,11 +17,11 @@ module.exports = {
      * @param path
      * @returns {string}
      */
-    template({name, path}) {
-        return `{path:${path},component: () => import(/* webpackChunkName: "ck-[index]" */'${path}')}`
+    template({name, path, fullPath}) {
+        return `require('${fullPath}').default(vue,ops)`
     },
     /**
      * join连接符
      */
-    separator: ',\r\n'
+    separator: '\r\n'
 }

@@ -21,10 +21,7 @@ const makeArray = (arr) => {
  * @returns {{libs: *, views: *}}
  */
 const parseOptions = ({service}, options) => {
-    let drOpt = options.pluginOptions.dr
-    if (!drOpt) {
-        drOpt = {}
-    }
+    let drOpt = options.pluginOptions ? options.pluginOptions.dr : {}
     const {pkg, context} = service
     //router　视图　　库文件
     let {views, libs} = drOpt
@@ -38,7 +35,7 @@ const parseOptions = ({service}, options) => {
     }
     return {views, libs}
 }
-
+module.exports.default = {AA:""}
 module.exports = (api, options) => {
     const drOptions = parseOptions(api, options)
     //计算hash，用来缓存计算
@@ -76,7 +73,7 @@ module.exports = (api, options) => {
             cacheGroups: {
                 ve: {
                     name: `ve`,
-                    test: /[\\/]node_modules[\\/](vue|vue-router|vuex)[\\/]/,
+                    test: /[\\/]node_modules[\\/](vue|vue-router|vuex|core-js)[\\/]/,
                     priority: -9,
                     chunks: 'initial'
                 },

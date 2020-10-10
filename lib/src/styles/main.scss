@@ -1,11 +1,12 @@
-.main {
+@import "var.scss";
+
+.root {
   height: 100%;
   overflow: auto;
 
   @import "header";
-  @import "left";
 
-  .main-content {
+  .main {
     overflow: auto;
     padding: 0px;
     height: 100%;
