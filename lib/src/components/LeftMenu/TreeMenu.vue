@@ -6,16 +6,6 @@ export default {
   props: {
     menuData: {type: Array, default: () => []}
   },
-  methods: {
-    menuClick(menu) {
-      let url = menu.data.url
-      if (url.indexOf('http:') >= 0 || url.indexOf('https:') >= 0) {
-        this.$router.push({name: 'frame', params: {$url: url}, query: {$url: url}})
-      } else {
-        this.$router.push(menu.data.url)
-      }
-    }
-  },
   render() {
     return (
         <section>
@@ -32,7 +22,7 @@ export default {
               )
             } else {
               return (
-                  <el-menu-item index={m.id} onClick={() => this.menuClick(m)}>
+                  <el-menu-item index={m.id} onClick={() => this.$store.commit('menuChange', m)}>
                     <icon icon={m.data.icon}/>
                     <span slot="title" class="stitle">{m.label}</span>
                   </el-menu-item>

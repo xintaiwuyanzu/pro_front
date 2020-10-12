@@ -2,8 +2,13 @@
   "name": "@dr/lib",
   "version": "0.0.1",
   "description": "通用工具库",
-  "main": "index.js",
+  "main": "./src/lib/index.js",
   "dlib": true,
+  "scripts": {
+    "build": "vue-cli-service build --report",
+    "serve": "vue-cli-service serve",
+    "genTheme": "vue-cli-service genTheme"
+  },
   "dependencies": {
     "@types/js-cookie": "^2.2.6",
     "axios": "^0.20.0",
@@ -18,8 +23,12 @@
     "vuex": "^3.5.1"
   },
   "devDependencies": {
+    "@vue/cli-plugin-babel": "~4.5.0",
+    "@vue/cli-plugin-eslint": "~4.5.0",
+    "@vue/cli-service": "~4.5.0",
     "babel-eslint": "^10.1.0",
     "eslint": "^7.8.1",
-    "eslint-plugin-vue": "^6.2.2"
+    "eslint-plugin-vue": "^6.2.2",
+    "vue-cli-plugin-dr": "^1.0.0"
   }
 }

@@ -1,7 +1,7 @@
 <template>
   <section class="leftMenu">
     <el-menu class="menu"
-             :loading="loading"
+             :loading="dataLoading"
              unique-opened
              :text-color="textColor"
              :active-text-color="activeTextColor"
@@ -19,7 +19,7 @@ import '../../styles/left.scss'
 export default {
   props: {
     textColor: {default: "#000000"},
-    activeTextColor: {default: "#e0efff"},
+    activeTextColor: {default: "#0a0a86"},
     backgroundColor: {default: "#FFFFFF"}
   },
   extends: AbstractMenu,

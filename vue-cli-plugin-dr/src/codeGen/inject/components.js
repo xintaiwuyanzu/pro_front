@@ -14,6 +14,6 @@ module.exports = {
      * @returns {string}
      */
     template({name, path, fullPath}) {
-        return `{name:"${name}",component:()=>import(/* webpackChunkName: "cpn-${name}" */"${fullPath}")}`
+        return `{name:"${name}",component:import(/* webpackChunkName: "cpn-${name}" */"${fullPath}")}`
     }
 }

@@ -1,5 +1,5 @@
 <template>
-  <tooltip placement="bottom" effect="light">
+  <el-tooltip placement="bottom" effect="light">
     <div slot="content">
       <div>
          <span @click="iconSelected(icon)" v-for="icon in icons" :key="icon">
@@ -13,17 +13,16 @@
       </div>
     </div>
     <icon :icon="defaultIcon"/>
-  </tooltip>
+  </el-tooltip>
 </template>
 <script>
 import icons from 'vue-icon/lib/feather-icons.esm'
-import {Tooltip} from 'element-ui'
 import elIcons from './icon.json'
 import icon from '../icon'
 
 export default {
   name: 'iconSelect',
-  components: {Tooltip, icon},
+  components: {icon},
   props: {value: String},
   data() {
     return {

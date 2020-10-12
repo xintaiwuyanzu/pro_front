@@ -6,12 +6,10 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build --report",
     "lint": "vue-cli-service lint",
-    "genTheme": "vue-cli-service genTheme "
+    "genTheme": "vue-cli-service genTheme"
   },
   "dependencies": {
     "@dr/lib": "^0.0.1",
-    "js-base64": "^3.4.5",
-    "uuid": "^8.3.0",
     "vue": "^2.6.11"
   },
   "devDependencies": {

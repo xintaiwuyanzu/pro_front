@@ -1,4 +1,6 @@
 <script lang="jsx">
+import '../styles/normal.css'
+
 export default {
   render() {
     return (

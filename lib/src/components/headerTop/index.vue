@@ -1,16 +1,16 @@
-<script lang="jsx">
-
+<template>
+  <section class="header-content">
+    <span>{{ title }}</span>
+    <div style="flex: 1">
+    </div>
+  </section>
+</template>
+<script>
 export default {
-  name: 'HeaderTop',
-  functional: true,
-  render(createElement, context) {
-    return (
-        <section>
-          <div style="flex: 1">
-            {context.children}
-          </div>
-        </section>
-    )
+  computed: {
+    title() {
+      return document.title
+    }
   }
 }
 </script>

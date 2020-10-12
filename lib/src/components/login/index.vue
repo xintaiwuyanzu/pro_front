@@ -14,13 +14,13 @@
               </el-form-item>
               <el-form-item>
                 <el-input type="text"
-                          placeholder="请输入用户名" v-model="loginForm.username" :disabled="loading"
+                          placeholder="请输入用户名" v-model="loginForm.username" :disabled="dataLoading"
                           autofocus>
                 </el-input>
               </el-form-item>
               <el-form-item>
                 <el-input placeholder="请输入密码"
-                          v-model="loginForm.password" type="password" :disabled="loading">
+                          v-model="loginForm.password" type="password" :disabled="dataLoading">
                 </el-input>
               </el-form-item>
               <img src="./login.png" style="width:100%;height:auto;margin: auto;" @click="doLogin(loginForm)"/>
