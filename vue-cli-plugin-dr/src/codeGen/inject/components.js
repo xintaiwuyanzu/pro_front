@@ -8,23 +8,12 @@ module.exports = {
      */
     fileNameMatcher: ['+(*.vue|*.js|*.jsx)', '*/+(index.vue|index.js|index.jsx)'],
     /**
-     * 判断是否能够替换
-     */
-    /**
-     * 判断是否能够替换
-     */
-    injectMatcher: /(\/\/inject components here)/,
-    /**
      * 根据变量模板生成要插入的单条字符串
      * @param name
      * @param path
      * @returns {string}
      */
     template({name, path, fullPath}) {
-        return `vue.component("${name}",()=>import(/* webpackChunkName: "${name}" */"${fullPath}"))`
-    },
-    /**
-     * join连接符
-     */
-    separator: '\r\n'
+        return `{name:"${name}",component:()=>import(/* webpackChunkName: "cpn-${name}" */"${fullPath}")}`
+    }
 }

@@ -1,10 +1,13 @@
-const fs = require('fs')
 module.exports = (api, opts, rootOptions) => {
-    /*api.extendPackage({
+    delete api.generator.pkg.dependencies['core-js']
+    api.extendPackage({
         dependencies: {
             '@dr/lib': '^0.0.1'
+        },
+        babel: {
+            presets: ['vue-cli-plugin-dr/preset']
         }
-    });*/
+    })
     /*getMain = () => {
         const tsPath = api.resolve('src/main.ts')
         return fs.existsSync(tsPath) ? 'src/main.ts' : 'src/main.js'

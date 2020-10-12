@@ -1,10 +1,10 @@
-const router = require('./router')
+const views = require('./views')
 const components = require('./components')
 const plugins = require('./plugins')
-const store = require('./store')
+const stores = require('./stores')
 module.exports = {
-    router,
+    views,
     components,
     plugins,
-    store
+    stores
 }

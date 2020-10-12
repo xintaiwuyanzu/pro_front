@@ -8,10 +8,6 @@ module.exports = {
      */
     fileNameMatcher: '**/index.vue',
     /**
-     * 判断是否能够替换
-     */
-    injectMatcher: /(\/\/inject router here)/,
-    /**
      * 根据变量模板生成要插入的单条字符串
      * @param name
      * @param path
@@ -19,9 +15,5 @@ module.exports = {
      */
     template({name, requirePath, fullPath}) {
         return `{path:'/${name}',component: () => import(/* webpackChunkName: "${name}" */'${fullPath}')}`
-    },
-    /**
-     * join连接符
-     */
-    separator: ',\r\n'
+    }
 }
