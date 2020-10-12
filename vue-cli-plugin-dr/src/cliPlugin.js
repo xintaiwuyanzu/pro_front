@@ -1,5 +1,12 @@
 const hardSource = require('hard-source-webpack-plugin')
 const webpack = require('webpack')
+const fs = require('fs')
+const path = require('path')
+let template = 'public/index.html'
+
+if (!fs.existsSync(path.resolve(process.cwd(), template))) {
+    template = require.resolve(`vue-cli-plugin-dr/${template}`)
+}
 module.exports = (api, options) => {
     api.chainWebpack(cfg => {
         //添加缓存
@@ -50,6 +57,15 @@ module.exports = (api, options) => {
                 }
             }
         })
+        const pkg = api.service.pkg
+        const computeTitle = (arg) => {
+            if (arg.title === pkg.name) {
+                if (pkg.description) {
+                    arg.title = pkg.description
+                }
+            }
+        }
+
         //如果是多页面，手动添加chunks
         if (options.pages) {
             Object.keys(options.pages)
@@ -57,8 +73,17 @@ module.exports = (api, options) => {
                     cfg.plugin(`html-${p}`)
                         .tap(args => {
                             args[0].chunks = ['ve', 'el', 'ec', 'vendors', 'common', ...args[0].chunks]
+                            args[0].template = template
+                            computeTitle(args[0])
                             return args
                         })
+                })
+        } else {
+            cfg.plugin('html')
+                .tap(args => {
+                    args[0].template = template
+                    computeTitle(args[0])
+                    return args
                 })
         }
     })
