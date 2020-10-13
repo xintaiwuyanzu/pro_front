@@ -8,6 +8,11 @@ module.exports = () => ({
                 libraryName: 'vue-cli-plugin-dr',
                 libDir: '../.cache/pluginDr',
                 style: false
-            }]
+            }, 'dr'],
+        [require('babel-plugin-component'),
+            {
+                libraryName: 'element-ui',
+                style: false
+            }, 'el']
     ]
 })

@@ -6,8 +6,7 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build --report",
-    "lint": "vue-cli-service lint",
-    "genTheme": "vue-cli-service genTheme"
+    "lint": "vue-cli-service lint"
   },
   "dependencies": {
     "@dr/core": "^0.0.1",

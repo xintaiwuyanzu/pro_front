@@ -5,7 +5,7 @@ const path = require('path')
 let template = 'public/index.html'
 
 if (!fs.existsSync(path.resolve(process.cwd(), template))) {
-    template = require.resolve(`vue-cli-plugin-dr/${template}`)
+    template = path.resolve(process.cwd(), 'node_modules', `vue-cli-plugin-dr/${template}`)
 }
 module.exports = (api, options) => {
     api.chainWebpack(cfg => {
@@ -15,7 +15,7 @@ module.exports = (api, options) => {
         cfg.plugin('LimitChunkCountPlugin')
             .use(webpack.optimize.LimitChunkCountPlugin,
                 [{
-                    maxChunks: 200,
+                    maxChunks: 100,
                     minChunkSize: 5120
                 }])
         //添加代码打包

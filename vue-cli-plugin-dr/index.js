@@ -7,7 +7,7 @@ const command = require('./src/command')
  */
 module.exports = (api, options) => {
     //先注册自定义命令
-    command(api, options)
+    // command(api, options)
     //先动态成成代码
     codeGen(api, options)
     //在魔改配置项

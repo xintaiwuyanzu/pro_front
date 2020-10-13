@@ -1,17 +1,9 @@
 import VueRouter from 'vue-router'
 import {components, views} from 'vue-cli-plugin-dr'
-import error from './error'
-import loading from './loading'
+import utils from './utils'
 
-const makeSync = (component) => {
-    return () => ({
-        component,
-        error,
-        loading
-    })
-}
 const router = ({vue}) => {
-    components.forEach(({name, component}) => vue.component(name, makeSync(component)))
+    components.forEach(({name, component}) => vue.component(name, utils.makeSync(component)))
     vue.use(VueRouter)
     const routes = [
         {path: '/', redirect: '/login'},
@@ -20,7 +12,7 @@ const router = ({vue}) => {
             path: '/main', component: vue.component('indexmain'),
             children:
                 views.map(({path, component}) => ({
-                    path, component: makeSync(component)
+                    path, component: utils.makeSync(component)
                 }))
         }
     ]

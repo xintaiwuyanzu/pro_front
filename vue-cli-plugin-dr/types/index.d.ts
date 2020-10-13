@@ -9,8 +9,13 @@ type components = {
     component: AsyncComponent
 }[]
 type views = RouteConfig[]
-
+/**
+ * 所有的store modules
+ */
 type stores = { name: string, value: Module<any, any> }[]
+/**
+ * element-ui对象
+ */
+type elements = { name: string, component: AsyncComponent, css: Promise<any> }[]
 
 type plugins = { name: string, value(vue: Vue, router: VueRouter, store: Store<any>, opt: any) }[]
-

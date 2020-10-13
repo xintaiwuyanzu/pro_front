@@ -87,6 +87,9 @@ const readLibAndCache = (cacheDir, libs, selector) => {
  */
 module.exports = (api, options) => {
     const {views, libs, selector} = parseOptions(api, options)
+
+    require('./element')(api, libs)
+
     //计算缓存文件夹和环境hash
     const {cacheDirectory, cacheIdentifier} = api.genCacheConfig('pluginDr', {}, ['vue.config.js'])
     //先判断缓存是否存在

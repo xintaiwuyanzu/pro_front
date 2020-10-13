@@ -6,8 +6,7 @@
   "dlib": true,
   "scripts": {
     "build": "vue-cli-service build --report",
-    "serve": "vue-cli-service serve",
-    "genTheme": "vue-cli-service genTheme"
+    "serve": "vue-cli-service serve"
   },
   "dependencies": {
     "@types/js-cookie": "^2.2.6",

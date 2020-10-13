@@ -1,5 +1,31 @@
-import element from "element-ui";
+import {elements} from 'vue-cli-plugin-dr'
+import utils from '../../lib/utils'
+import InfiniteScroll from 'element-ui/lib/infinite-scroll'
+import Loading from 'element-ui/lib/loading'
+import MessageBox from 'element-ui/lib/message-box'
+import Message from 'element-ui/lib/message'
 
 export default (vue, router, store, opt) => {
-    vue.use(element, Object.assign({size: 'small', zIndex: 3000}, opt))
+    vue.prototype.$ELEMENT = {
+        size: opt.size || '',
+        zIndex: opt.zIndex || 2000
+    }
+
+    vue.use(InfiniteScroll)
+    vue.use(Loading.directive);
+
+    vue.prototype.$loading = Loading.service;
+    vue.prototype.$msgbox = MessageBox;
+    vue.prototype.$alert = MessageBox.alert;
+    vue.prototype.$confirm = MessageBox.confirm;
+    vue.prototype.$prompt = MessageBox.prompt;
+    vue.prototype.$notify = Notification;
+    vue.prototype.$message = Message;
+    //是否懒加载element的css样式
+    const lazyCss = opt.lazyCss ? opt.lazyCss : true
+    //将element组件注册成异步组件
+    elements.forEach(e => {
+        vue.component(e.name, lazyCss ? utils.makeSync(e.component, e.css) : utils.makeSync(e.component))
+    })
+
 }
