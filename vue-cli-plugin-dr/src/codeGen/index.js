@@ -32,7 +32,7 @@ const parseOptions = ({service}, options) => {
     views = makeArray(views)
     if (libs) {
         if (libs.length === 0) {
-            libs = [{name: '@dr/lib', index: 0}]
+            libs = [{name: '@dr/core', index: 0}]
         } else {
             libs = libs.map((name, index) => {
                 return {name, index}
