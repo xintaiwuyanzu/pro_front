@@ -5,6 +5,7 @@ const utils = require('./src/utils')
 /**
  * 导出vue-cli-plugin
  * @type {function(*=, *=): void}
+ * //TODO 可以从resolve入手修改
  */
 module.exports = (api, options) => {
     const drOptions = utils.parseOptions(api, options)
