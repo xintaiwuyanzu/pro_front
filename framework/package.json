@@ -1,6 +1,6 @@
 {
   "name": "@dr/framework",
-  "version": "0.1.0",
+  "version": "0.0.1",
   "description": "达融基础开发平台",
   "dlib": true,
   "scripts": {
