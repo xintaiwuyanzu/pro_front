@@ -1,5 +1,5 @@
 import VueRouter from 'vue-router'
-import {components, views} from 'vue-cli-plugin-dr'
+import {components, views} from '@dr/auto'
 import utils from './utils'
 
 const router = ({vue}) => {

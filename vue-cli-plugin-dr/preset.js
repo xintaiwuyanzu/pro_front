@@ -5,10 +5,10 @@ module.exports = () => ({
     plugins: [
         [require('babel-plugin-component'),
             {
-                libraryName: 'vue-cli-plugin-dr',
-                libDir: '../.cache/pluginDr',
+                libraryName: '@dr/auto',
+                libDir: '../../.cache/pluginDr',
                 style: false
-            }, 'dr'],
+            }, 'auto'],
         [require('babel-plugin-component'),
             {
                 libraryName: 'element-ui',

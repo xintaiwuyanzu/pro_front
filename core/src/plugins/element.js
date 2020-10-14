@@ -1,4 +1,4 @@
-import {elements} from 'vue-cli-plugin-dr'
+import {elements} from '@dr/auto'
 import utils from '../../lib/utils'
 import InfiniteScroll from 'element-ui/lib/infinite-scroll'
 import Loading from 'element-ui/lib/loading'

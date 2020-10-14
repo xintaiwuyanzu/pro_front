@@ -1,8 +1,7 @@
 import router from "./router";
 import store from "./store";
 import utils from "./utils";
-import {plugins} from 'vue-cli-plugin-dr'
-
+import {plugins} from '@dr/auto'
 
 /**
  * 启动方法

@@ -9,7 +9,9 @@
     "serve": "vue-cli-service serve"
   },
   "dependencies": {
+    "@dr/auto": "^0.0.1",
     "@types/js-cookie": "^2.2.6",
+    "async-validator": "^3.4.0",
     "axios": "^0.20.0",
     "element-ui": "^2.13.2",
     "js-base64": "^3.4.5",

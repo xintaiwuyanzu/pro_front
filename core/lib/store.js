@@ -1,7 +1,7 @@
 import vuex from 'vuex';
 import createLogger from "vuex/dist/logger";
 import utils from "./utils";
-import {stores} from 'vue-cli-plugin-dr'
+import {stores} from '@dr/auto'
 
 const store = ({vue}) => {
     vue.use(vuex)
