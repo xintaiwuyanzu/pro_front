@@ -47,7 +47,7 @@
 </template>
 
 <script>
-import fromMixin from '@dr/core/lib/util/formMixin'
+import fromMixin from '@dr/auto/lib/util/formMixin'
 
 export default {
   data() {

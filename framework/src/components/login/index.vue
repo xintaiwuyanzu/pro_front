@@ -79,10 +79,6 @@ export default {
         margin-bottom: 2vh;
         margin-left: 13vw;
       }
-
-      .el-input__inner {
-        height: 5vh;
-      }
     }
   }
 }

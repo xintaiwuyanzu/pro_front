@@ -1,4 +1,5 @@
 import vue from 'vue'
-import core from '@dr/core'
+import lib from '@dr/auto/lib'
 
-core.start({vue})
+lib.start({vue})
+window.vue = vue

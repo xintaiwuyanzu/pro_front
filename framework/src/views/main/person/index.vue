@@ -98,7 +98,7 @@
 </template>
 <script>
 import ConfigForm from './form'
-import indexMixin from '@dr/core/lib/util/indexMixin'
+import indexMixin from '@dr/auto/lib/util/indexMixin'
 import Base64 from 'base64-js'
 
 export default {

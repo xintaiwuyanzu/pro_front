@@ -6,10 +6,14 @@ export default {
   components: {vueIcon},
   props: {icon: String, default: {type: String, default: 'setting'}},
   render() {
-    if (this.icon.startsWith('el-icon')) {
-      return <i class={this.icon}/>
+    let icon = this.icon
+    if (!icon) {
+      icon = 'setting'
+    }
+    if (icon.startsWith('el-icon')) {
+      return <i class={icon}/>
     } else {
-      return <vue-icon name={this.icon} class={'svg-icon-' + this.icon}/>
+      return <vue-icon name={icon} class={'svg-icon-' + icon}/>
     }
   }
 }

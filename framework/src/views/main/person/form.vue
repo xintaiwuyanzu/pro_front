@@ -70,7 +70,7 @@
 </template>
 
 <script>
-import fromMixin from '@dr/core/lib/util/formMixin'
+import fromMixin from '@dr/auto/lib/util/formMixin'
 import {Base64} from 'js-base64';
 
 export default {

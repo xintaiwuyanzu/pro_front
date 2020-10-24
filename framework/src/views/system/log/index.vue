@@ -53,7 +53,7 @@
     </section>
 </template>
 <script>
-    import indexMixin from '@dr/core/lib/util/indexMixin'
+    import indexMixin from '@dr/auto/lib/util/indexMixin'
     import readerForm from './form'
 let persons = []
     export default {

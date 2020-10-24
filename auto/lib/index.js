@@ -21,7 +21,12 @@ const start = (opt) => {
     //回调所有的plugin
     Promise.all(plugins.map(makePromise))
         .then(() => {
-            new vue({router: routerInstance, store: storeInstance, render: h => h(vue.component('app'))})
+            let componentName = 'app'
+            if (utils.dev && opt.componentName) {
+                //如果是开发环境，可以直接传componentName参数，直接渲染页面
+                componentName = opt.componentName
+            }
+            new vue({router: routerInstance, store: storeInstance, render: h => h(vue.component(componentName))})
                 .$mount(opt.el ? opt.el : '#app')
         })
 }

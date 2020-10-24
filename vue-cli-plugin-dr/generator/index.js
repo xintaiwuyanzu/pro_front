@@ -2,7 +2,7 @@ module.exports = (api, opts, rootOptions) => {
     delete api.generator.pkg.dependencies['core-js']
     api.extendPackage({
         dependencies: {
-            '@dr/core': '^0.0.1'
+            '@dr/auto': '^0.0.1'
         },
         babel: {
             presets: ['vue-cli-plugin-dr/preset']
