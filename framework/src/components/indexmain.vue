@@ -16,7 +16,7 @@ export default {
   render() {
     const {rootClassName, headerClassName, leftClassName, mainClassName} = this
     return (
-        <el-container class={rootClassName}>
+        <el-container class={rootClassName} direction='vertical'>
           <el-header class={headerClassName}>
             <header-top/>
           </el-header>

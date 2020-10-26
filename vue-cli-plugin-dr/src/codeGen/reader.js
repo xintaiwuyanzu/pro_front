@@ -53,7 +53,7 @@ module.exports.readLib = (libs) => {
  * 读取项目本身的配置
  * @param ops
  */
-module.exports.readPrj = ({views = []}) => {
+module.exports.readPrj = (views = []) => {
     const cwd = path.resolve(process.cwd())
     let data = {}
     Object.entries(injects)
@@ -77,9 +77,8 @@ module.exports.readPrj = ({views = []}) => {
                 })
         })
     if (views.length > 0) {
-        let {router} = data
         const reg = new RegExp(`(${views.join('|')})`)
-        data.router = Object.entries(router)
+        data.views = Object.entries(data.views)
             .filter(([key]) => reg.test(key))
             .reduce((r, [k, v]) => {
                 r[k] = v

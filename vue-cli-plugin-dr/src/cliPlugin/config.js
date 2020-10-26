@@ -84,13 +84,6 @@ function buildBabelExclude({transpileDependencies = []}, libs) {
 
 module.exports = {
     /**
-     * LimitChunkCountPlugin参数
-     */
-    limit: {
-        maxChunks: 100,
-        minChunkSize: 5120
-    },
-    /**
      *optimization.splitChunks参数
      */
     splitChunks: {cacheGroups},

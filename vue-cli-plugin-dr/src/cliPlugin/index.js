@@ -9,12 +9,16 @@ let template = 'public/index.html'
 if (!fs.existsSync(path.resolve(process.cwd(), template))) {
     template = path.resolve(process.cwd(), 'node_modules', `vue-cli-plugin-dr/${template}`)
 }
-module.exports = (api, options, {views, libs, selector}) => {
+module.exports = (api, options, {views, libs, selector, limit}) => {
     api.chainWebpack(cfg => {
         //添加缓存
         cfg.plugin('hard-source-webpack-plugin').use(hardSource)
+        //moment
+        cfg.plugin('moment').use(webpack.ContextReplacementPlugin, [/moment[/\\]locale$/, /zh-cn/])
         //添加最小限制
-        cfg.plugin('LimitChunkCountPlugin').use(webpack.optimize.LimitChunkCountPlugin, [config.limit])
+        if (api.service.mode === 'production') {
+            cfg.plugin('LimitChunkCountPlugin').use(webpack.optimize.LimitChunkCountPlugin, [limit])
+        }
         //添加代码打包
         cfg.optimization.splitChunks(config.splitChunks)
         //babel添加exclude

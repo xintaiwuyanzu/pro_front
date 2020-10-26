@@ -29,7 +29,7 @@ const parseOptions = ({service}, options) => {
     let drOpt = options.pluginOptions ? options.pluginOptions.dr : {}
     const {pkg, context} = service
     //router　视图　　库文件
-    let {views, libs, selector} = drOpt
+    let {views, libs, selector, limit} = drOpt
     views = makeArray(views)
     if (libs) {
         if (libs.length === 0) {
@@ -53,7 +53,11 @@ const parseOptions = ({service}, options) => {
     if (!selector) {
         selector = defaultSelector
     }
-    return {views, libs, selector}
+    limit = Object.assign({
+        maxChunks: 100,
+        minChunkSize: 5120
+    },)
+    return {views, libs, selector, limit}
 }
 module.exports = {
     parseOptions,
