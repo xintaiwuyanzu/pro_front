@@ -58,6 +58,7 @@ export default {
           {validator: this.validateKey, trigger: 'blur'}
         ]
       },
+      path: 'sysDict',
       autoClose: true,
       defaultForm: {
         key: '',

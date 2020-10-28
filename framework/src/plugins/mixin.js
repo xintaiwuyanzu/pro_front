@@ -19,6 +19,16 @@ export default (vue) => {
                     {value: '0', label: '否'}
                 ]
             }
+        },
+        methods: {
+            apiPath() {
+                let path = this.path
+                if (!path) {
+                    const routePath = this.$route.path.split('/')
+                    path = routePath[routePath.length - 1]
+                }
+                return path
+            }
         }
     })
 }

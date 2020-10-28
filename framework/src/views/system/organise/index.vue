@@ -113,12 +113,10 @@ export default {
               page: false
             }).then(({data}) => {
               if (data && data.success) {
-                console.log(data.data)
                 if (data.data.length > 0) {
                   this.$message.error('当前部门下存在用户，暂不能删除！')
                   this.treaLoading = false
                 } else {
-                  console.log(orgId)
                   this.$http.post('/organise/delete', {id: orgId})
                       .then(({data}) => {
                         if (data.success) {

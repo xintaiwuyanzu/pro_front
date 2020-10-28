@@ -23,8 +23,6 @@ export default {
          */
         search() {
             this.searchForm.pageIndex = 0
-            this.$store.commit('setSearchForm', this.searchForm)
-            this.$store.commit('setSearchFormUrl', this.$route.path)
             if (this.$parent && this.$parent.loadData) {
                 this.$parent.loadData(this.getSearchForm())
             } else {

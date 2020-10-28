@@ -1,6 +1,11 @@
 import menuStore from "./menuStore";
 
 export default {
+    computed: {
+        collapse() {
+            return this.$store.state.menu.collapse
+        }
+    },
     data() {
         return {
             menus: []
@@ -26,5 +31,5 @@ export default {
     },
     beforeDestroy() {
         this.$store.unregisterModule('menu')
-    },
+    }
 }

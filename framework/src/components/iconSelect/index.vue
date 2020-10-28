@@ -8,11 +8,11 @@
       </div>
       <div>
         <span @click="iconSelected('el-icon-'+icon)" v-for="icon in elIcons" :key="icon">
-          <icon :icon="'el-icon-'+icon"/>
+          <icon :icon="'el-icon-'+icon" style="width: 20px;font-size: 20px;"/>
         </span>
       </div>
     </div>
-    <icon :icon="defaultIcon"/>
+    <icon :icon="defaultIcon" style="width: 20px;font-size: 20px;"/>
   </el-tooltip>
 </template>
 <script>

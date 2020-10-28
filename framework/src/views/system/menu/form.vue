@@ -1,6 +1,6 @@
 <template>
-  <el-dialog :visible.sync="edit" :title="(form.id?'编辑':'添加')+'菜单'" width="450px">
-    <el-form :model="form" :rules="rules" ref="form" label-width="100px">
+  <el-dialog :visible.sync="edit" :title="(form.id?'编辑':'添加')+'菜单'" width="80%">
+    <el-form :model="form" :rules="rules" ref="form" label-width="120px">
       <el-form-item label="所属系统：">
         <el-input v-model="form.sysName" disabled/>
       </el-form-item>
@@ -40,13 +40,15 @@
 </template>
 <script>
 import fromMixin from '@dr/auto/lib/util/formMixin'
+import {views} from '@dr/auto'
 
 export default {
   mixins: [fromMixin],
   data() {
     return {
       autoClose: true,
-      path: '/sysmenu'
+      path: '/sysmenu',
+      paths: views.map(v => ({value: v.path}))
     }
   },
   methods: {

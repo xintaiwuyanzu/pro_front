@@ -1,6 +1,11 @@
 <template>
   <section>
     <nac-info>
+      <config-form ref="form"
+                   @func="getMsgFromForm"
+                   :organiseId="organiseId"
+                   @getPerson="getPerson"
+                   @search="loadData"/>
     </nac-info>
     <div class="index_main card">
       <el-row>
@@ -27,10 +32,7 @@
           <el-card shadow="hover" style="min-height:85vh;overflow:auto">
             <div slot="header">
               <strong>人员详情</strong>
-
             </div>
-            <config-form ref="form" v-if="showSearch" @func="getMsgFromForm" :organiseId="organiseId"
-                         @getPerson="getPerson"/>
             <div class="table-container" style="height: 65vh">
               <el-table :data="personData" border height="100%">
                 <el-table-column label="排序" type="index" fixed align="center"/>
@@ -45,13 +47,10 @@
                     {{ scope.row.sex|dict({0: '女', 1: '男'}) }}
                   </template>
                 </el-table-column>
-                <el-table-column label="操作" header-align="center" align="center"
-                                 fixed="right">
+                <el-table-column label="操作" header-align="center" align="center" width="180">
                   <template slot-scope="scope">
                     <el-button type="text" size="small" @click="editForm(scope.row)">编 辑</el-button>
                     <el-button type="text" size="small" @click="removePer(scope.row.id)">删 除
-                    </el-button>
-                    <el-button type="text" size="small" @click="showRoleDialog(scope.row)">角色授权
                     </el-button>
                     <el-button type="text" size="small" @click="resetPws(scope.row)">重置密码
                     </el-button>
@@ -68,38 +67,14 @@
             </el-pagination>
           </el-card>
         </el-col>
-        <!--                <per-form ref="perForm"></per-form>-->
       </el-row>
     </div>
-    <el-dialog
-        :title="rolenametitle"
-        :visible.sync="roleDialogVisible">
-
-      <el-row style="min-height: 400px;max-height: 500px;overflow-y: scroll;">
-        <el-tree
-            style="padding-bottom: 100px;padding-left: 30px;"
-            :data="roleTree"
-            show-checkbox
-            :props="props"
-            node-key="id"
-            check-strictly
-            ref="roletree"
-            :default-checked-keys="defaultcheckarray"
-            highlight-current="true"
-            default-expand-all="true">
-        </el-tree>
-      </el-row>
-      <el-row style="text-align: right">
-        <el-button @click="roleDialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="showquan">确 定</el-button>
-      </el-row>
-    </el-dialog>
   </section>
 </template>
 <script>
 import ConfigForm from './form'
 import indexMixin from '@dr/auto/lib/util/indexMixin'
-import Base64 from 'base64-js'
+import {Base64} from 'js-base64'
 
 export default {
   components: {ConfigForm},

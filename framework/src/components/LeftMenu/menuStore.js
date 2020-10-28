@@ -4,11 +4,13 @@
 export default {
     state: {
         menus: [],
-        currentMenu: {}
+        currentMenu: {},
+        collapse: false,
     },
     mutations: {
         menuChange(state, menu) {
             state.currentMenu = menu
+            state.collapse = false
             let url = menu.data.url
             if (url) {
                 if (url.indexOf('http:') >= 0 || url.indexOf('https:') >= 0) {
@@ -17,6 +19,15 @@ export default {
                     this.$router.push(menu.data.url)
                 }
             }
+        },
+        toggleMenu(state) {
+            state.collapse = !state.collapse
+        },
+        openMenu(state) {
+            state.collapse = false
+        },
+        closeMenu(state) {
+            state.collapse = true
         }
     }
 }

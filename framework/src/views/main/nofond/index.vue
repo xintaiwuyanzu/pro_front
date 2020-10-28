@@ -1,3 +1,3 @@
 <template>
-  <div>nofond</div>
+  <div>页面未找到</div>
 </template>

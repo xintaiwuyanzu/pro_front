@@ -1,6 +1,4 @@
 <script lang="jsx">
-import icon from '../icon'
-
 export default {
   name: 'TreeMenu',
   props: {

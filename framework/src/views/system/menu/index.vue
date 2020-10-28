@@ -6,16 +6,8 @@
           <el-select v-model="sysId" ref="sysSelect">
             <el-option v-for="item in options" :key="item.id" :value="item.id" :label="item.sysName">
               <span style="float: left">{{ item.sysName }}</span>
-              <span style="float: right">
-                                    <i class="el-icon-edit-outline" @click="$refs.subsys.editForm(item)"/>
-                                </span>
               <span style="float: right; color: #8492a6; font-size: 13px">{{ item.sysDescription }}</span>
             </el-option>
-            <li class="el-select-dropdown__item">
-              <el-button type="primary" icon="el-icon-circle-plus-outline"
-                         @click="$refs.subsys.editForm()">添加系统
-              </el-button>
-            </li>
           </el-select>
         </el-form-item>
         <el-form-item>
@@ -66,16 +58,17 @@
         </div>
       </el-tree>
     </div>
-    <subsys-form ref="subsys"/>
     <sys-menu-form ref="sysMenu"/>
   </section>
 </template>
 <script>
-import SubsysForm from './subSysform'
 import SysMenuForm from './form'
 
+/**
+ * TODO 这里的数据修改后需要刷新右侧菜单
+ */
 export default {
-  components: {SubsysForm, SysMenuForm},
+  components: {SysMenuForm},
   data() {
     return {
       options: [],
@@ -95,6 +88,8 @@ export default {
   },
   methods: {
     $init() {
+      this.loadSyss()
+      this.$store.commit('closeMenu')
       this.loadData()
     },
     filterNode(value, data) {
@@ -118,7 +113,6 @@ export default {
       this.$http.post('/sysmenu/menutree', {all: true, sysId: this.sysId})
           .then(({data}) => {
             if (data.success) {
-              //this.menuData = data.data ? data.data : []
               let list = data.data ? data.data : []
               for (let i = 0; i < list.length; i++) {
                 if (list[i].data.status == 1) {
@@ -164,9 +158,6 @@ export default {
             this.loadData()
           })
     }
-  },
-  mounted() {
-    this.loadSyss()
   }
 }
 </script>

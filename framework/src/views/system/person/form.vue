@@ -4,21 +4,9 @@
       <el-form-item label="用户姓名" prop="userName">
         <el-input v-model="searchForm.userName" placeholder="请输入用户姓名" clearable/>
       </el-form-item>
-      <el-form-item label="用户编号" prop="userCode">
-        <el-input v-model="searchForm.userCode" placeholder="请输入用户编号" clearable/>
-      </el-form-item>
-      <el-form-item label="用户类型" prop="personType">
-        <el-input v-model="searchForm.personType" placeholder="请输入用户类型" clearable/>
-      </el-form-item>
-      <el-form-item label="是否可用" prop="status">
-        <el-select v-model="searchForm.status" clearable placeholder="请选择是否可用" style="width: 80px">
-          <el-option v-for="item in statusOptions" :key="item.value" :label="item.label" :value="item.value"/>
-        </el-select>
-      </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="searchF()" size="mini">搜 索</el-button>
-        <el-button @click="$refs.searchForm.resetFields()" size="mini">重 置</el-button>
-        <el-button type="primary" @click="editForm()" size="mini" style="margin-left: 50px">添 加</el-button>
+        <el-button type="primary" @click="editForm()" size="mini">添 加</el-button>
       </el-form-item>
     </el-form>
     <el-dialog :visible.sync="edit" :title="(form.id?'编辑':'添加')+'人员'+(form.id?'':'(默认密码123456)')" width="40%">
