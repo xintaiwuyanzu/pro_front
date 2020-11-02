@@ -3,8 +3,29 @@
  */
 $--header-height: 64px !default;
 $--header-background: linear-gradient(#337bea, #116cdc) !default;
-
+//dialog的内边距缩小
 $--dialog-padding-primary: 14px;
+//card的内边距缩小
+$--card-padding: 10px;
+//表格内容内边距
+$--table-content-padding: 8px !default;
 
+//按钮边距
+$--button-padding-vertical-base: 10 !default;
+$--button-padding-horizontal-base: 16 !default;
+
+$--button-padding-vertical: #{$--button-padding-vertical-base}px;
+$--button-padding-horizontal: #{$--button-padding-horizontal-base}px;
+
+$--button-medium-padding-vertical: #{$--button-padding-vertical-base - 2}px;
+$--button-medium-padding-horizontal: #{ $--button-padding-horizontal-base - 2}px;
+
+$--button-small-padding-vertical: #{$--button-padding-vertical-base - 4}px;
+$--button-small-padding-horizontal: #{$--button-padding-horizontal-base - 4}px;
+
+$--button-mini-padding-vertical: #{$--button-padding-vertical-base - 6}px;
+$--button-mini-padding-horizontal: #{$--button-padding-horizontal-base - 4}px;
+
+$--collapse-header-height: 36px;
 $--background-color: #f3f4fc !default;
 $--nav-height: 42px !default;

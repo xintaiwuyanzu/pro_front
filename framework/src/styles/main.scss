@@ -11,6 +11,30 @@
     padding: 0px;
     height: 100%;
 
+    .el-table {
+      th, td {
+        padding: $--table-content-padding 0px;
+      }
+    }
+
+    .el-table--medium {
+      td, th {
+        padding: #{$--table-content-padding - 2} 0px;
+      }
+    }
+
+    .el-table--small {
+      td, th {
+        padding: #{$--table-content-padding - 4} 0px;
+      }
+    }
+
+    .el-table--mini {
+      td, th {
+        padding: #{$--table-content-padding - 6} 0px;
+      }
+    }
+
     .main-container {
       overflow: auto;
       display: flex;
@@ -22,7 +46,6 @@
         flex-direction: column;
         flex: 1;
         padding: 5px;
-        margin-top: 8px;
         overflow: auto;
 
         .table-container {
@@ -62,7 +85,7 @@
           margin-left: auto;
 
           .el-button {
-            padding: 6px 15px;
+            padding: $--button-mini-padding-vertical $--button-mini-padding-horizontal;
             margin-left: 6px;
           }
 

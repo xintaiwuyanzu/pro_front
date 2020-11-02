@@ -13,10 +13,13 @@ export default {
             state.collapse = false
             let url = menu.data.url
             if (url) {
-                if (url.indexOf('http:') >= 0 || url.indexOf('https:') >= 0) {
-                    this.$router.push({name: 'frame', params: {$url: url}, query: {$url: url}})
-                } else {
-                    this.$router.push(menu.data.url)
+                //过滤重复跳转
+                if (this.$router.currentRoute.path !== url) {
+                    if (url.indexOf('http:') >= 0 || url.indexOf('https:') >= 0) {
+                        this.$router.push({name: 'frame', params: {$url: url}, query: {$url: url}})
+                    } else {
+                        this.$router.push(menu.data.url)
+                    }
                 }
             }
         },
