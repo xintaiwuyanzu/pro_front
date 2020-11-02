@@ -12,7 +12,7 @@
           <el-input v-model="form.description" clearable/>
         </el-form-item>
         <el-form-item label="权限类型" prop="type" required>
-          <el-select v-model="form.type" :disabled="!!id" clearable>
+          <el-select v-model="form.type" :disabled="!!id" clearable @change="()=>form.groupId=''">
             <el-option v-for="p in providers" :key="p.type" :label="p.name" :value="p.type"/>
           </el-select>
         </el-form-item>

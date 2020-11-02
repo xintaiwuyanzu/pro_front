@@ -8,23 +8,30 @@ export default {
     },
     data() {
         return {
+            defaultIndex: '',
             menus: []
         }
     },
     methods: {
-        loadMenu(params = {sysId: 'default'}) {
+        async loadMenu(params = {sysId: 'default'}) {
             this.dataLoading = true
-            this.$post('/sysmenu/menutree', params)
-                .then(({data}) => {
-                    if (data.success) {
-                        this.menus = data.data
-                    }
-                    this.dataLoading = false
-                })
+            const data = await this.$post('/sysmenu/menutree', params)
+            this.menus = data.data.data
+            if (this.$route.path === '/main/') {
+                let first = this.menus[0]
+                if (first.children) {
+                    first = first.children[0]
+                }
+                if (first) {
+                    this.$store.commit('menuChange', first)
+                    this.defaultIndex = first.id
+                }
+            }
+            this.dataLoading = false
+        },
+        $init() {
+            this.loadMenu()
         }
-    },
-    mounted() {
-        this.loadMenu()
     },
     beforeMount() {
         this.$store.registerModule('menu', menuStore)

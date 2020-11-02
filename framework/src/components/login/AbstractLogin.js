@@ -39,7 +39,7 @@ export default {
                             //跳转登录
                             let p = this.$router.currentRoute.query.p
                             if (!p) {
-                                p = '/main/frame'
+                                p = '/main/'
                             }
                             this.$router.push(p)
                         } else {

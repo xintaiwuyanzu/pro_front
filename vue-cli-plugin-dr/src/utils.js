@@ -56,7 +56,7 @@ const parseOptions = ({service}, options) => {
     limit = Object.assign({
         maxChunks: 100,
         minChunkSize: 5120
-    },)
+    }, limit)
     return {views, libs, selector, limit}
 }
 module.exports = {

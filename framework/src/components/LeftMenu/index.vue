@@ -1,7 +1,9 @@
 <template>
   <section class="leftMenu">
     <el-menu class="menu"
+             ref="menu"
              :loading="dataLoading"
+             :default-active="defaultIndex"
              :collapse="collapse"
              unique-opened>
       <tree-menu :menu-data="menus"/>
