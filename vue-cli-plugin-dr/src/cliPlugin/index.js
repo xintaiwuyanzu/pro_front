@@ -1,4 +1,5 @@
 const hardSource = require('hard-source-webpack-plugin')
+const compress = require('compression-webpack-plugin')
 const webpack = require('webpack')
 const fs = require('fs')
 const path = require('path')
@@ -7,7 +8,7 @@ let template = 'public/index.html'
 
 
 if (!fs.existsSync(path.resolve(process.cwd(), template))) {
-    template = path.resolve(process.cwd(), 'node_modules', `vue-cli-plugin-dr/${template}`)
+    template = path.resolve(process.cwd(), 'node_modules', `@dr/vue-cli-plugin-dr/${template}`)
 }
 module.exports = (api, options, {views, libs, selector, limit}) => {
     api.chainWebpack(cfg => {
@@ -17,7 +18,13 @@ module.exports = (api, options, {views, libs, selector, limit}) => {
         cfg.plugin('moment').use(webpack.ContextReplacementPlugin, [/moment[/\\]locale$/, /zh-cn/])
         //添加最小限制
         if (api.service.mode === 'production') {
+            //控制chunk数量
             cfg.plugin('LimitChunkCountPlugin').use(webpack.optimize.LimitChunkCountPlugin, [limit])
+            //gzip压缩文件
+            cfg.plugin('CompressionWebpackPlugin').use(compress, [{
+                test: /\.(js|css|json|txt|html|ico|svg)(\?.*)?$/i,
+                threshold: 10240
+            }])
         }
         //添加代码打包
         cfg.optimization.splitChunks(config.splitChunks)

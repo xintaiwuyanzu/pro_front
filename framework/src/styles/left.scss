@@ -36,7 +36,7 @@
       overflow-x: hidden;
       overflow-y: auto;
       flex: 1;
-      width: 200px;
+      width: $--left-menu-width;
 
       .el-menu-item.is-active {
         height: 64px;
