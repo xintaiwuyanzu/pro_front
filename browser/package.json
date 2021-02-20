@@ -7,18 +7,18 @@
     "dev": "electron-webpack dev",
     "compile": "electron-webpack",
     "dist": "yarn compile && electron-builder",
-    "dist:dir": "yarn dist --dir -c.compression=store -c.mac.identity=null"
+    "dist:dir": "yarn dist --dir -c.compression=store -c.mac.identity=null",
+    "postinstall": "electron-builder install-app-deps"
   },
   "dependencies": {
-    "source-map-support": "^0.5.9",
-    "usb": "^1.5.0"
+    "source-map-support": "^0.5.19"
   },
   "devDependencies": {
-    "electron": "4.0.8",
-    "electron-builder": "^20.36.1",
-    "electron-rebuild": "^1.8.4",
+    "electron": "11.2.1",
+    "electron-builder": "^22.9.1",
+    "electron-rebuild": "^2.3.4",
     "electron-webpack": "^2.6.0",
-    "webpack": "^4.25.1"
+    "webpack": "^4.46.0"
   },
   "build": {
     "appId": "com.dr.drclient",

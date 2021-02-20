@@ -14,6 +14,7 @@ function createMainWindow() {
         show: false,
         webPreferences: {
             webSecurity: false,
+
             nodeIntegration: config.node,
             nodeIntegrationInWorker: config.worker
         },

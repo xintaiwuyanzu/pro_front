@@ -26,3 +26,5 @@ pnpm-debug.log*
 /core/dist
 /framework/dist
 */yarn.lock
+/browser/build
+/browser/dist
