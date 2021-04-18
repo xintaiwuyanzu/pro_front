@@ -1,4 +1,5 @@
 const path = require('path')
+const util = require('../utils')
 const cacheGroups = {
     ve: {
         name: `ve`,
@@ -41,7 +42,8 @@ const {isWindows} = require('@vue/cli-shared-utils')
 function genTranspileDepRegex(transpileDependencies) {
     const deps = transpileDependencies.map(dep => {
         if (typeof dep === 'string') {
-            const depPath = path.join('node_modules', dep, '/')
+            const p = util.moduleDir(dep);
+            const depPath = p.substr(0, p.length - 1)
             return isWindows
                 ? depPath.replace(/\\/g, '\\\\') // double escape for windows style path
                 : depPath

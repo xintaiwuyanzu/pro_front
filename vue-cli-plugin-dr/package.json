@@ -1,13 +1,20 @@
 {
   "name": "@dr/vue-cli-plugin-dr",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "达融自动辅助前端模块化//TODO 这里可以处理成自动扫描的",
   "main": "index.js",
+  "files": [
+    "preset.js",
+    "index.js",
+    "generator",
+    "public",
+    "src"
+  ],
   "dependencies": {
     "@babel/core": "^7.11.6",
     "@vue/babel-preset-app": "^4.5.7",
     "@vue/cli-plugin-babel": "^4.5.0",
-    "babel-plugin-component": "^1.1.1",
+    "babel-plugin-import": "^1.13.3",
     "clean-css": "^4.2.3",
     "compression-webpack-plugin": "^6.1.1",
     "core-js": "^3.6.5",

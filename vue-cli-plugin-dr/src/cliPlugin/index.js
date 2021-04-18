@@ -4,11 +4,12 @@ const webpack = require('webpack')
 const fs = require('fs')
 const path = require('path')
 const config = require('./config')
+const util = require('../utils')
 let template = 'public/index.html'
 
 
 if (!fs.existsSync(path.resolve(process.cwd(), template))) {
-    template = path.resolve(process.cwd(), 'node_modules', `@dr/vue-cli-plugin-dr/${template}`)
+    template = util.moduleFilePath('@dr/vue-cli-plugin-dr', template)
 }
 module.exports = (api, options, {views, libs, selector, limit}) => {
     api.chainWebpack(cfg => {

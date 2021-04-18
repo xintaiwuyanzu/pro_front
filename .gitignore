@@ -25,6 +25,7 @@ pnpm-debug.log*
 */package-lock.json
 /core/dist
 /framework/dist
-*/yarn.lock
+*yarn.lock
 /browser/build
 /browser/dist
+/demo

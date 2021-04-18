@@ -1,0 +1,8 @@
+{
+  "private": "true",
+  "workspaces": [
+    "auto",
+    "framework",
+    "vue-cli-plugin-dr"
+  ]
+}

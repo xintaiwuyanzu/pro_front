@@ -1,16 +1,20 @@
+const path = require('path')
+const babelImport = require('babel-plugin-import')
+const utils = require('./src/utils')
+const cacheDir = path.resolve(process.cwd(), 'node_modules', '.cache', 'pluginDr')
 module.exports = () => ({
     presets: [
         require('@vue/babel-preset-app')
     ],
     plugins: [
-    	//TODO 可以从resolve入手修改
-        [require('babel-plugin-component'),
+        //TODO 可以从resolve入手修改
+        [babelImport,
             {
                 libraryName: '@dr/auto',
-                libDir: '../../.cache/pluginDr',
+                customName: (transformedMethodName) => path.resolve(cacheDir, transformedMethodName),
                 style: false
             }, 'auto'],
-        [require('babel-plugin-component'),
+        [babelImport,
             {
                 libraryName: 'element-ui',
                 style: false

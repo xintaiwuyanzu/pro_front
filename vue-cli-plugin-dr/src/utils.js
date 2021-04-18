@@ -43,7 +43,7 @@ const parseOptions = ({service}, options) => {
         libs = makeArray(libs)
         if (libs.length === 0) {
             libs = Object.keys(pkg.dependencies)
-                .map(p => require(path.resolve(process.cwd(), "node_modules", `${p}/package.json`)))
+                .map(p => require(moduleFilePath(p, `package.json`)))
                 .filter(p => p.dlib)
                 .map((pkg, index) => {
                     return {name: pkg.name, index}
@@ -59,7 +59,22 @@ const parseOptions = ({service}, options) => {
     }, limit)
     return {views, libs, selector, limit}
 }
+
+/**
+ * 获取模块路径
+ * @param mod
+ * @return {string}
+ */
+const moduleDir = (mod) => `${path.dirname(require.resolve(`${mod}/package.json`))}/`
+/**
+ * 获取指定模块的指定文件路径
+ * @param mod
+ * @param subPath
+ */
+const moduleFilePath = (mod, subPath) => path.resolve(moduleDir(mod), subPath)
 module.exports = {
     parseOptions,
-    defaultSelector
+    defaultSelector,
+    moduleDir,
+    moduleFilePath
 }

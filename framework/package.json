@@ -1,6 +1,6 @@
 {
   "name": "@dr/framework",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "达融基础开发平台",
   "dlib": true,
   "scripts": {
@@ -8,6 +8,9 @@
     "build": "vue-cli-service build --report",
     "lint": "vue-cli-service lint"
   },
+  "files": [
+    "src"
+  ],
   "dependencies": {
     "@dr/auto": "^0.0.1",
     "@types/js-cookie": "^2.2.6",
@@ -30,6 +33,6 @@
     "babel-eslint": "^10.1.0",
     "eslint": "^7.8.1",
     "eslint-plugin-vue": "^6.2.2",
-    "vue-cli-plugin-dr": "^1.0.0"
+    "@dr/vue-cli-plugin-dr": "^1.0.0"
   }
 }

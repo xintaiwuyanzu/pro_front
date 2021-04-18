@@ -1,5 +1,5 @@
 module.exports = {
     presets: [
-        'vue-cli-plugin-dr/preset'
+        '@dr/vue-cli-plugin-dr/preset'
     ]
 }

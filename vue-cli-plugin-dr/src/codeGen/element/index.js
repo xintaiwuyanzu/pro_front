@@ -2,7 +2,9 @@ const components = require('./components.json')
 const path = require('path')
 const fs = require('fs')
 const rootPath = process.cwd();
-const elementPath = path.resolve(rootPath, 'node_modules/element-ui/')
+const utils = require('../../utils')
+
+const elementPath = utils.moduleDir('element-ui')
 const elementThemePath = path.resolve(elementPath, 'packages/theme-chalk/src')
 const varPath = 'src/styles/var.scss'
 const eol = require('os').EOL
@@ -18,7 +20,10 @@ const fontPath = path.resolve(elementThemePath, 'fonts').split('\\').join('/')
  * @returns {*}
  */
 const readVars = (api, libs) => {
-    const vars = libs.map(l => path.resolve(rootPath, 'node_modules', l.name, varPath))
+    const vars = libs.map(l => {
+        const modDir = utils.moduleDir(l.name)
+        return path.resolve(modDir, varPath)
+    })
         .filter(p => fs.existsSync(p))
         .reverse()
     const prjVar = path.resolve(rootPath, varPath)
