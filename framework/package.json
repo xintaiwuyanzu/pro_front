@@ -13,26 +13,26 @@
   ],
   "dependencies": {
     "@dr/auto": "^0.0.1",
-    "@types/js-cookie": "^2.2.6",
-    "async-validator": "^3.4.0",
-    "axios": "^0.20.0",
-    "element-ui": "^2.13.2",
-    "js-base64": "^3.4.5",
-    "js-cookie": "^2.2.1",
+    "@types/js-cookie": "^2.2.7",
+    "async-validator": "^3.5.2",
+    "axios": "^0.21.1",
+    "element-ui": "^2.15.4",
+    "js-base64": "^3.6.1",
+    "js-cookie": "^3.0.0",
     "nprogress": "^0.2.0",
-    "qs": "^6.9.4",
-    "vue": "^2.6.12",
-    "vue-icon": "^2.1.2",
-    "vue-router": "^3.4.3",
-    "vuex": "^3.5.1"
+    "qs": "^6.10.1",
+    "vue": "^2.6.14",
+    "vue-icon": "^2.2.0",
+    "vue-router": "^3.5.2",
+    "vuex": "^3.6.2"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "~4.5.0",
-    "@vue/cli-plugin-eslint": "~4.5.0",
-    "@vue/cli-service": "~4.5.0",
+    "@dr/vue-cli-plugin-dr": "^1.0.0",
+    "@vue/cli-plugin-babel": "~4.5.13",
+    "@vue/cli-plugin-eslint": "~4.5.13",
+    "@vue/cli-service": "~4.5.13",
     "babel-eslint": "^10.1.0",
-    "eslint": "^7.8.1",
-    "eslint-plugin-vue": "^6.2.2",
-    "@dr/vue-cli-plugin-dr": "^1.0.0"
+    "eslint": "^6.8.0",
+    "eslint-plugin-vue": "^6.2.2"
   }
 }

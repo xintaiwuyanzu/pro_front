@@ -5,10 +5,9 @@ import jsCookie from 'js-cookie'
  * @type {string}
  */
 const defaultPath = process.env.BASE_URL
-jsCookie.defaults = {path: defaultPath}
+const cookieApi = jsCookie.withAttributes({path: defaultPath})
 const AUTH_KEY = '$auth'
 const DAUTH_KEY = 'dauth'
-
 export default {
     /**
      *获取登录token
@@ -34,15 +33,15 @@ export default {
      *获取前端缓存
      */
     getCookie(key) {
-        return jsCookie.get(key)
+        return cookieApi.get(key)
     },
     /**
      * 设置前端缓存
      */
     setCookie(key, value) {
-        jsCookie.set(key, value)
+        cookieApi.set(key, value)
     },
     cleanCookie(key) {
-        jsCookie.remove(key)
+        cookieApi.remove(key)
     }
 }
