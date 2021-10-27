@@ -23,9 +23,7 @@ pnpm-debug.log*
 *.sw?
 *.iml
 */package-lock.json
-/core/dist
-/framework/dist
+*/dist
+*/build
 *yarn.lock
-/browser/build
-/browser/dist
 /demo

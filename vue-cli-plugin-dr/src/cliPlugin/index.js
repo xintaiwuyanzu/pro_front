@@ -5,13 +5,66 @@ const fs = require('fs')
 const path = require('path')
 const config = require('./config')
 const util = require('../utils')
+//html模板路径
 let template = 'public/index.html'
-
-
 if (!fs.existsSync(path.resolve(process.cwd(), template))) {
     template = util.moduleFilePath('@dr/vue-cli-plugin-dr', template)
 }
+//var.scss 文件是否存在
+const cssVarExist = fs.existsSync(path.resolve(process.cwd(), 'src/styles/var.scss'));
+//入口文件是否存在
+const mainJsExist = fs.existsSync(path.resolve(process.cwd(), 'src/main.js'));
+
+/**
+ * 读取配置或者设置新的配置
+ * @param obj
+ * @param key
+ * @returns {*}
+ */
+const readOrCreate = (obj, key) => {
+    let value = obj[key]
+    if (!value) {
+        value = {}
+        obj[key] = value
+    }
+    return value
+}
+
+
 module.exports = (api, options, {views, libs, selector, limit}) => {
+    //修改css相关默认配置
+    if (!Object.hasOwnProperty(options, 'productionSourceMap')) {
+        options.productionSourceMap = false
+    }
+    const cssOptions = readOrCreate(options, 'css')
+    const loaderOptions = readOrCreate(cssOptions, 'loaderOptions')
+
+    const less = readOrCreate(loaderOptions, 'less')
+    const lessOptions = readOrCreate(less, 'lessOptions')
+    lessOptions.javascriptEnabled = true
+
+    if (cssVarExist) {
+        lessOptions.plugins = [require('less-plugin-sass2less')]
+        //TODO function
+        if (less.additionalData) {
+            less.additionalData = `@import "@/styles/var.scss";${less.additionalData}`
+        } else {
+            less.additionalData = `@import "@/styles/var.scss";`
+        }
+
+        const sass = readOrCreate(loaderOptions, 'sass')
+        //TODO function
+        if (sass.additionalData) {
+            sass.additionalData = `@import "@/styles/var.scss";${sass.additionalData}`
+        } else {
+            sass.additionalData = `@import "@/styles/var.scss";`
+        }
+    }
+    //TODO  如果入口文件不存在，则使用默认的
+    if (!mainJsExist && options.entryFiles) {
+
+    }
+
     api.chainWebpack(cfg => {
         //添加缓存
         cfg.plugin('hard-source-webpack-plugin').use(hardSource)

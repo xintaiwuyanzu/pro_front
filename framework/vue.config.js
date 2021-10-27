@@ -1,5 +1,4 @@
 module.exports = {
-    productionSourceMap: false,
     devServer: {
         proxy: {
             '/api': {

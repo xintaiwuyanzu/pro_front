@@ -26,8 +26,12 @@ const start = (opt) => {
                 //如果是开发环境，可以直接传componentName参数，直接渲染页面
                 componentName = opt.componentName
             }
-            new vue({router: routerInstance, store: storeInstance, render: h => h(vue.component(componentName))})
-                .$mount(opt.el ? opt.el : '#app')
+            new vue({
+                    router: routerInstance,
+                    store: storeInstance,
+                    render: h => h(vue.component(componentName))
+                }
+            ).$mount(opt.el ? opt.el : '#app')
         })
 }
 export default {

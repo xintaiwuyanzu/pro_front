@@ -15,6 +15,7 @@ module.exports = (api, options) => {
     //先动态成成代码
     codeGen(api, options, drOptions)
     //先执行babel，在执行自己
+    //TODO 这里应该可以拦截babel配置，注入自定义的preset
     babelPlugin(api, options)
     //在魔改配置项
     plugin(api, options, drOptions)

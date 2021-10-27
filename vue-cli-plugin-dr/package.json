@@ -1,6 +1,6 @@
 {
   "name": "@dr/vue-cli-plugin-dr",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "达融自动辅助前端模块化//TODO 这里可以处理成自动扫描的",
   "main": "index.js",
   "files": [
@@ -21,6 +21,9 @@
     "glob": "^7.1.6",
     "graceful-fs": "^4.2.4",
     "hard-source-webpack-plugin": "^0.13.1",
+    "less": "^4.1.2",
+    "less-loader": "^7.3.0",
+    "less-plugin-sass2less": "^1.2.0",
     "sass": "^1.26.5",
     "sass-loader": "^10.0.2",
     "uppercamelcase": "^3.0.0",
