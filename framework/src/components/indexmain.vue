@@ -1,5 +1,7 @@
 <script lang="jsx">
 import '../styles/main.scss'
+import {useMenuContext} from "../hooks/useMenu";
+import vue from "vue";
 
 export default {
   /**
@@ -13,18 +15,23 @@ export default {
     mainClassName: {type: String, default: 'main'},
     leftClassName: {type: String, default: 'left'}
   },
-  render() {
-    const {rootClassName, headerClassName, leftClassName, mainClassName} = this
-    return (
-        <el-container class={rootClassName} direction='vertical'>
-          <el-header class={headerClassName}>
+  setup(props) {
+    const hasHeaderMenu = !vue.component('headerMenu')
+
+    useMenuContext()
+    return () => (
+        <el-container class={props.rootClassName} direction='vertical'>
+          <el-header class={props.headerClassName}>
             <header-top/>
           </el-header>
           <el-container style="overflow: auto;">
-            <el-aside width="auto" style="padding: 0px" class={leftClassName}>
-              <left-menu/>
-            </el-aside>
-            <el-main style="padding: 0px;" class={mainClassName}>
+            {
+              hasHeaderMenu ?
+                  <el-aside width="auto" style="padding: 0px" class={props.leftClassName}>
+                    <left-menu/>
+                  </el-aside> : ''
+            }
+            <el-main style="padding: 0px;" class={props.mainClassName}>
               <transition name="fade-transform" mode="out-in">
                 <router-view class="main-container"/>
               </transition>
