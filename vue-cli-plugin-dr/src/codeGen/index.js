@@ -1,8 +1,7 @@
 const fs = require('graceful-fs')
 const path = require('path')
 const reader = require('./reader')
-const writeJson = require('write-json-file')
-const utils = require('../utils')
+
 const readLibAndCache = (cacheDir, libs, selector) => {
     const result = {}
     const data = reader.readLib(libs)
@@ -14,11 +13,11 @@ const readLibAndCache = (cacheDir, libs, selector) => {
                 .forEach(([name, arr]) => {
                     let v = selector(type, name, arr)
                     if (!v) {
-                        v = utils.defaultSelector(type, name, arr)
+                        v = require('../utils').defaultSelector(type, name, arr)
                     }
                     result[type] [name] = v
                 })
-            writeJson.sync(path.resolve(cacheDir, `${type}.json`), result[type])
+            require('write-json-file').sync(path.resolve(cacheDir, `${type}.json`), result[type])
         })
     return result
 }
@@ -29,11 +28,12 @@ const readLibAndCache = (cacheDir, libs, selector) => {
  * @param options
  */
 module.exports = (api, options, {views, libs, selector}) => {
-
-    require('./element')(api, libs)
-
     //计算缓存文件夹和环境hash
     const {cacheDirectory, cacheIdentifier} = api.genCacheConfig('pluginDr', {}, ['vue.config.js'])
+    if (!fs.existsSync(cacheDirectory)) {
+        fs.mkdirSync(cacheDirectory, {recursive: true})
+    }
+    require('./element')(cacheDirectory)
     //先判断缓存是否存在
     const cacheDir = path.resolve(cacheDirectory, cacheIdentifier)
 

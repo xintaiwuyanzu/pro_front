@@ -1,20 +1,8 @@
-const hardSource = require('hard-source-webpack-plugin')
-const compress = require('compression-webpack-plugin')
-const webpack = require('webpack')
 const fs = require('fs')
 const path = require('path')
 const config = require('./config')
-const util = require('../utils')
-//html模板路径
-let template = 'public/index.html'
-if (!fs.existsSync(path.resolve(process.cwd(), template))) {
-    template = util.moduleFilePath('@dr/vue-cli-plugin-dr', template)
-}
-//var.scss 文件是否存在
-const cssVarExist = fs.existsSync(path.resolve(process.cwd(), 'src/styles/var.scss'));
-//入口文件是否存在
-const mainJsExist = fs.existsSync(path.resolve(process.cwd(), 'src/main.js'));
-
+const rootPath = process.cwd();
+const utils = require('../utils')
 /**
  * 读取配置或者设置新的配置
  * @param obj
@@ -31,6 +19,25 @@ const readOrCreate = (obj, key) => {
 }
 
 
+/**
+ * 读取所有模块的var文件
+ * @param api
+ * @param libs
+ * @returns {*}
+ */
+const readVars = (api, libs) => {
+    const varPath = 'src/styles/var.scss'
+    const result = libs.map(l => ({name: l.name, varPath: path.resolve(utils.moduleDir(l.name), varPath)}))
+        .filter(p => fs.existsSync(p.varPath))
+        .map(p => `${p.name}/${varPath}`)
+        .reverse()
+    if (fs.existsSync(path.resolve(rootPath, varPath))) {
+        result.unshift(`@/styles/var.scss`)
+    }
+    return result
+}
+
+
 module.exports = (api, options, {views, libs, selector, limit}) => {
     //修改css相关默认配置
     if (!Object.hasOwnProperty(options, 'productionSourceMap')) {
@@ -42,32 +49,37 @@ module.exports = (api, options, {views, libs, selector, limit}) => {
     const less = readOrCreate(loaderOptions, 'less')
     const lessOptions = readOrCreate(less, 'lessOptions')
     lessOptions.javascriptEnabled = true
+    const vars = readVars(api, libs)
+    if (vars.length > 0) {
+        const eol = require('os').EOL
 
-    if (cssVarExist) {
+        //按顺序添加所有模块的变量
+        const addStr = vars.map(v => `@import "${v}";`).join(eol)
         lessOptions.plugins = [require('less-plugin-sass2less')]
         //TODO function
         if (less.additionalData) {
-            less.additionalData = `@import "@/styles/var.scss";${less.additionalData}`
+            less.additionalData = `${less.additionalData}${eol}${addStr}`
         } else {
-            less.additionalData = `@import "@/styles/var.scss";`
+            less.additionalData = addStr
         }
-
         const sass = readOrCreate(loaderOptions, 'sass')
         //TODO function
         if (sass.additionalData) {
-            sass.additionalData = `@import "@/styles/var.scss";${sass.additionalData}`
+            sass.additionalData = `${sass.additionalData}${eol}${addStr}`
         } else {
-            sass.additionalData = `@import "@/styles/var.scss";`
+            sass.additionalData = addStr
         }
     }
-    //TODO  如果入口文件不存在，则使用默认的
+
+//入口文件是否存在
+    const mainJsExist = fs.existsSync(path.resolve(rootPath, 'src/main.js'));
     if (!mainJsExist && options.entryFiles) {
-
+        //TODO  如果入口文件不存在，则使用默认的
     }
-
     api.chainWebpack(cfg => {
+        const webpack = require('webpack')
         //添加缓存
-        cfg.plugin('hard-source-webpack-plugin').use(hardSource)
+        cfg.plugin('hard-source-webpack-plugin').use(require('hard-source-webpack-plugin'))
         //moment
         cfg.plugin('moment').use(webpack.ContextReplacementPlugin, [/moment[/\\]locale$/, /zh-cn/])
         //添加最小限制
@@ -75,7 +87,7 @@ module.exports = (api, options, {views, libs, selector, limit}) => {
             //控制chunk数量
             cfg.plugin('LimitChunkCountPlugin').use(webpack.optimize.LimitChunkCountPlugin, [limit])
             //gzip压缩文件
-            cfg.plugin('CompressionWebpackPlugin').use(compress, [{
+            cfg.plugin('CompressionWebpackPlugin').use(require('compression-webpack-plugin'), [{
                 test: /\.(js|css|json|txt|html|ico|svg)(\?.*)?$/i,
                 threshold: 10240
             }])
@@ -92,6 +104,12 @@ module.exports = (api, options, {views, libs, selector, limit}) => {
                     arg.title = pkg.description
                 }
             }
+        }
+
+        //html模板路径
+        let template = 'public/index.html'
+        if (!fs.existsSync(path.resolve(rootPath, template))) {
+            template = utils.moduleFilePath('@dr/vue-cli-plugin-dr', template)
         }
         //如果是多页面，手动添加chunks
         if (options.pages) {
