@@ -3,6 +3,7 @@
   "workspaces": [
     "auto",
     "framework",
-    "vue-cli-plugin-dr"
+    "vue-cli-plugin-dr",
+    "ant-menu"
   ]
 }

@@ -1,0 +1,28 @@
+{
+  "name": "@dr/ant-menu",
+  "description": "AntDesign头部菜单",
+  "version": "0.0.1",
+  "dlib": true,
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build --report",
+    "lint": "vue-cli-service lint"
+  },
+  "files": [
+    "src"
+  ],
+  "dependencies": {
+    "@dr/auto": "^0.0.2",
+    "@dr/framework": "^0.0.3",
+    "ant-design-vue": "^1.7.8",
+    "vue": "^2.6.11"
+  },
+  "devDependencies": {
+    "@dr/vue-cli-plugin-dr": "^1.0.1",
+    "@vue/cli-plugin-eslint": "~4.5.13",
+    "@vue/cli-service": "~4.5.13",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^7.8.1",
+    "eslint-plugin-vue": "^6.2.2"
+  }
+}
