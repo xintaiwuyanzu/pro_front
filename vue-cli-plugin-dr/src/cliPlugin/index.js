@@ -3,6 +3,8 @@ const path = require('path')
 const config = require('./config')
 const rootPath = process.cwd();
 const utils = require('../utils')
+const {EOL: eol} = require("os");
+const sassPlugin = require("less-plugin-sass2less");
 /**
  * 读取配置或者设置新的配置
  * @param obj
@@ -29,7 +31,7 @@ const readVars = (api, libs) => {
     const varPath = 'src/styles/var.scss'
     const result = libs.map(l => ({name: l.name, varPath: path.resolve(utils.moduleDir(l.name), varPath)}))
         .filter(p => fs.existsSync(p.varPath))
-        .map(p => `${p.name}/${varPath}`)
+        .map(p => `~${p.name}/${varPath}`)
         .reverse()
     if (fs.existsSync(path.resolve(rootPath, varPath))) {
         result.unshift(`@/styles/var.scss`)
@@ -51,23 +53,29 @@ module.exports = (api, options, {views, libs, selector, limit}) => {
     lessOptions.javascriptEnabled = true
     const vars = readVars(api, libs)
     if (vars.length > 0) {
-        const eol = require('os').EOL
-
         //按顺序添加所有模块的变量
-        const addStr = vars.map(v => `@import "${v}";`).join(eol)
-        lessOptions.plugins = [require('less-plugin-sass2less')]
-        //TODO function
-        if (less.additionalData) {
-            less.additionalData = `${less.additionalData}${eol}${addStr}`
+        const addStrLess = vars.map(v => `@import "${v}";`).join(eol)
+        console.info('追加全局css变量')
+        console.info(addStrLess)
+        const sassPlugin = require('less-plugin-sass2less')
+        if (lessOptions.plugins) {
+            lessOptions.plugins.push(sassPlugin)
         } else {
-            less.additionalData = addStr
+            lessOptions.plugins = [sassPlugin]
         }
+        //TODO
+        /* if (less.additionalData) {
+             less.additionalData = `${less.additionalData}${addStrLess}`
+         } else {
+             less.additionalData = addStrLess
+         }*/
+        lessOptions.modifyVars = addStrLess
         const sass = readOrCreate(loaderOptions, 'sass')
         //TODO function
         if (sass.additionalData) {
-            sass.additionalData = `${sass.additionalData}${eol}${addStr}`
+            sass.additionalData = `${sass.additionalData}${addStrLess}`
         } else {
-            sass.additionalData = addStr
+            sass.additionalData = addStrLess
         }
     }
 

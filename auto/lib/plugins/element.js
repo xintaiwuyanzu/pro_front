@@ -4,6 +4,8 @@ import InfiniteScroll from 'element-ui/lib/infinite-scroll'
 import Loading from 'element-ui/lib/loading'
 import MessageBox from 'element-ui/lib/message-box'
 import Message from 'element-ui/lib/message'
+import Notification from 'element-ui/lib/notification'
+
 
 export default (vue, router, store, opt={}) => {
     vue.prototype.$ELEMENT = {

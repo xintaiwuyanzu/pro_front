@@ -16,8 +16,7 @@
         </el-form-item>
         <el-form-item label="性别" prop="sex" required>
           <el-select v-model="form.sex" placeholder="请选择性别">
-            <el-option v-for="item in optionSex" :label="item.label" :key="item.value"
-                       :value="item.value"/>
+            <el-option v-for="item in optionSex" :label="item.label" :key="item.value" :value="item.value"/>
           </el-select>
         </el-form-item>
         <el-form-item label="职务" prop="duty" required>
@@ -83,19 +82,19 @@ export default {
       },
       optionSex: [
         {
-          value: 1,
+          value: '1',
           label: '男'
         }, {
-          value: 0,
+          value: '0',
           label: '女'
         }
       ],
       statusRole: [
         {
-          value: 1,
+          value: '1',
           label: '是'
         }, {
-          value: 0,
+          value: '0',
           label: '否'
         }
       ],
@@ -117,22 +116,25 @@ export default {
         path = path + '/insert'
       }
       this.form.organiseId = this.organiseId;
+      //TODO 这里密码可以后台内置
       this.form.password = Base64.encode('123456');
       this.form.registerLogin = true
-      console.log(this.form)
-      this.$http.post(path, this.form)
-          .then(({data}) => {
-            if (data && data.success) {
-              this.$message.success('保存成功！')
-              this.edit = false;
-              this.searchF()
-            } else {
-              this.$message.error(data.message)
-            }
-            this.loading = false
-          })
+      this.$refs.form.validate(v => {
+        if (v) {
+          this.$http.post(path, this.form)
+              .then(({data}) => {
+                if (data && data.success) {
+                  this.$message.success('保存成功！')
+                  this.edit = false;
+                  this.searchF()
+                } else {
+                  this.$message.error(data.message)
+                }
+                this.loading = false
+              })
+        }
+      })
     },
   }
-
 }
 </script>

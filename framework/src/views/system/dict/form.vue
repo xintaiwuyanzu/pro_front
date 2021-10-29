@@ -1,13 +1,13 @@
 <template>
   <section>
     <el-form :model="searchForm" ref="searchForm" inline class="searchForm">
-      <el-form-item label="编码：" prop="key">
+      <el-form-item label="编码：" prop="key" style="padding-right: 5px">
         <el-input v-model="searchForm.key" placeholder="请输入字典编码" clearable/>
       </el-form-item>
-      <el-form-item label="描述：" prop="description">
+      <el-form-item label="描述：" prop="description" style="padding-right: 5px">
         <el-input v-model="searchForm.description" placeholder="请输入字典描述" clearable/>
       </el-form-item>
-      <el-form-item label="是否可用：" prop="status">
+      <el-form-item label="是否可用：" prop="status" style="padding-right: 5px">
         <el-select v-model="searchForm.status" clearable style="width: 60px" placeholder="">
           <el-option v-for="item in statusOptions" :key="item.value" :label="item.label" :value="item.value"/>
         </el-select>
@@ -18,15 +18,15 @@
         <el-button type="primary" @click="editForm()" size="mini">添加</el-button>
       </el-form-item>
     </el-form>
-    <el-dialog :visible.sync="edit" :title="(form.id?'编辑':'添加')+'字典'" width="80%">
-      <el-form :model="form" :rules="rules" ref="form" label-width="90px">
-        <el-form-item label="编码：" prop="key" required>
+    <el-dialog :visible.sync="edit" :title="(form.id?'编辑':'添加')+'字典'" width="40%">
+      <el-form :model="form" :rules="rules" ref="form" label-width="110px">
+        <el-form-item label="字典编码：" prop="key" required>
           <el-input v-model="form.key" placeholder="请输入字典编码" clearable/>
         </el-form-item>
-        <el-form-item label="值：" prop="value" required>
+        <el-form-item label="字典值：" prop="value" required>
           <el-input v-model="form.value" placeholder="请输入字典值" clearable/>
         </el-form-item>
-        <el-form-item label="排序：" prop="order" required>
+        <el-form-item label="排序：" prop="order">
           <el-input v-model="form.order" placeholder="请输入字典排序" clearable/>
         </el-form-item>
         <el-form-item label="是否可用：" prop="status">
@@ -53,11 +53,6 @@ export default {
   data() {
     return {
       searchForm: {},
-      rules: {
-        key: [
-          {validator: this.validateKey, trigger: 'blur'}
-        ]
-      },
       path: 'sysDict',
       autoClose: true,
       defaultForm: {
@@ -77,7 +72,6 @@ export default {
         } else {
           this.$post('/sysDict/validate', {key})
               .then(({data}) => {
-                console.log(data)
                 if (data.success) {
                   cb()
                 } else {

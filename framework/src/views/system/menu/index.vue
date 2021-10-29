@@ -2,7 +2,7 @@
   <section>
     <nac-info>
       <el-form inline style="padding-top: 5px">
-        <el-form-item label="请选择系统：">
+        <el-form-item label="请选择系统：" style="margin-right: 10px">
           <el-select v-model="sysId" ref="sysSelect">
             <el-option v-for="item in options" :key="item.id" :value="item.id" :label="item.sysName">
               <span style="float: left">{{ item.sysName }}</span>
@@ -26,7 +26,8 @@
                :data="menuData"
                :props="treeDefaultProps"
                v-loading="treaLoading"
-               default-expand-all :filter-node-method="filterNode"
+               default-expand-all
+               :filter-node-method="filterNode"
                ref="menuTree">
         <div style="flex: 1;margin: 2px;" slot-scope="{ node, data }">
           <el-tag style="float: left;font-size: 16px"
@@ -35,7 +36,7 @@
             <span>{{ data.label }}</span>
           </el-tag>
           <span class="buttons">
-                    <el-button v-if="data.level===0" type="primary" size="mini" @click="editMenu">
+                  <el-button v-if="data.level===0" type="primary" size="mini" @click="editMenu">
                     添加同级
                   </el-button>
                   <el-button v-if="!data.data.leaf" type="primary" size="mini" @click="editMenu({parentId: data.id})">
@@ -44,6 +45,10 @@
                   <el-button v-if="!data.data.leaf" type="primary" size="mini"
                              @click="editMenu({parentId: data.id,leaf:true})">
                     添加子菜单
+                  </el-button>
+                  <el-button type="primary" size="mini"
+                             @click="editMenuParent(data.data)">
+                    修改父级
                   </el-button>
                   <el-button type="primary" size="mini" @click="editMenu(data.data)">
                     编辑
@@ -58,7 +63,7 @@
         </div>
       </el-tree>
     </div>
-    <sys-menu-form ref="sysMenu"/>
+    <sys-menu-form :resources="menuData" ref="sysMenu"/>
   </section>
 </template>
 <script>
@@ -89,7 +94,6 @@ export default {
   methods: {
     $init() {
       this.loadSyss()
-      this.$store.commit('closeMenu')
       this.loadData()
     },
     filterNode(value, data) {
@@ -115,13 +119,28 @@ export default {
             if (data.success) {
               let list = data.data ? data.data : []
               for (let i = 0; i < list.length; i++) {
-                if (list[i].data.status == 1) {
-                  this.menuData.push(list[i])
-                }
+                //TODO 这里为什么要把隐藏的菜单去掉？？
+                //if (list[i].data.status == 1) {
+                this.menuData.push(list[i])
+                //}
               }
             }
             this.treaLoading = false
           })
+    },
+    editMenuParent(menu) {
+      let formData = {
+        sysId: this.sysId,
+        parentId: this.sysId,
+        sysName: this.$refs.sysSelect.selectedLabel,
+        status: '1',
+        leaf: false,
+        order: 1
+      }
+      if (menu) {
+        formData = Object.assign(formData, menu)
+      }
+      this.$refs.sysMenu.editParentForm(formData)
     },
     editMenu(menu) {
       let formData = {
@@ -137,26 +156,28 @@ export default {
       }
       this.$refs.sysMenu.editForm(formData)
     },
-    remove(id) {
+    async remove(id) {
+      await this.$confirm('确定要删除该菜单吗？', '提示', {confirmButtonText: '确定', cancelButtonText: '取消', type: 'warning'})
       this.treaLoading = true
-      this.$http.post('/sysmenu/delete', {id})
-          .then(({data}) => {
-            if (data.success) {
-              this.$message.success('删除成功！')
-            }
-            this.loadData()
-          })
+      const data = await this.$http.post('/sysmenu/delete', {id})
+      if (data.data.success) {
+        this.$message.success('删除成功！')
+      }
+      await this.loadData()
     },
-    toggle(data) {
+    async toggle(data) {
+      const status = data.data.status === '1' ? '0' : '1'
+      await this.$confirm(`确定要${status === '1' ? '启用' : '禁用'}菜单吗?`, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
       this.treaLoading = true
-      let status = data.data.status === '1' ? '0' : '1'
-      this.$http.post('/sysmenu/update', Object.assign({}, data.data, {status}))
-          .then(({data}) => {
-            if (data.success) {
-              this.$message.success('操作成功！')
-            }
-            this.loadData()
-          })
+      const result = await this.$http.post('/sysmenu/update', Object.assign({}, data.data, {status}))
+      if (result.data.success) {
+        this.$message.success('操作成功！')
+      }
+      this.loadData()
     }
   }
 }

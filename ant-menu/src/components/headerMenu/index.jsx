@@ -3,7 +3,7 @@
  */
 import {useMenu} from "@dr/framework/src/hooks/useMenu";
 import Menu from "ant-design-vue/es/menu";
-import "ant-design-vue/es/menu/style";
+import "./style.less";
 
 export default {
     setup() {
@@ -13,7 +13,7 @@ export default {
                 if (md.children) {
                     const children = createChildren(md.children)
                     return (
-                        <Menu.SubMenu key={md.id} title={md.label}>
+                        <Menu.SubMenu key={md.id}>
                             <template slot="title">
                                 <icon icon={md.data.icon}/>
                                 <span class="stitle">{md.label}</span>
@@ -23,7 +23,7 @@ export default {
                     )
                 } else {
                     return (
-                        <Menu.Item key={md.id} title={md.label} onClick={() => menuData.currentMenu = md}>
+                        <Menu.Item key={md.id} onClick={() => menuData.currentMenu = md}>
                             <icon icon={md.data.icon}/>
                             <span class="stitle">{md.label}</span>
                         </Menu.Item>
@@ -35,7 +35,7 @@ export default {
             const menuChildren = createChildren(menuData.menu)
             return (
                 <section class="headerMenu">
-                    <Menu class="menu" mode='horizontal' defaultSelectedKeys={[menuData.defaultIndex]} theme='dark'>
+                    <Menu class="menu" mode='horizontal' defaultSelectedKeys={[menuData.defaultIndex]} theme="dark">
                         {menuChildren}
                     </Menu>
                 </section>

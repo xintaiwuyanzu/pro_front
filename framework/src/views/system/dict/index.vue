@@ -7,8 +7,8 @@
       <div class="table-container">
         <el-table :data="data" border height="100%" @selection-change="handleTableSelect">
           <el-table-column label="排序" type="index" align="center"/>
-          <el-table-column prop="key" label="编码" header-align="center" align="center" show-overflow-tooltip/>
-          <el-table-column prop="value" label="值" header-align="center" align="center" show-overflow-tooltip/>
+          <el-table-column prop="key" label="字典编码" header-align="center" align="center" show-overflow-tooltip/>
+          <el-table-column prop="value" label="字典值" header-align="center" align="center" show-overflow-tooltip/>
           <el-table-column prop="description" label="描述" width="300" align="center" header-align="center"
                            show-overflow-tooltip/>
           <el-table-column prop="order" label="排序" width="80" header-align="center" align="center"/>
@@ -60,7 +60,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>

@@ -1,10 +1,9 @@
-@import "var.scss";
-
 .root {
   height: 100%;
   overflow: auto;
 
-  @import "header";
+  @import "./header.scss";
+  @import "./left.scss";
 
   .main {
     overflow: auto;

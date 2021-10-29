@@ -21,7 +21,7 @@
             <el-option v-for="p in groups" :key="p.id" :label="p.name" :value="p.id"/>
           </el-select>
         </el-form-item>
-        <el-form-item prop="code" required>
+        <el-form-item prop="code" required label="权限编码">
           <span slot="label">
             权限编码
             <el-tooltip content="选择权限" placement="right">

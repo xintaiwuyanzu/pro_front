@@ -1,4 +1,4 @@
-import {inject, onMounted, provide, reactive, watchEffect} from "vue-demi";
+import {inject, onMounted, provide, reactive, unref, watch} from "vue-demi";
 import {http} from "../../plugins/http";
 import {useRouter} from '@u3u/vue-hooks'
 
@@ -10,6 +10,33 @@ const defaultMenuLoader = async () => {
     //TODO 这里参数写死了
     return httpInstance.post('/sysmenu/menutree', {sysId: 'default'})
 }
+
+function trimUrl(path) {
+    if (path) {
+        if (path.endsWith('/')) {
+            return path.substr(0, path.length - 1)
+        } else {
+            return path
+        }
+    }
+}
+
+function filterMenu(arr, path) {
+    if (arr) {
+        for (let i = 0; i < arr.length; i++) {
+            const a = arr[i]
+            if (a.data && trimUrl(a.data.url) === path) {
+                return a
+            } else if (a.children) {
+                const childResult = filterMenu(a.children, path)
+                if (childResult) {
+                    return childResult
+                }
+            }
+        }
+    }
+}
+
 /**
  * 系统菜单主键
  * @type {symbol}
@@ -31,12 +58,12 @@ export const useMenuContext = (menuLoader = defaultMenuLoader) => {
     })
     const {route, router} = useRouter()
     //监听当前菜单对象，有变化则跳转路由
-    watchEffect(() => {
-        if (providerData.currentMenu && providerData.currentMenu.data) {
-            if (providerData.currentMenu.data.url) {
-                const url = providerData.currentMenu.data.url
+    watch(() => providerData.currentMenu,
+        (newMenu) => {
+            if (newMenu.data && newMenu.data.url) {
+                const url = trimUrl(newMenu.data.url)
                 //过滤重复跳转
-                if (route.value.path !== url) {
+                if (trimUrl(route.value.path) !== url) {
                     if (url.indexOf('http:') >= 0 || url.indexOf('https:') >= 0) {
                         router.push({name: 'frame', params: {$url: url}, query: {$url: url}})
                     } else {
@@ -44,9 +71,7 @@ export const useMenuContext = (menuLoader = defaultMenuLoader) => {
                     }
                 }
             }
-        }
-    })
-
+        })
     /**
      *组件初始化的时候加载菜单
      */
@@ -55,14 +80,22 @@ export const useMenuContext = (menuLoader = defaultMenuLoader) => {
         const result = await menuLoader()
         providerData.menu = result.data.data
         providerData.menuLoading = false
-        if (route.value.path === '/main/') {
-            let first = providerData.menu[1]
-            if (first.children) {
-                first = first.children[0]
+        const currentPath = route.value.path
+        if (currentPath === '/main/') {
+            if (providerData.menu.length > 0) {
+                let first = providerData.menu[0]
+                if (first.children) {
+                    first = first.children[0]
+                }
+                if (first) {
+                    providerData.defaultIndex = first.id
+                    providerData.currentMenu = unref(first)
+                }
             }
-            if (first) {
-                providerData.defaultIndex = first.id
-                providerData.currentMenu = first
+        } else {
+            const currentMenu = filterMenu(providerData.menu, trimUrl(currentPath))
+            if (currentMenu) {
+                providerData.currentMenu = currentMenu
             }
         }
     })

@@ -74,8 +74,24 @@ export default {
             const descriptor = {};
             if (rules && rules.length > 0) {
                 rules.forEach(rule => {
+                    let label = this.label
+                    if (label && (label.endsWith(':') || label.endsWith('：'))) {
+                        label = label.substr(0, label.length - 1)
+                    }
                     //这里改了
-                    rule.fullField = this.label
+                    rule.fullField = label
+                    if (!rule.type) {
+                        try {
+                            //TODO 字段格式类型 详情参考async-validator getType方法
+                            const fieldValue = this.fieldValue
+                            if (fieldValue !== null && fieldValue !== undefined) {
+                                //这里获取类型太暴力了 所有校验类型为  string  number boolean method  regexp integer  float array object enum  date  url hex email any
+                                rule.type = typeof fieldValue
+                            }
+                        } catch (e) {
+                            console.warn(`设置字段${this.prop}数据类型失败`, e)
+                        }
+                    }
                     delete rule.trigger;
                 });
             }

@@ -74,7 +74,6 @@
 <script>
 import ConfigForm from './form'
 import indexMixin from '@dr/auto/lib/util/indexMixin'
-import {Base64} from 'js-base64'
 
 export default {
   components: {ConfigForm},
@@ -205,23 +204,16 @@ export default {
         type: 'warning'
       }).then(() => {
         this.loading = true
-        this.$http.post('/gestion/resetPassword', {
-          personId: row.id,
-          newPwd: Base64.encode("123456")
-        })
+        this.$http.post('/login/resetPassword', {personId: row.id})
             .then(({data}) => {
               if (data.success) {
-                this.$message({
-                  message: '重置密码成功！',
-                  type: 'success'
-                });
+                this.$alert(data.data, {title: '提示'});
               } else {
                 this.$message.error(data.message)
               }
               this.loading = false
             })
       }).catch()
-
     },
     apiPath() {
       return '/person'
@@ -233,9 +225,7 @@ export default {
         type: 'warning'
       }).then(() => {
         this.loading = true
-        this.$http.post('/gestion/deletePerson', {
-          personId: id
-        })
+        this.$http.post('/person/delete', {id})
             .then(({data}) => {
               if (data.success) {
                 this.$message.success(data.message)
