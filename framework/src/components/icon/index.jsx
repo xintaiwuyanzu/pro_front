@@ -14,7 +14,7 @@ export default {
         if (icon.startsWith('el-icon')) {
             return <i class={icon} title={icon}/>
         } else {
-            return <vueIcon name={icon} class={'el-icon svg-icon-' + icon}/>
+            return <vueIcon name={icon} title={icon} class={'el-icon svg-icon-' + icon}/>
         }
     }
 }

@@ -32,7 +32,7 @@
         <div style="flex: 1;margin: 2px;" slot-scope="{ node, data }">
           <el-tag style="float: left;font-size: 16px"
                   :type="data.data.status==='0'?'danger':(data.data.leaf?'':'warning')">
-            <icon style="margin-right: 5px;width: 16px;height: 16px" :icon="data.data.icon"/>
+            <icon style="margin-right: 5px;width: 16px;height: 16px" :icon="data.data.icon" v-if="data.data.icon"/>
             <span>{{ data.label }}</span>
           </el-tag>
           <span class="buttons">
