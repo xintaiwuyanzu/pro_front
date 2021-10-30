@@ -1,9 +1,33 @@
 @import "~ant-design-vue/es/menu/style/index.less";
 @import "../../styles/var.scss";
 
+
 /**
-这里面用element-ui里面定义的变量
+这里面用element-ui里面定义的变量修改ant样式
  */
-.ant-menu-item:hover, .ant-menu-item-active, .ant-menu:not(.ant-menu-inline) .ant-menu-submenu-open, .ant-menu-submenu-active, .ant-menu-submenu-title:hover {
+.ant-menu-item:hover,
+.ant-menu-item-active,
+.ant-menu:not(.ant-menu-inline)
+.ant-menu-submenu-open,
+.ant-menu-submenu-active,
+.ant-menu-submenu-title:hover {
   color: @--color-white;
+}
+
+.header-menu {
+  width: 100%;
+  max-width: 100%;
+  font-size: 16px;
+  margin-left: 40px;
+
+  .ant-menu-submenu-title {
+    padding: 0px 14px;
+  }
+
+}
+
+.header-icon {
+  height: auto;
+  margin-right: 10px;
+  width: 14px;
 }

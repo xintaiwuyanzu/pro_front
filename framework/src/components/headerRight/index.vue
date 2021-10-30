@@ -7,6 +7,10 @@
 </template>
 
 <script>
+/**
+ * 右侧默认登出
+ * TODO 将来可以添加消息通知和用户信息
+ */
 import loginUtil from '../login/util'
 
 export default {

@@ -1,29 +1,18 @@
-import Logout from './logout'
 import vue from "vue";
 
 /**
- * TODO  logo等其他参数
+ * 头部分为左中右三部分
  */
 export default {
-    components: {Logout},
-    props: {
-        /**
-         * 标题
-         */
-        title: {type: String, required: false},
-        /**
-         * 是否显示登出按钮
-         */
-        logout: {default: true}
-    },
-    setup(props) {
+    setup() {
+        const headerLeft = vue.component('headerLeft')
         const headerMenu = vue.component('headerMenu')
+        const headerRight = vue.component('headerRight')
         return () => (
             <section class="header-content">
-                <div style="margin-left: auto;display: flex;justify-content: center">
-                    {headerMenu ? <headerMenu/> : ''}
-                    {props.logout ? <Logout/> : ''}
-                </div>
+                {headerLeft ? <headerLeft class='header-left'/> : ''}
+                {headerMenu ? <headerMenu class='header-middle'/> : ''}
+                {headerRight ? <headerRight class='header-right'/> : ''}
             </section>
         )
     }

@@ -1,9 +1,9 @@
 {
   "private": "true",
   "workspaces": [
+    "ant-menu",
     "auto",
     "framework",
-    "vue-cli-plugin-dr",
-    "ant-menu"
+    "vue-cli-plugin-dr"
   ]
 }

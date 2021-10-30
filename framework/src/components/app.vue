@@ -5,7 +5,7 @@ export default {
   render() {
     return (
         <transition name="el-zoom-in-top">
-          <router-view className="container"/>
+          <router-view class="container"/>
         </transition>
     )
   }

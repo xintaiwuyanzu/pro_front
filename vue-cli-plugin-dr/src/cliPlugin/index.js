@@ -78,13 +78,20 @@ module.exports = (api, options, {views, libs, selector, limit}) => {
             sass.additionalData = addStrLess
         }
     }
-
-//入口文件是否存在
-    const mainJsExist = fs.existsSync(path.resolve(rootPath, 'src/main.js'));
-    if (!mainJsExist && options.entryFiles) {
-        //TODO  如果入口文件不存在，则使用默认的
-    }
     api.chainWebpack(cfg => {
+        //入口文件是否存在
+        const mainJsExist = fs.existsSync(path.resolve(rootPath, 'src/main.js'));
+        if (!mainJsExist && !options.entryFiles) {
+            //TODO  如果入口文件不存在，则使用默认的
+            if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'development') {
+                cfg.mode(process.env.NODE_ENV)
+                    .context(api.service.context)
+                    .entry('app')
+                    .clear()
+                    .add('@dr/auto/main.js')
+                    .end()
+            }
+        }
         const webpack = require('webpack')
         //添加缓存
         cfg.plugin('hard-source-webpack-plugin').use(require('hard-source-webpack-plugin'))

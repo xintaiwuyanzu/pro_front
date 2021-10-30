@@ -8,7 +8,8 @@
   "files": [
     "types",
     "lib",
-    "index.js"
+    "index.js",
+    "main.js"
   ],
   "devDependencies": {
     "element-ui": "^2.15.4",

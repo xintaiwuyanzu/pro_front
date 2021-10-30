@@ -14,18 +14,23 @@ export default {
                     const children = createChildren(md.children)
                     return (
                         <Menu.SubMenu key={md.id}>
-                            <template slot="title">
-                                <icon icon={md.data.icon}/>
-                                <span class="stitle">{md.label}</span>
-                            </template>
+                            {
+                                md.data.icon ?
+                                    <template slot="title">
+                                        <icon class='header-icon' icon={md.data.icon}/>
+                                        {md.label}
+                                    </template>
+                                    :
+                                    <template slot="title">{md.label}</template>
+                            }
                             {children}
                         </Menu.SubMenu>
                     )
                 } else {
                     return (
                         <Menu.Item key={md.id} onClick={() => menuData.currentMenu = md}>
-                            <icon icon={md.data.icon}/>
-                            <span class="stitle">{md.label}</span>
+                            {md.data.icon ? <icon class='header-icon' icon={md.data.icon}/> : ''}
+                            {md.label}
                         </Menu.Item>
                     )
                 }
@@ -34,8 +39,9 @@ export default {
         return () => {
             const menuChildren = createChildren(menuData.menu)
             return (
-                <section class="headerMenu">
-                    <Menu class="menu" mode='horizontal' defaultSelectedKeys={[menuData.defaultIndex]} theme="dark">
+                <section>
+                    <Menu class="header-menu" mode='horizontal' defaultSelectedKeys={[menuData.defaultIndex]}
+                          theme="dark">
                         {menuChildren}
                     </Menu>
                 </section>
