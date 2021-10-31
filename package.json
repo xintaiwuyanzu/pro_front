@@ -1,5 +1,12 @@
 {
   "private": "true",
+  "scripts": {
+    "publish:ant-menu": "cd ant-menu && yarn publish && cd ..",
+    "publish:auto": "cd auto && yarn publish && cd ..",
+    "publish:framework": "cd framework && yarn publish && cd ..",
+    "publish:vue-cli-plugin-dr": "cd vue-cli-plugin-dr && yarn publish && cd ..",
+    "pubAll": "yarn publish:ant-menu && yarn publish:auto && yarn publish:framework && yarn publish:vue-cli-plugin-dr"
+  },
   "workspaces": [
     "ant-menu",
     "auto",
