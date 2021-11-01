@@ -4,7 +4,13 @@ const config = require('./config')
 const rootPath = process.cwd();
 const utils = require('../utils')
 const {EOL: eol} = require("os");
-const sassPlugin = require("less-plugin-sass2less");
+const varPath = 'src/styles/var.scss'
+/**
+ *项目级变量
+ * @type {string}
+ */
+const prjVarExist = path.resolve(rootPath, varPath)
+const prjVarPath = prjVarExist ? `@import "@/styles/var.scss";` : ''
 /**
  * 读取配置或者设置新的配置
  * @param obj
@@ -28,14 +34,10 @@ const readOrCreate = (obj, key) => {
  * @returns {*}
  */
 const readVars = (api, libs) => {
-    const varPath = 'src/styles/var.scss'
     const result = libs.map(l => ({name: l.name, varPath: path.resolve(utils.moduleDir(l.name), varPath)}))
         .filter(p => fs.existsSync(p.varPath))
         .map(p => `~${p.name}/${varPath}`)
         .reverse()
-    if (fs.existsSync(path.resolve(rootPath, varPath))) {
-        result.unshift(`@/styles/var.scss`)
-    }
     return result
 }
 
@@ -52,31 +54,38 @@ module.exports = (api, options, {views, libs, selector, limit}) => {
     const lessOptions = readOrCreate(less, 'lessOptions')
     lessOptions.javascriptEnabled = true
     const vars = readVars(api, libs)
-    if (vars.length > 0) {
+    if (vars.length > 0 || prjVarExist) {
+        const elementScss = `@import "~element-ui/packages/theme-chalk/src/common/var.scss";`
         //按顺序添加所有模块的变量
         const addStrLess = vars.map(v => `@import "${v}";`).join(eol)
-        console.info('追加全局css变量')
-        console.info(addStrLess)
         const sassPlugin = require('less-plugin-sass2less')
         if (lessOptions.plugins) {
             lessOptions.plugins.push(sassPlugin)
         } else {
             lessOptions.plugins = [sassPlugin]
         }
-        //TODO
-        /* if (less.additionalData) {
-             less.additionalData = `${less.additionalData}${addStrLess}`
-         } else {
-             less.additionalData = addStrLess
-         }*/
-        lessOptions.modifyVars = addStrLess
+        //less 变量是懒加载的，项目级的变量是最后的  https://www.tutorialspoint.com/less/less_default_variables.htm
+        const lessAddArr = [addStrLess, prjVarPath]
+        if (less.additionalData) {
+            lessAddArr.push(less.additionalData)
+        }
+        lessAddArr.unshift(elementScss)
+        less.additionalData = lessAddArr.join(eol)
+        console.info('追加全局less变量')
+        //lessOptions.modifyVars = `${elementScss}${eol}${addStrLess}${eol}${prjVarPath}`
+        console.info(less.additionalData)
         const sass = readOrCreate(loaderOptions, 'sass')
+        //sass全局变量有默认变量的存在，所以优先加载项目上的变量
+        const sassAddArr = [prjVarPath, addStrLess]
         //TODO function
         if (sass.additionalData) {
-            sass.additionalData = `${sass.additionalData}${addStrLess}`
-        } else {
-            sass.additionalData = addStrLess
+            sassAddArr.unshift(sass.additionalData)
         }
+        sassAddArr.unshift(elementScss)
+        sass.additionalData = sassAddArr.join(eol)
+        console.info('追加全局sass变量')
+        console.info(sass.additionalData)
+
     }
     api.chainWebpack(cfg => {
         //入口文件是否存在

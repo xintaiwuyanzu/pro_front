@@ -1,10 +1,10 @@
 import axios from 'axios'
 import NProgress from "nprogress";
-import 'nprogress/nprogress.css';
+//TODO 这里应该也一起跟着样式走
 import qs from 'qs'
-import util from '../components/login/util'
+import util from '../../components/login/util'
 import {Message} from "element-ui";
-
+import './style.scss'
 /**
  * 默认配置项
  */

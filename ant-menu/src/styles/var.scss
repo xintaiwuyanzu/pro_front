@@ -4,21 +4,6 @@
 @import "~element-ui/packages/theme-chalk/src/common/var.scss";
 引进来的
  */
-
-$--color-primary: #409EFF !default;
-$--color-black: #000000 !default;
-$--color-white: #FFFFFF !default;
-
-$--color-primary-light-1: mix($--color-white, $--color-primary, 10%) !default;
-$--color-primary-light-2: mix($--color-white, $--color-primary, 20%) !default;
-$--color-primary-light-3: mix($--color-white, $--color-primary, 30%) !default;
-$--color-primary-light-4: mix($--color-white, $--color-primary, 40%) !default;
-$--color-primary-light-5: mix($--color-white, $--color-primary, 50%) !default;
-$--color-primary-light-6: mix($--color-white, $--color-primary, 60%) !default;
-$--color-primary-light-7: mix($--color-white, $--color-primary, 70%) !default;
-$--color-primary-light-8: mix($--color-white, $--color-primary, 80%) !default;
-$--color-primary-light-9: mix($--color-white, $--color-primary, 90%) !default;
-
 $--color-primary-dark-1: mix($--color-black, $--color-primary, 10%) !default;
 $--color-primary-dark-2: mix($--color-black, $--color-primary, 20%) !default;
 $--color-primary-dark-3: mix($--color-black, $--color-primary, 30%) !default;

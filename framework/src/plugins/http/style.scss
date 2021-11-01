@@ -1,0 +1,16 @@
+@import '~nprogress/nprogress.css';
+
+#nprogress {
+  .bar {
+    background: $--process-color;
+  }
+
+  .peg {
+    box-shadow: 0 0 10px $--process-color, 0 0 5px $--process-color;
+  }
+
+  .spinner-icon {
+    border-top-color: $--process-color;
+    border-left-color: $--process-color;
+  }
+}
