@@ -9,7 +9,7 @@ const router = ({vue}) => {
         {path: '/', redirect: '/login'},
         {path: '/login', component: vue.component('login')},
         {
-            path: '/main', component: vue.component('indexmain'),
+            path: '/main', component: vue.component('indexMain'),
             children:
                 views.map(({path, component}) => ({
                     path, component: utils.makeSync(component)

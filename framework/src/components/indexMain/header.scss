@@ -1,4 +1,11 @@
 .header {
+  /**
+头部样式参数
+ */
+  $--header-height: 64px !default;
+
+  $--header-background: #{$--color-primary} !default;
+
   background: $--header-background;
   vertical-align: middle;
   height: $--header-height !important;

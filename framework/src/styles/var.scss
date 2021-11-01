@@ -1,11 +1,6 @@
 /**
-头部样式参数
+*下面代码是定制element的样式，所以需要放在全局
  */
-$--header-height: 64px !default;
-
-$--header-background: #{$--color-primary} !default;
-$--left-menu-width: 200px !default;
-
 //dialog的内边距缩小
 $--dialog-padding-primary: 14px;
 //card的内边距缩小
@@ -28,9 +23,3 @@ $--button-small-padding-horizontal: #{$--button-padding-horizontal-base - 4}px !
 
 $--button-mini-padding-vertical: #{$--button-padding-vertical-base - 6}px !default;
 $--button-mini-padding-horizontal: #{$--button-padding-horizontal-base - 4}px !default;
-
-$--collapse-header-height: 36px !default;
-$--background-color: #f3f4fc !default;
-$--nav-height: 42px !default;
-//上方进度条颜色
-$--process-color: mix($--color-black, $--color-primary, 20%) !default;

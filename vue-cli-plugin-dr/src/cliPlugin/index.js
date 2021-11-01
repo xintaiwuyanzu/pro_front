@@ -55,25 +55,36 @@ module.exports = (api, options, {views, libs, selector, limit}) => {
     lessOptions.javascriptEnabled = true
     const vars = readVars(api, libs)
     if (vars.length > 0 || prjVarExist) {
-        const elementScss = `@import "~element-ui/packages/theme-chalk/src/common/var.scss";`
         //按顺序添加所有模块的变量
         const addStrLess = vars.map(v => `@import "${v}";`).join(eol)
-        const sassPlugin = require('less-plugin-sass2less')
-        if (lessOptions.plugins) {
-            lessOptions.plugins.push(sassPlugin)
-        } else {
-            lessOptions.plugins = [sassPlugin]
-        }
-        //less 变量是懒加载的，项目级的变量是最后的  https://www.tutorialspoint.com/less/less_default_variables.htm
+
         const lessAddArr = [addStrLess, prjVarPath]
-        if (less.additionalData) {
+
+        if (!lessOptions.plugins) {
+            lessOptions.plugins = []
+        }
+
+        lessOptions.plugins.push({
+            install: (less, pluginManager) => {
+                pluginManager.addPreProcessor({
+                    process: (src, ext) => {
+                        if (src.indexOf('dVars()') >= 0) {
+                            src = src.split('dVars()').join(lessAddArr.join(eol))
+                        }
+                        return src
+                    }
+                }, 1)
+            }
+        })
+        lessOptions.plugins.push(require('less-plugin-sass2less'))
+        //less 变量是懒加载的，项目级的变量是最后的  https://www.tutorialspoint.com/less/less_default_variables.htm
+        /*if (less.additionalData) {
             lessAddArr.push(less.additionalData)
         }
-        lessAddArr.unshift(elementScss)
         less.additionalData = lessAddArr.join(eol)
         console.info('追加全局less变量')
-        //lessOptions.modifyVars = `${elementScss}${eol}${addStrLess}${eol}${prjVarPath}`
-        console.info(less.additionalData)
+        lessOptions.modifyVars = `${addStrLess}${eol}${prjVarPath}`
+        console.info(less.additionalData)*/
         const sass = readOrCreate(loaderOptions, 'sass')
         //sass全局变量有默认变量的存在，所以优先加载项目上的变量
         const sassAddArr = [prjVarPath, addStrLess]
@@ -81,7 +92,6 @@ module.exports = (api, options, {views, libs, selector, limit}) => {
         if (sass.additionalData) {
             sassAddArr.unshift(sass.additionalData)
         }
-        sassAddArr.unshift(elementScss)
         sass.additionalData = sassAddArr.join(eol)
         console.info('追加全局sass变量')
         console.info(sass.additionalData)

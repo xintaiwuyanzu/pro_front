@@ -1,3 +1,11 @@
+/**
+左侧菜单款第
+ */
+$--left-menu-width: 200px !default;
+/**
+菜单头部关闭组件高度
+ */
+$--collapse-header-height: 36px !default;
 .el-submenu [class^=el-icon-], .el-menu-item [class^=el-icon-] {
   width: auto;
   margin: 0px;

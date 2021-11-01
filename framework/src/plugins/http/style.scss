@@ -1,6 +1,13 @@
 @import '~nprogress/nprogress.css';
+//使用element默认样式变量
+@import "~element-ui/packages/theme-chalk/src/common/var.scss";
 
 #nprogress {
+  /**
+  上方进度条颜色
+   */
+  $--process-color: mix($--color-black, $--color-primary, 20%) !default;
+
   .bar {
     background: $--process-color;
   }

@@ -1,6 +1,26 @@
 @import "~ant-design-vue/es/menu/style/index.less";
-//因为less后面定义会覆盖前面的定义，这里需要重新引入一下变量的覆盖
-@import "../../styles/var.scss";
+//先引入element的变量，需要用到
+@import "~element-ui/packages/theme-chalk/src/common/var.scss";
+//这里引入各个模块定义的变量
+dVars()
+
+@--color-primary-dark-3: mix(@--color-black, @--color-primary, 30%);
+@--color-primary-dark-4: mix(@--color-black, @--color-primary, 40%);
+/**
+这里使用element变量覆盖antMenu的默认样式
+ */
+//文字选中颜色
+@menu-dark-highlight-color: @--color-white;
+//鼠标悬停颜色
+@menu-dark-item-hover-bg: @--color-primary-dark-3;
+//菜单选中颜色
+@menu-dark-item-active-bg: @--color-primary-dark-4;
+//菜单主要背景颜色
+@menu-dark-bg: @--color-primary;
+//菜单文字颜色
+@menu-dark-color: @--color-primary-light-9;
+//行间距
+@menu-item-boundary-margin: 4px;
 
 /**
 这里面用element-ui里面定义的变量修改ant样式

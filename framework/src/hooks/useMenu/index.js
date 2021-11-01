@@ -38,6 +38,28 @@ function filterMenu(arr, path) {
 }
 
 /**
+ * 查找第一个菜单
+ * @param menu
+ * @returns {undefined}
+ */
+function findFirstMenu(menus) {
+    if (menus) {
+        for (let i = 0; i < menus.length; i++) {
+            const menu = menus[i]
+            if (menu.data && menu.data.url) {
+                return menu
+            } else if (menu.children) {
+                const result = findFirstMenu(menu.children)
+                if (result) {
+                    return result
+                }
+            }
+        }
+    }
+    return undefined;
+}
+
+/**
  * 系统菜单主键
  * @type {symbol}
  */
@@ -72,6 +94,8 @@ export const useMenuContext = (menuLoader = defaultMenuLoader) => {
                 }
             }
         })
+
+
     /**
      *组件初始化的时候加载菜单
      */
@@ -79,25 +103,20 @@ export const useMenuContext = (menuLoader = defaultMenuLoader) => {
         providerData.menuLoading = true
         const result = await menuLoader()
         providerData.menu = result.data.data
-        providerData.menuLoading = false
-        const currentPath = route.value.path
-        if (currentPath === '/main/') {
-            if (providerData.menu.length > 0) {
-                let first = providerData.menu[0]
-                if (first.children) {
-                    first = first.children[0]
-                }
-                if (first) {
-                    providerData.defaultIndex = first.id
-                    providerData.currentMenu = unref(first)
-                }
+        const currentPath = trimUrl(route.value.path)
+        if (currentPath === '/main') {
+            const first = findFirstMenu(providerData.menu)
+            if (first) {
+                providerData.defaultIndex = first.id
+                providerData.currentMenu = unref(first)
             }
         } else {
-            const currentMenu = filterMenu(providerData.menu, trimUrl(currentPath))
+            const currentMenu = filterMenu(providerData.menu, currentPath)
             if (currentMenu) {
                 providerData.currentMenu = currentMenu
             }
         }
+        providerData.menuLoading = true
     })
     provide(MENU_KEY, providerData);
     return providerData

@@ -1,6 +1,6 @@
 import TreeMenu from "./TreeMenu";
 import {Menu} from 'element-ui'
-import '../../styles/left.scss'
+import '../indexMain/left.scss'
 import {useMenu} from "../../hooks/useMenu";
 
 export default {
