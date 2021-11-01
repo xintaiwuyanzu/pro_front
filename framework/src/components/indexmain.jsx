@@ -15,7 +15,7 @@ export default {
         leftClassName: {type: String, default: 'left'}
     },
     setup(props) {
-        const hasHeaderMenu = vue.component('headerMenu')
+        const hasHeaderMenu = !vue.component('headerMenu')
 
         useMenuContext()
         return () => (

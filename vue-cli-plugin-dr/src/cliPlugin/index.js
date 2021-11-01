@@ -97,6 +97,8 @@ module.exports = (api, options, {views, libs, selector, limit}) => {
         cfg.plugin('hard-source-webpack-plugin').use(require('hard-source-webpack-plugin'))
         //moment
         cfg.plugin('moment').use(webpack.ContextReplacementPlugin, [/moment[/\\]locale$/, /zh-cn/])
+        //@vue/composition-api
+        cfg.resolve.alias.set('@vue/composition-api$', '@vue/composition-api/dist/vue-composition-api.esm.js')
         //添加最小限制
         if (api.service.mode === 'production') {
             //控制chunk数量
