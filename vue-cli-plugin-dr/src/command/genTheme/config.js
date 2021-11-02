@@ -9,7 +9,15 @@ const elementThemePath = util.moduleFilePath('element-ui', 'packages/theme-chalk
 const config = []
 
 Object.keys(pkg.dependencies)
-    .map(p => require(util.moduleFilePath(p, `package.json`)))
+    .map(p => {
+        //这里加载可能失败ahooks-vue，失败的就不处理了
+        let pkg = {}
+        try {
+            pkg = require(util.moduleFilePath(p, `package.json`))
+        } catch (e) {
+        }
+        return pkg
+    })
     .filter(p => p.dlib)
     .forEach(p => {
         const configFile = util.moduleFilePath(p.name, 'src/styles/var.scss')

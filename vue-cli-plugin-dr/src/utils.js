@@ -43,7 +43,16 @@ const parseOptions = ({service}, options) => {
         libs = makeArray(libs)
         if (libs.length === 0) {
             libs = Object.keys(pkg.dependencies)
-                .map(p => require(moduleFilePath(p, `package.json`)))
+                .map(p => {
+                    //TODO 这里有重复的代码
+                    //这里加载可能失败ahooks-vue，失败的就不处理了
+                    let pkg = {}
+                    try {
+                        pkg = require(moduleFilePath(p, `package.json`))
+                    } catch (e) {
+                    }
+                    return pkg
+                })
                 .filter(p => p.dlib)
                 .map((pkg, index) => {
                     return {name: pkg.name, index}

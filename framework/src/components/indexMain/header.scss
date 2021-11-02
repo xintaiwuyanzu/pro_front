@@ -20,12 +20,12 @@
     .header-middle {
       display: flex;
       flex: 1;
-      overflow: auto;
+      overflow: hidden;
     }
 
     .title {
       margin-right: 20px;
-      font-size: 24px;
+      font-size: $--font-size-extra-large;
     }
   }
 }

@@ -9,6 +9,13 @@ $--background-color: #f3f4fc !default;
 navinfo 高度
  */
 $--nav-height: 42px !default;
+.el-dialog__header {
+  border-bottom: $--border-base;
+
+  .el-dialog__title {
+    font-size: $--font-size-medium;
+  }
+}
 
 .root {
   height: 100%;
@@ -84,7 +91,7 @@ $--nav-height: 42px !default;
 
         .title {
           margin-left: 10px;
-          font-size: 14px;
+          font-size: $--font-size-base;
           font-weight: bold;
           font-stretch: normal;
           letter-spacing: 1px;

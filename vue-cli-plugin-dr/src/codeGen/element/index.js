@@ -3,17 +3,29 @@ const fs = require('fs')
 const utils = require('../../utils')
 
 /**
+ * 替换element组件，增强功能的组件
+ * @type {[{path: string, module: string, name: string}]}
+ */
+const fixCmps = [
+    {name: 'form-item', module: '@dr/framework', path: 'src/fix/FixCnMessageFormItem.js'},
+    {name: 'dialog', module: '@dr/framework', path: 'src/fix/FixBodyHeightDialog.jsx'},
+]
+
+/**
  * 生成element字符串数组
  */
 function genElements() {
-    const fixPath = fs.existsSync(utils.moduleFilePath("@dr/framework", 'src/fix/FixCnMessageFormItem.js'))
+    const fixMap = {}
+    fixCmps.filter(({module, path}) => fs.existsSync(utils.moduleFilePath(module, path)))
+        .forEach(c => fixMap[c.name] = `${c.module}/${c.path}`);
+
     const datas = Object.keys(require('./components.json'))
         .map(name => {
             let path = `element-ui/lib/${name}.js`
             //这里修复formItem
-            if (name === 'form-item' && fixPath) {
-                //TODO 这里拦截不优雅，可以用webpack加载拦截
-                path = '@dr/framework/src/fix/FixCnMessageFormItem.js'
+            //TODO 这里拦截不优雅，可以用webpack加载拦截
+            if (fixMap[name]) {
+                path = fixMap[name]
             }
             return {
                 name: `El${require('uppercamelcase')(name)}`,
