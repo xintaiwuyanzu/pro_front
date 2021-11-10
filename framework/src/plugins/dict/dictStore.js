@@ -1,6 +1,23 @@
+import {http} from "../http";
+
+export const dictUtil = (store) => {
+    return async (type) => {
+        const dictState = store.state.dict.dicts
+        if (!(dictState[type] && dictState[type].length > 0)) {
+            const result = await http().post('/sysDict/dict', {type})
+            if (result.data.success) {
+                dictState[type] = type === 'organise' ?
+                    result.data.data.filter(d => d.id !== '1') :
+                    result.data.data
+            }
+        }
+        return dictState[type]
+    }
+}
 /**
  * 字典相关的vuex
  */
+
 export default {
     state: {
         //前端缓存所有的字典，key是type，value是数据，通过一次次的请求逐步丰富起来
@@ -14,7 +31,8 @@ export default {
          */
         dictLoaded(state, dict) {
             if (dict) {
-                Object.keys(dict).forEach(k => state.dicts[k] = dict[k])
+                Object.keys(dict)
+                    .forEach(k => state.dicts[k] = dict[k])
             }
         }
     }

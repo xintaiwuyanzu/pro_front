@@ -1,6 +1,5 @@
 import {useMenu} from "../hooks/useMenu";
 import {useRouter} from "@u3u/vue-hooks";
-import {ref, unref} from "vue-demi";
 
 export default {
     props: {
@@ -16,26 +15,19 @@ export default {
     setup(props, context) {
         const {menuData} = useMenu()
         const {router} = useRouter()
-        let title = ref(props.title);
         return () => {
-            if (!props.title) {
-                if (menuData.currentMenu) {
-                    title.value = menuData.currentMenu.label
-                } else {
-                    title.value = ''
-                }
+            const children = []
+            if (context.slots.default) {
+                children.push(context.slots.default())
+            }
+            if (props.back) {
+                children.push((<el-button onClick={() => router.back()} type="primary" size="mini">返 回 </el-button>))
             }
             return (
                 <div class="breadcrumb-container">
-                    <strong class="title">{unref(title)} </strong>
+                    <strong class="title">{props.title || menuData.currentMenu.label || ''} </strong>
                     <section class="slot">
-                        {context.slots.default ? context.slots.default() : ''}
-                        {
-                            props.back ?
-                                <el-button onClick={() => router.back()} type="success" size="mini">返 回
-                                </el-button> :
-                                ''
-                        }
+                        {children}
                     </section>
                 </div>
             )

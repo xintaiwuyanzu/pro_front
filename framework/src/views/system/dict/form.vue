@@ -8,9 +8,11 @@
         <el-input v-model="searchForm.description" placeholder="请输入字典描述" clearable/>
       </el-form-item>
       <el-form-item label="是否可用：" prop="status" style="padding-right: 5px">
-        <el-select v-model="searchForm.status" clearable style="width: 60px" placeholder="">
-          <el-option v-for="item in statusOptions" :key="item.value" :label="item.label" :value="item.value"/>
-        </el-select>
+        <select-async :data="statusOptions" valueKey="value"
+                      v-model="searchForm.status"
+                      clearable
+                      placeholder=""
+                      style="width: 60px"/>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="search" size="mini">搜 索</el-button>
@@ -25,6 +27,13 @@
         </el-form-item>
         <el-form-item label="字典值：" prop="value" required>
           <el-input v-model="form.value" placeholder="请输入字典值" clearable/>
+        </el-form-item>
+        <el-form-item label="显示类型：" prop="showType">
+          <el-select v-model="form.showType" placeholder="请选择字典标签显示类型">
+            <el-option v-for="show in showType" :key="show.id" :value="show.id" :label="show.label">
+              <el-tag :type="show.id">{{ show.label }}</el-tag>
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="排序：" prop="order">
           <el-input v-model="form.order" placeholder="请输入字典排序" clearable/>
@@ -55,9 +64,17 @@ export default {
       searchForm: {},
       path: 'sysDict',
       autoClose: true,
+      showType: [
+        {id: 'primary', label: '主要'},
+        {id: 'success', label: '成功'},
+        {id: 'warning', label: '警告'},
+        {id: 'danger', label: '危险'},
+        {id: 'info', label: '提示'}
+      ],
       defaultForm: {
         key: '',
         value: '',
+        showType: '',
         order: '',
         status: 1,
         description: ''

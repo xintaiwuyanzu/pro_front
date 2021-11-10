@@ -1,0 +1,16 @@
+/**
+自定义tablerender样式
+ */
+.table-wrapper {
+  flex-direction: column;
+  display: flex;
+
+  .render-table {
+    flex: 1;
+    overflow: auto;
+  }
+
+  .render-page {
+
+  }
+}

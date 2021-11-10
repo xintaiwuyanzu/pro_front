@@ -7,16 +7,17 @@ export default {
             }
         }
     },
-    data() {
-        return {
-            data: [],
-            page: {
-                size: 15,
-                index: 0,
-                total: 0
-            },
-            selectIds: [],
-            loading: false,
+    data: () => ({
+        data: [],
+        page: {size: 15, sizes: [5, 10, 15, 20, 50, 100], index: 0, total: 0},
+        selectIds: [],
+        loading: false,
+    }),
+    watch: {
+        'page.size'(n, o) {
+            if (n !== o) {
+                this.loadData()
+            }
         }
     },
     methods: {
@@ -33,23 +34,23 @@ export default {
          *根据传入的参数加载数据
          * @param params
          */
-        loadData(params, useSearchForm) {
+        async loadData(params, useSearchForm) {
             this.loading = true
             if (useSearchForm && this.$refs.form && this.$refs.form.getSearchForm) {
                 params = this.$refs.form.getSearchForm(params)
             }
-            this.$http.post(this.apiPath() + '/page', params).then(({data}) => {
-                if (data && data.success) {
-                    this.data = data.data.data
-                    this.page.index = data.data.start / data.data.size + 1
-                    this.page.size = data.data.size
-                    this.page.total = data.data.total
-                    if (this.$refs.form) {
-                        this.$refs.form.searchForm = Object.assign(this.$refs.form.searchForm, {pageIndex: this.page.index - 1})
-                    }
+            const result = await this.$http.post(this.apiPath() + '/page', {pageSize: this.page.size, ...params})
+            const data = result.data
+            if (data && data.success) {
+                this.data = data.data.data
+                this.page.index = data.data.start / data.data.size + 1
+                this.page.size = data.data.size
+                this.page.total = data.data.total
+                if (this.$refs.form) {
+                    this.$refs.form.searchForm = Object.assign(this.$refs.form.searchForm, {pageIndex: this.page.index - 1})
                 }
-                this.loading = false
-            })
+            }
+            this.loading = false
         },
         /**
          *删除指定的数据

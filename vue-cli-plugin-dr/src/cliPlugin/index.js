@@ -9,7 +9,7 @@ const varPath = 'src/styles/var.scss'
  *项目级变量
  * @type {string}
  */
-const prjVarExist = path.resolve(rootPath, varPath)
+const prjVarExist = fs.existsSync(path.resolve(rootPath, varPath))
 const prjVarPath = prjVarExist ? `@import "@/styles/var.scss";` : ''
 /**
  * 读取配置或者设置新的配置

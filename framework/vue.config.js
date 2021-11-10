@@ -2,7 +2,7 @@ module.exports = {
     devServer: {
         proxy: {
             '/api': {
-                target: 'http://demo3.r-sys.cn/api',
+                target: 'http://127.0.0.1/api',
                 pathRewrite: {'^/api': '/'}
             }
         }

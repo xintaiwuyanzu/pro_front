@@ -1,4 +1,4 @@
-import ElDialog from 'element-ui/packages/dialog/src/component'
+import ElDialog from 'element-ui/lib/dialog'
 import {getCurrentInstance, nextTick, onMounted, onUnmounted, toRefs, watch} from "vue-demi";
 
 function getWindowHeight() {

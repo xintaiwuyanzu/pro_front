@@ -6,7 +6,11 @@ const babelPlugin = require('@vue/cli-plugin-babel')
 /**
  * 导出vue-cli-plugin
  * @type {function(*=, *=): void}
- * //TODO 可以从resolve入手修改
+ * TODO 可以从resolve入手修改
+ * TODO 区分dev和prod，dev时使用require.context解决重启的问题
+ * TODO 重构代码生成和element补丁
+ * TODO 项目可以自定义配置文件，直接声明用哪个组件
+ * TODO 依赖排序问题
  */
 module.exports = (api, options) => {
     const drOptions = utils.parseOptions(api, options)

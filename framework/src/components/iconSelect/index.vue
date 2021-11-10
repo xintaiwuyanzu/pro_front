@@ -18,7 +18,7 @@
           <icon :icon="value?value:'el-icon-search'" style="width: 16px;font-size: 16px;"/>
         </el-button>
       </el-tooltip>
-      <el-button slot="suffix" type="text" @click="$emit('input','')" title="清除">
+      <el-button slot="suffix" type="text" @click="$emit('input')" title="清除">
         <icon icon="x-circle" style="width: 16px;font-size: 16px;"/>
       </el-button>
     </el-input>

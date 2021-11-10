@@ -7,8 +7,18 @@ const utils = require('../../utils')
  * @type {[{path: string, module: string, name: string}]}
  */
 const fixCmps = [
+    /**
+     * 修复校验信息为中文
+     */
     {name: 'form-item', module: '@dr/framework', path: 'src/fix/FixCnMessageFormItem.js'},
+    /**
+     * 修复弹窗为自适应窗口最大高度
+     */
     {name: 'dialog', module: '@dr/framework', path: 'src/fix/FixBodyHeightDialog.jsx'},
+    /**
+     * 修复column带有字典渲染
+     */
+    {name: 'table-column', module: '@dr/framework', path: 'src/fix/FixTableColumnWithStatus.jsx'}
 ]
 
 /**

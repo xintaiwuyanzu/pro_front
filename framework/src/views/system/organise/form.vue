@@ -67,7 +67,6 @@ import fromMixin from '@dr/auto/lib/util/formMixin'
 export default {
   data() {
     return {
-      dict: ['org.type'],
       autoClose: true,
       form: {phone: '', mobile: '', organiseCode: '10'},
     }

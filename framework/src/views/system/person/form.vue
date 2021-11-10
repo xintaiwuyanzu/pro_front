@@ -9,39 +9,41 @@
         <el-button type="primary" @click="editForm()" size="mini">添 加</el-button>
       </el-form-item>
     </el-form>
-    <el-dialog :visible.sync="edit" :title="(form.id?'编辑':'添加')+'人员'+(form.id?'':'(默认密码123456)')" width="40%">
+    <el-dialog :visible.sync="edit" :title="(form.id?'编辑':'添加')+'人员'+(form.id?'':'(默认密码123456)')" width="60%">
       <el-form :model="form" :rules="rules" ref="form" label-width="100px">
         <el-form-item label="用户姓名" prop="userName" required>
           <el-input v-model="form.userName" placeholder="请输入用户姓名" clearable/>
         </el-form-item>
-        <el-form-item label="性别" prop="sex" required>
+        <el-form-item label="用户编号" prop="userCode" required>
+          <el-input v-model="form.userCode" placeholder="请输入用户编号" clearable/>
+        </el-form-item>
+        <el-form-item label="性别" prop="sex">
           <el-select v-model="form.sex" placeholder="请选择性别">
             <el-option v-for="item in optionSex" :label="item.label" :key="item.value" :value="item.value"/>
           </el-select>
         </el-form-item>
-        <el-form-item label="职务" prop="duty" required>
+        <el-form-item label="职务" prop="duty">
           <el-select v-model="form.duty" placeholder="请选择职务">
             <el-option label="负责人" key="负责人" value="fuzeren"/>
             <el-option label="科员" key="科员" value="keyuan"/>
           </el-select>
         </el-form-item>
-        <el-form-item label="用户编号" prop="userCode" required>
-          <el-input v-model="form.userCode" placeholder="请输入用户编号" clearable/>
-        </el-form-item>
-        <el-form-item label="用户类型" prop="userCode" required>
+        <el-form-item label="用户类型" prop="userCode">
           <el-input v-model="form.personType" placeholder="请输入用户类型" clearable/>
         </el-form-item>
-        <el-form-item label="联系电话" prop="mobile" required>
+        <el-form-item label="联系电话" prop="mobile">
           <el-input v-model="form.mobile" placeholder="请输入联系电话" clearable/>
         </el-form-item>
         <el-form-item label="邮 箱" prop="email">
           <el-input v-model="form.email" placeholder="请输入邮箱" clearable/>
         </el-form-item>
         <el-form-item label="是否可用" prop="status">
-          <el-select v-model="form.status" clearable placeholder="请选择是否可用" style="width: 80px">
-            <el-option label="是" key="1" value="1" aria-selected="form.status==1"></el-option>
-            <el-option label="否" key="0" value="0" aria-selected="form.status==1"></el-option>
-          </el-select>
+          <select-async v-model="form.status"
+                        clearable
+                        placeholder="请选择是否可用"
+                        style="width: 120px"
+                        valueKey="value"
+                        :data="statusRole"/>
         </el-form-item>
         <el-form-item label="描述" prop="description">
           <el-input type="textarea" v-model="form.description" :autosize="{ minRows: 3, maxRows: 6 }"
@@ -72,7 +74,7 @@ export default {
         userName: "",
         userCode: "",
         personType: "",
-        status: ""
+        status: "1"
       },
       defaultForm: {
         key: '',
