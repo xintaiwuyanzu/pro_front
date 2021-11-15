@@ -18,6 +18,7 @@
     "@vue/composition-api": "^1.2.4",
     "async-validator": "^4.0.7",
     "axios": "^0.21.1",
+    "dayjs": "^1.10.7",
     "element-ui": "^2.15.4",
     "js-base64": "^3.6.1",
     "js-cookie": "^3.0.0",

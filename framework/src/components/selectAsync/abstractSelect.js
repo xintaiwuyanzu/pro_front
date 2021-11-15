@@ -15,9 +15,11 @@ export default {
         //el-option value
         valueKey: {type: String, default: 'id'},
         /**
-         * 可以直接传选项数据
+         * 可以直接声明选项数据
+         *data为Object时，默认取对象的key为数据值，value为显示的值
+         *data为Array时，根据labelKey取每条数据的数据值，根据valueKey取每条数据的显示值
          */
-        data: {type: Array}
+        data: [Object, Array]
     }
 }
 
@@ -36,6 +38,9 @@ export const selectRender = (prop,
         const labelKey = prop.labelKey || 'label'
         const valueKey = prop.valueKey || 'id'
         const args = {
+            attrs: {
+                placeholder: context.attrs.placeHolder
+            },
             props: {
                 ...context.attrs,
                 value: prop.value,
@@ -43,11 +48,40 @@ export const selectRender = (prop,
             },
             on: {
                 ...context.listeners,
-                value: (v) => context.emit('value', v)
+                input: (v) => context.emit('input', v)
             }
         }
-        return (<el-select  {...args}>
-            {(prop.data ? prop.data : data.data).map(d => <el-option label={d[labelKey]} value={d[valueKey]}/>)}
-        </el-select>)
+        const computeData = prop.data || data.data
+        let children
+        if (Array.isArray(computeData)) {
+            children = computeData.map(d => {
+                let value = d[valueKey]
+                if (typeof prop.value === 'number') {
+                    try {
+                        //处理一下数字类型的字典
+                        value = parseInt(value)
+                    } catch (ignore) {
+                        /*eslint-disable*/
+                    }
+                }
+                return <el-option label={d[labelKey]} value={value}/>
+            })
+        } else {
+            children = Object.keys(computeData)
+                .map(k => {
+                    const v = computeData[k]
+                    let value = typeof v === 'string' ? v : v[prop.labelKey]
+                    if (typeof prop.value === 'number') {
+                        try {
+                            //处理一下数字类型的字典
+                            value = parseInt(value)
+                        } catch (ignore) {
+                            /*eslint-disable*/
+                        }
+                    }
+                    return <el-option label={value} value={k}/>
+                })
+        }
+        return (<el-select  {...args}>{children}</el-select>)
     }
 }

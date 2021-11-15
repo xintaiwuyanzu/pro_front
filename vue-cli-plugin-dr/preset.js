@@ -1,6 +1,5 @@
 const path = require('path')
 const babelImport = require('babel-plugin-import')
-const utils = require('./src/utils')
 const cacheDir = path.resolve(process.cwd(), 'node_modules', '.cache', 'pluginDr')
 module.exports = () => ({
     presets: [
@@ -26,6 +25,7 @@ module.exports = () => ({
         [babelImport,
             {
                 libraryName: 'element-ui',
+                libraryDirectory: 'packages',
                 style: false
             }, 'el']
     ]

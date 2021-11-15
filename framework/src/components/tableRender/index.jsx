@@ -1,4 +1,3 @@
-import fixColumn from '../../fix/FixTableColumnWithStatus'
 import './style.scss'
 
 export const functionUtils = (refId, functionArr) => {
@@ -15,6 +14,71 @@ export const functionUtils = (refId, functionArr) => {
         return o
     }, {})
 }
+/**
+ * 将对象转换为数组类型
+ * @param arr
+ * @return {*[]}
+ */
+export const makeArray = (arr) => {
+    let result = arr || []
+    if (!Array.isArray(arr) && typeof arr === 'object') {
+        result = []
+        Object.keys(arr).forEach(key => {
+            result.push({prop: key, ...arr[key]})
+        })
+    }
+    return result
+}
+/**
+ * 根据field计算children
+ * @param arr
+ * @param context
+ * @param vNodeFunction
+ * @return {(*)[]}
+ */
+export const computeChildren = (arr, context, vNodeFunction) => {
+    const slotObject = (context.$slots.default || []).reduce((obj, vNode) => {
+        const props = vNode.componentOptions ? vNode.componentOptions.propsData : vNode.asyncMeta.data.props
+        const key = props.prop || 'default'
+        const arr = obj[key] = obj[key] || []
+        arr.push(vNode)
+        return obj
+    }, {})
+    const useSlotNameArr = []
+    const children = makeArray(arr)
+        .filter(f => {
+            //过滤掉不显示的子项
+            const show = f.show
+            if (show === undefined) {
+                return true
+            }
+            return show
+        })
+        .map(props => {
+            const prop = props.prop
+            const propSlot = slotObject[prop]
+            if (propSlot) {
+                useSlotNameArr.push(prop)
+                return propSlot
+            } else {
+                return vNodeFunction(props)
+            }
+        })
+    Object.keys(slotObject)
+        .forEach(k => {
+            if (useSlotNameArr.indexOf(k) < 0 && k !== 'default') {
+                slotObject[k]
+                    .forEach(v => children.push(v))
+            }
+        })
+    //添加默认slot
+    if (slotObject.default) {
+        slotObject.default.forEach(v => children.push(v))
+    }
+    return children
+}
+
+
 export const tableFunctions = [
     'clearSelection',
     'toggleRowSelection',
@@ -33,6 +97,7 @@ export const tableFunctions = [
  */
 export default {
     inheritAttrs: false,
+    name: 'tableRender',
     props: {
         /**
          * 索引页面
@@ -41,19 +106,30 @@ export default {
         /**
          * 是否可以多选
          */
-        selectAble: {type: Boolean, default: false},
+        checkAble: {type: Boolean, default: false},
         /**
          * 列默认属性
          */
-        defaultColumn: {type: Object, default: () => ({})},
+        defaultColumnProps: {
+            type: Object,
+            default: () => (
+                {
+                    align: 'center',
+                    'header-align': 'center',
+                    'show-overflow-tooltip': true
+                }
+            )
+        },
         /**
          * 所有的列组件
+         * Array时每个对象的prop属性是key
+         * Object时key是key，value是对象
          */
-        columns: {type: Array},
+        columns: [Array, Object],
         /**
          *是否显示分页组件
          */
-        showPage: {type: Boolean, default: false},
+        showPage: {type: Boolean, default: true},
         /**
          * 分页属性
          */
@@ -61,37 +137,18 @@ export default {
     },
     methods: functionUtils('table', tableFunctions),
     render() {
-        const slots = this.$slots
-        const children = (this.columns || []).map(props => {
-            const prop = props.prop
-            const propSlot = slots[prop]
-            if (propSlot) {
-                if (Array.isArray(propSlot) && propSlot.length === 1) {
-                    return propSlot[0]
-                } else {
-                    return propSlot
-                }
-            }
-
-            //todo追加默认属性
-            return <fixColumn
-                //声明属性
-                {...{props}}
-                //默认属性
-                {...{props: this.defaultColumn}}
-            />
-        })
+        const children = computeChildren(this.columns, this, props => <el-table-column
+            //声明属性
+            {...{props}}
+            //默认属性
+            {...{props: this.defaultColumnProps}}
+        />)
         //是否添加列
-        if (this.index) {
-            children.unshift(<fixColumn page={this.page}/>)
+        if (this.index && this.page) {
+            children.unshift(<el-table-column page={this.page}/>)
         }
-        if (this.selectAble) {
-            children.unshift(<fixColumn type='selection'/>)
-        }
-        if (Array.isArray(slots.default)) {
-            slots.default.forEach(s => children.push(s))
-        } else {
-            children.push(slots.default)
+        if (this.checkAble) {
+            children.unshift(<el-table-column type='selection'/>)
         }
         const tableArgs = {
             ref: 'table',
@@ -101,7 +158,6 @@ export default {
             },
             on: this.$listeners
         }
-
         if (this.showPage && this.page) {
             const pageArgs = {
                 on: {

@@ -1,4 +1,4 @@
-import ElDialog from 'element-ui/lib/dialog'
+import {Dialog} from 'element-ui'
 import {getCurrentInstance, nextTick, onMounted, onUnmounted, toRefs, watch} from "vue-demi";
 
 function getWindowHeight() {
@@ -17,7 +17,7 @@ export default {
         //增加是否自动调整内容高度属性
         autoHeight: {default: true, type: Boolean}
     },
-    extends: ElDialog,
+    extends: Dialog,
     setup(prop) {
         //ref dialog htmlElement对象，使用ref(null)获取不到
         let dialog = null

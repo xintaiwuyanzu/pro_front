@@ -1,6 +1,12 @@
 const path = require('path')
 const util = require('../utils')
 const cacheGroups = {
+    cpn: {
+        name: `cpn`,
+        test: /[\\/](src\/components)[\\/]/,
+        priority: -9,
+        chunks: 'initial'
+    },
     ve: {
         name: `ve`,
         test: /[\\/]node_modules[\\/](vue|vue-router|vuex|core-js)[\\/]/,
@@ -31,7 +37,6 @@ const cacheGroups = {
         priority: -16,
         chunks: 'initial',
         maxInitialRequests: 5,
-        minSize: 0,
         reuseExistingChunk: true,
         enforce: true
     }
@@ -56,7 +61,7 @@ function genTranspileDepRegex(transpileDependencies) {
 
 function buildBabelExclude({transpileDependencies = []}, libs) {
     const cliServicePath = path.dirname(require.resolve('@vue/cli-service'))
-    const transpileDepRegex = genTranspileDepRegex(transpileDependencies.concat(libs.map(l => l.name)))
+    const transpileDepRegex = genTranspileDepRegex(transpileDependencies.concat(libs.map(l => l.name)).concat('element-ui'))
     return filepath => {
         // always transpile js in vue files
         if (/\.vue\.jsx?$/.test(filepath)) {
@@ -88,7 +93,9 @@ module.exports = {
     /**
      *optimization.splitChunks参数
      */
-    splitChunks: {cacheGroups},
+    splitChunks: {
+        cacheGroups
+    },
     chunks: Object.keys(cacheGroups),
     buildBabelExclude
 }

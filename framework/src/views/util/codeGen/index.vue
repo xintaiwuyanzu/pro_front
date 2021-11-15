@@ -145,7 +145,7 @@ export default {
     nodeClick(data, node) {
       if (node.level === 3) {
         this.tableLoading = true
-        this.$http.post('/codeGen/columns', {dataSource: node.parent.parent.data.id, tableName: node.data.id})
+        this.$post('/codeGen/columns', {dataSource: node.parent.parent.data.id, tableName: node.data.id})
             .then(({data}) => {
               if (data.success) {
                 this.columns = data.data
@@ -180,7 +180,7 @@ export default {
   }
 }
 </script>
-<style scoped type="scss">
+<style scoped lang="scss">
 .index_main {
   .tree-container {
     display: flex;
@@ -197,10 +197,12 @@ export default {
       flex: 1;
       overflow: auto;
     }
+
   }
 
   .table-container {
     flex: 1;
   }
+
 }
 </style>

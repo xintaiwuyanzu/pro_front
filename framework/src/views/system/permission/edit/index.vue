@@ -4,23 +4,7 @@
       <el-button type="primary" @click="save">保存</el-button>
     </nac-info>
     <div class="index_main">
-      <el-form :model="form" label-width="120px" ref="form">
-        <el-form-item label="权限名称" prop="name" required>
-          <el-input v-model="form.name" clearable/>
-        </el-form-item>
-        <el-form-item label="权限描述" prop="description">
-          <el-input v-model="form.description" clearable/>
-        </el-form-item>
-        <el-form-item label="权限类型" prop="type" required>
-          <el-select v-model="form.type" :disabled="!!id" clearable @change="()=>form.groupId=''">
-            <el-option v-for="p in providers" :key="p.type" :label="p.name" :value="p.type"/>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="权限分组" prop="groupId" required v-if="groups.length>1">
-          <el-select v-model="form.groupId" clearable :disabled="!!id">
-            <el-option v-for="p in groups" :key="p.id" :label="p.name" :value="p.id"/>
-          </el-select>
-        </el-form-item>
+      <form-render style="padding: 10px 20px" :fields="fields" :model="form" label-width="120px" ref="form">
         <el-form-item prop="code" required label="权限编码">
           <span slot="label">
             权限编码
@@ -37,7 +21,7 @@
           </el-dialog>
           <el-input type="textarea" v-model="form.code" clearable/>
         </el-form-item>
-      </el-form>
+      </form-render>
     </div>
   </section>
 </template>
@@ -59,23 +43,51 @@ export default {
     }
   },
   computed: {
+    fields() {
+      return [
+        {prop: 'name', label: '权限名称', required: true},
+        {prop: 'description', label: '描述', type: 'textarea'},
+        {
+          prop: 'type',
+          label: '权限类型',
+          required: true,
+          disabled: !!this.id,
+          fieldType: 'select',
+          data: this.providers,
+          valueKey: 'type',
+          labelKey: 'name',
+          on: {
+            change: () => {
+              this.form.groupId = ''
+            }
+          }
+        },
+        {
+          prop: 'groupId',
+          disabled: !!this.id,
+          label: '权限分组',
+          required: true,
+          show: this.groups.length > 1,
+          fieldType: 'select',
+          data: this.groups,
+          valueKey: 'id',
+          labelKey: 'name',
+        }
+      ]
+    },
     resourceType() {
       return this.form.type
     }
   },
   methods: {
-    save() {
-      this.$refs.form.validate((success) => {
-        if (success) {
-          this.$post(`/sysPermission/${this.id ? 'update' : 'insert'}`, this.form)
-              .then(() => {
-                this.$message.success('保存成功')
-                this.$router.back()
-              })
-        } else {
-          this.$message.warning('请填写完整表单')
-        }
-      })
+    async save() {
+      const result = await this.$refs.form.submit(`/sysPermission/${this.id ? 'update' : 'insert'}`)
+      if (result.success) {
+        this.$message.success(result.message)
+        this.$router.back()
+      } else {
+        this.$message.error(result.message)
+      }
     },
     $init() {
       this.loadResourceProvider()

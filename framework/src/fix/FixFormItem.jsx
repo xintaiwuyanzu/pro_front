@@ -1,4 +1,6 @@
-import ELFormItem from 'element-ui/lib/form-item'
+import {FormItem} from 'element-ui'
+import {noop} from 'element-ui/src/utils/util';
+
 import AsyncValidator from 'async-validator';
 
 const messages = {
@@ -59,15 +61,15 @@ const messages = {
  */
 
 export default {
-    name: ELFormItem.name,
-    componentName: ELFormItem.componentName,
-    extends: ELFormItem,
+    name: FormItem.name,
+    componentName: FormItem.componentName,
+    extends: FormItem,
     methods: {
-        validate(trigger, callback) {
+        validate(trigger, callback = noop) {
             this.validateDisabled = false;
             const rules = this.getFilteredRule(trigger);
             if ((!rules || rules.length === 0) && this.required === undefined) {
-                callback || callback();
+                callback();
                 return true;
             }
             this.validateState = 'validating';
@@ -107,9 +109,7 @@ export default {
             validator.validate(model, {firstFields: true, messages}, (errors, invalidFields) => {
                 this.validateState = !errors ? 'success' : 'error';
                 this.validateMessage = errors ? errors[0].message : '';
-                if (callback) {
-                    callback(this.validateMessage, invalidFields);
-                }
+                callback(this.validateMessage, invalidFields);
                 this.elForm && this.elForm.$emit('validate', this.prop, !errors, this.validateMessage || null);
             });
         }

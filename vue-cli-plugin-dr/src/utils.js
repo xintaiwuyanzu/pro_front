@@ -26,6 +26,7 @@ const defaultSelector = (type, name, arr) => {
  * @returns {{libs: *, views: *}}
  */
 const parseOptions = ({service}, options) => {
+    checkBrowserList()
     let drOpt = options.pluginOptions ? options.pluginOptions.dr : {}
     const {pkg, context} = service
     //router　视图　　库文件
@@ -64,11 +65,35 @@ const parseOptions = ({service}, options) => {
     }
     limit = Object.assign({
         maxChunks: 100,
-        minChunkSize: 5120
+        minChunkSize: 128 * 1000
     }, limit)
     return {views, libs, selector, limit}
 }
-
+/**
+ * 校验browserslist，
+ * 如果当前工程下面没有browserslist相关的定义，
+ * 则尝试使用环境变量定义默认的browserslist
+ */
+const checkBrowserList = () => {
+    if (require(`${process.cwd()}/package.json`).browserslist) {
+        return
+    }
+    const fs = require('fs')
+    if (fs.existsSync(path.resolve(process.cwd(), '.browserslistrc'))) {
+        return;
+    }
+    if (fs.existsSync(path.resolve(process.cwd(), '.browserslist'))) {
+        return;
+    }
+    if (!process.env.BROWSERSLIST) {
+        //添加默认的配置
+        process.env.BROWSERSLIST =
+            ['> 1%',
+                'last 2 versions',
+                'not dead'
+            ]
+    }
+}
 /**
  * 获取模块路径
  * @param mod

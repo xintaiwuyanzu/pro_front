@@ -3,12 +3,13 @@ import {reactive, ref, watch} from "vue-demi";
 import abstractSelect, {selectRender} from "./abstractSelect";
 
 export default {
+    name: 'selectAsync',
     extends: abstractSelect,
     props: {
         //数据异步加载方法
         loadFunction: {type: Function},
         //异步请求地址
-        url: {type: String, require: true},
+        url: {type: String},
         //请求参数
         params: {
             type: Object, default: () => ({})

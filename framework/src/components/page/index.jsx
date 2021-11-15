@@ -2,6 +2,7 @@
  * 一个省事的组件，用来标引table的分页
  */
 export default {
+    name: 'page',
     inheritAttrs: false,
     props: {
         /**
@@ -11,6 +12,7 @@ export default {
         page: {type: Object}
     },
     setup(prop, context) {
+        //TODO 这里的page是可以直接发送事件的
         return () => {
             const args = {
                 props: {

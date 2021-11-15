@@ -35,6 +35,7 @@
 import AbstractLogin from "./AbstractLogin";
 
 export default {
+  name: 'login',
   extends: AbstractLogin
 }
 </script>

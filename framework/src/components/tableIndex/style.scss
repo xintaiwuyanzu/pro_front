@@ -1,0 +1,19 @@
+.table_index {
+
+  .table-wrapper {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    padding: 5px;
+    overflow: auto;
+
+    .render-table {
+      flex: 1;
+      overflow: auto;
+    }
+
+    .el-pagination {
+      text-align: right;
+    }
+  }
+}

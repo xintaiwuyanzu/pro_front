@@ -4,6 +4,7 @@ import '../indexMain/left.scss'
 import {useMenu} from "../../hooks/useMenu";
 
 export default {
+    name: 'LeftMenu',
     setup() {
         const {menuData} = useMenu()
         return () => (

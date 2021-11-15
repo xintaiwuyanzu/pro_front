@@ -10,15 +10,15 @@ const fixCmps = [
     /**
      * 修复校验信息为中文
      */
-    {name: 'form-item', module: '@dr/framework', path: 'src/fix/FixCnMessageFormItem.js'},
+    {name: 'form-item', module: '@dr/framework', path: 'src/fix/FixFormItem.jsx'},
     /**
      * 修复弹窗为自适应窗口最大高度
      */
-    {name: 'dialog', module: '@dr/framework', path: 'src/fix/FixBodyHeightDialog.jsx'},
+    {name: 'dialog', module: '@dr/framework', path: 'src/fix/FixDialog.jsx'},
     /**
      * 修复column带有字典渲染
      */
-    {name: 'table-column', module: '@dr/framework', path: 'src/fix/FixTableColumnWithStatus.jsx'}
+    {name: 'table-column', module: '@dr/framework', path: 'src/fix/FixTableColumn.jsx'}
 ]
 
 /**
@@ -29,9 +29,11 @@ function genElements() {
     fixCmps.filter(({module, path}) => fs.existsSync(utils.moduleFilePath(module, path)))
         .forEach(c => fixMap[c.name] = `${c.module}/${c.path}`);
 
-    const datas = Object.keys(require('./components.json'))
+    const components = require('./components.json')
+    const datas = Object.keys(components)
         .map(name => {
-            let path = `element-ui/lib/${name}.js`
+            //let path = `element-ui/lib/${name}.js`
+            let path = `element-ui/${components[name]}`
             //这里修复formItem
             //TODO 这里拦截不优雅，可以用webpack加载拦截
             if (fixMap[name]) {
@@ -39,6 +41,7 @@ function genElements() {
             }
             return {
                 name: `El${require('uppercamelcase')(name)}`,
+                //TODO 可以使用sass-migrator更新scss的问题
                 css: name,
                 path,
             }

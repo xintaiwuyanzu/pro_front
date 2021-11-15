@@ -50,39 +50,36 @@ export default {
         /**
          *保存表单
          */
-        saveForm() {
+        async saveForm() {
             if (this.$refs.form) {
                 this.loading = true
-                this.$refs.form.validate(valid => {
-                    if (valid) {
-                        let path = this.apiPath()
-                        if (this.form.id) {
-                            path = path + '/update'
-                        } else {
-                            path = path + '/insert'
-                        }
-                        this.$http.post(path, this.form).then(({data}) => {
-                            if (data && data.success) {
-                                this.form = data.data
-                                this.$message.success('保存成功！')
-                                if (this.autoClose) {
-                                    this.cancel()
-                                }
-                                if (this.$parent && this.$parent.loadData) {
-                                    this.$parent.loadData(this.getSearchForm())
-                                } else {
-                                    // 如果form获取不到父组件的loadData方法，则采用事件的方式进行触发加载数据
-                                    this.$emit('search', this.getSearchForm())
-                                }
-                            } else {
-                                this.$message.error(data.message)
-                            }
-                            this.loading = false
-                        })
+                const valid = await this.$refs.form.validate()
+                if (valid) {
+                    let path = this.apiPath()
+                    if (this.form.id) {
+                        path = path + '/update'
                     } else {
-                        this.loading = false
+                        path = path + '/insert'
                     }
-                })
+                    const result = await this.$http.post(path, this.form)
+                    const data = result.data
+                    if (data && data.success) {
+                        this.form = data.data
+                        this.$message.success('保存成功！')
+                        if (this.autoClose) {
+                            this.cancel()
+                        }
+                        if (this.$parent && this.$parent.loadData) {
+                            await this.$parent.loadData(this.getSearchForm())
+                        } else {
+                            // 如果form获取不到父组件的loadData方法，则采用事件的方式进行触发加载数据
+                            this.$emit('search', this.getSearchForm())
+                        }
+                    } else {
+                        this.$message.error(data.message)
+                    }
+                }
+                this.loading = false
             }
         },
         /**

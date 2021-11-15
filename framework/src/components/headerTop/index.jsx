@@ -4,6 +4,7 @@ import vue from "vue";
  * 头部分为左中右三部分
  */
 export default {
+    name: 'headerTop',
     setup() {
         const headerLeft = vue.component('headerLeft')
         const headerMenu = vue.component('headerMenu')

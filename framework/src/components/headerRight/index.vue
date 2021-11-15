@@ -14,6 +14,7 @@
 import loginUtil from '../login/util'
 
 export default {
+  name: 'headerRight',
   methods: {
     logout() {
       this.$confirm("确定要退出登录吗？", '提 醒', {type: 'waring'})

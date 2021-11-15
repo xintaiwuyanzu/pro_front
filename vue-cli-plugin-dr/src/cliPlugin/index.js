@@ -114,24 +114,32 @@ module.exports = (api, options, {views, libs, selector, limit}) => {
         const webpack = require('webpack')
         //添加缓存
         cfg.plugin('hard-source-webpack-plugin').use(require('hard-source-webpack-plugin'))
-        //moment
-        cfg.plugin('moment').use(webpack.ContextReplacementPlugin, [/moment[/\\]locale$/, /zh-cn/])
         //@vue/composition-api
         cfg.resolve.alias.set('@vue/composition-api$', '@vue/composition-api/dist/vue-composition-api.esm.js')
         //添加最小限制
         if (api.service.mode === 'production') {
             //控制chunk数量
-            cfg.plugin('LimitChunkCountPlugin').use(webpack.optimize.LimitChunkCountPlugin, [limit])
+            cfg.plugin('LimitChunkCountPlugin').use(webpack.optimize.LimitChunkCountPlugin, [{maxChunks: limit.maxChunks}])
+            cfg.plugin('MinChunkSizePlugin').use(webpack.optimize.MinChunkSizePlugin, [{minChunkSize: limit.minChunkSize}])
             //gzip压缩文件
             cfg.plugin('CompressionWebpackPlugin').use(require('compression-webpack-plugin'), [{
                 test: /\.(js|css|json|txt|html|ico|svg)(\?.*)?$/i,
-                threshold: 10240
+                threshold: 128 * 1000
             }])
+            //moment
+            cfg.plugin('moment').use(webpack.ContextReplacementPlugin, [/moment[/\\]locale$/, /zh-cn/])
+            //添加代码打包
+            cfg.optimization.splitChunks(config.splitChunks)
+            cfg.performance.maxEntrypointSize(512 * 1000).maxAssetSize(384 * 1000)
+            //压缩
+            const terserOptions = require('@vue/cli-service/lib/config/terserOptions')
+            cfg.optimization
+                .minimizer('terser')
+                .use(require('terser-webpack-plugin'), [Object.assign(terserOptions(options), {terserOptions: {output: {comments: false}}})])
         }
-        //添加代码打包
-        cfg.optimization.splitChunks(config.splitChunks)
         //babel添加exclude
         cfg.module.rule('js').exclude.clear().add(config.buildBabelExclude(options, libs))
+        cfg.module.rule('js').uses.get('babel-loader').options({presets: ['@dr/vue-cli-plugin-dr/preset']})
         //计算title
         const pkg = api.service.pkg
         const computeTitle = (arg) => {
@@ -141,7 +149,6 @@ module.exports = (api, options, {views, libs, selector, limit}) => {
                 }
             }
         }
-
         //html模板路径
         let template = 'public/index.html'
         if (!fs.existsSync(path.resolve(rootPath, template))) {

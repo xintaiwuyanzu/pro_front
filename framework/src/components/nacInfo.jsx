@@ -2,6 +2,7 @@ import {useMenu} from "../hooks/useMenu";
 import {useRouter} from "@u3u/vue-hooks";
 
 export default {
+    name: 'nacInfo',
     props: {
         /**
          * 显示名称

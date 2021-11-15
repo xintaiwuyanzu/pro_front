@@ -6,7 +6,7 @@ module.exports = {
     /**
      *文件匹配正则
      */
-    fileNameMatcher: ['+(*.vue|*.js|*.jsx)', '*/+(index.vue|index.js|index.jsx)'],
+    fileNameMatcher: ['+(*.vue|*.js|*.jsx)', '*/index.+(vue|js|jsx)'],
     /**
      * 根据变量模板生成要插入的单条字符串
      * @param name

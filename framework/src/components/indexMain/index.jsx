@@ -3,6 +3,7 @@ import {useMenuContext} from "../../hooks/useMenu";
 import vue from "vue";
 
 export default {
+    name: 'indexMain',
     /**
      * 总共分为上左中下四个区域
      *
@@ -14,6 +15,7 @@ export default {
         mainClassName: {type: String, default: 'main'},
         leftClassName: {type: String, default: 'left'}
     },
+    //TODO 这里应该可以从@dr/auto 查询判断
     setup(props) {
         const hasHeaderMenu = !vue.component('headerMenu')
         //TODO 菜单加载状态

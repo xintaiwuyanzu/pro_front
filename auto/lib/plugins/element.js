@@ -1,13 +1,9 @@
 import {elements} from '@dr/auto'
 import utils from '@dr/auto/lib/utils'
-import InfiniteScroll from 'element-ui/lib/infinite-scroll'
-import Loading from 'element-ui/lib/loading'
-import MessageBox from 'element-ui/lib/message-box'
-import Message from 'element-ui/lib/message'
-import Notification from 'element-ui/lib/notification'
+import {InfiniteScroll, Loading, Message, MessageBox, Notification} from 'element-ui'
 
 
-export default (vue, router, store, opt={}) => {
+export default (vue, router, store, opt = {}) => {
     vue.prototype.$ELEMENT = {
         size: opt.size || 'small',
         zIndex: opt.zIndex || 2000
