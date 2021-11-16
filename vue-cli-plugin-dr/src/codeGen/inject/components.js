@@ -13,7 +13,7 @@ module.exports = {
      * @param path
      * @returns {string}
      */
-    template({name, path, fullPath}) {
-        return `{name:"${name}",component:import(/* webpackChunkName: "cpn-${name}" */"${fullPath}")}`
+    template({name, requirePath}) {
+        return `{name:"${name}",component:import(/* webpackChunkName: "cpn-${name}" */"${requirePath}")}`
     }
 }

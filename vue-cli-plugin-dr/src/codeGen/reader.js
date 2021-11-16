@@ -70,7 +70,7 @@ module.exports.readPrj = (views = []) => {
                     glob.sync(pattern)
                         .forEach(fullPath => {
                             const fileMeta = path.parse(fullPath)
-                            const requirePath = path.relative(cwd, fullPath).split(path.sep).join('/')
+                            const requirePath = `@/` + path.relative(cwd + '/src/', fullPath).split(path.sep).join('/')
                             const name = path.relative(root, fileMeta.name === 'index' ? fileMeta.dir : path.join(fileMeta.dir, fileMeta.name)).split(path.sep).join('/')
                             obj[name] = {name, fullPath, requirePath}
                         })
