@@ -43,7 +43,7 @@
                         placeholder="请选择是否可用"
                         style="width: 120px"
                         valueKey="value"
-                        :data="statusRole"/>
+                        :mapper="statusRole"/>
         </el-form-item>
         <el-form-item label="描述" prop="description">
           <el-input type="textarea" v-model="form.description" :autosize="{ minRows: 3, maxRows: 6 }"

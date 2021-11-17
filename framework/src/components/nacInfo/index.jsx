@@ -1,4 +1,4 @@
-import {useMenu} from "../hooks/useMenu";
+import {useMenu} from "../../hooks/useMenu";
 import {useRouter} from "@u3u/vue-hooks";
 
 export default {

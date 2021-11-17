@@ -1,5 +1,6 @@
 import './style.scss'
 import {useTable} from "../../hooks/useTable";
+import {useMenu} from "../../hooks/useMenu";
 
 export default {
     name: 'tableIndex',
@@ -25,6 +26,10 @@ export default {
          */
         delete: {type: Boolean, default: true},
         /**
+         * 是否支持多选删除
+         */
+        deleteMulti: {type: Boolean, default: false},
+        /**
          * 可以自定义table属性
          */
         tableProp: {type: Object, default: () => ({})},
@@ -32,6 +37,10 @@ export default {
          * 可以自定义表单属性
          */
         searchFormProp: {type: Object, default: () => ({})},
+        /**
+         * 添加默认搜索条件
+         */
+        defaultSearchForm: {type: Object},
         /**
          * 默认添加表单字段
          */
@@ -57,6 +66,10 @@ export default {
     data() {
         return {
             /**
+             * 表格选中的数据
+             */
+            tableSelection: [],
+            /**
              * 查询表单对象
              */
             searchFormModel: {},
@@ -73,6 +86,9 @@ export default {
              */
             dialogVisible: false
         }
+    },
+    beforeMount() {
+        this.searchFormModel = {...this.searchFormModel, ...this.defaultSearchForm}
     },
     computed: {
         /**
@@ -101,13 +117,22 @@ export default {
          * @return {string}
          */
         dialogTitle() {
-            const title = this.title || ''
+            let title = this.title || (this.menuData.currentMenu ? this.menuData.currentMenu.label : '') || ''
+            if (title.endsWith('管理')) {
+                title = title.substr(0, title.length - 2)
+            }
             return `${this.editFormModel.id ? '编辑' : '添加'}${title}`
         }
     },
     setup(props) {
-        const result = useTable({basePath: props.path, pagePath: props.pagePath, deletePath: props.deletePath})
-        return {...result}
+        const {menuData} = useMenu()
+        const result = useTable({
+            basePath: props.path,
+            pagePath: props.pagePath,
+            deletePath: props.deletePath,
+            initParams: props.defaultSearchForm
+        })
+        return {...result, menuData}
     },
     methods: {
         /**

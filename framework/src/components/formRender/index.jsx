@@ -9,16 +9,10 @@ import {getPropByPath} from 'element-ui/src/utils/util';
  * @return {{directives: [{name: string, value}], style, attrs: (*&{placeHolder: (string|`${string}${string}`)}), props: (*&{value: *}), on: (*&{input: (function(*): *)})}}
  */
 function computeArgs(props, context, isCustom) {
-    //这里为了删除type属性
     const {on, style, fieldType, ...other} = props
-    const value = getPropByPath(context.$attrs.model, props.prop)
-    if (!value.v) {
-        //TODO 这里有点暴力，为了实现响应式
-        context.$set(context.$attrs.model, props.prop, '')
-    }
+    //补全placeHolder
     const placeHolderPre = fieldType === 'select' ? '请选择' : '请输入'
     const placeHolder = props.placeHolder || `${placeHolderPre}${props.label}`
-
     const attrs = isCustom ? {
         placeHolder,
         //默认属性
@@ -27,6 +21,20 @@ function computeArgs(props, context, isCustom) {
         ...other,
     } : {placeHolder}
 
+    //这里为了删除type属性
+    const value = getPropByPath(context.$attrs.model, props.prop)
+    let findV = value.v
+    if (findV) {
+        //这里要处理一下多选的问题
+        if (attrs.multiple && !Array.isArray(findV)) {
+            const split = attrs.multipleSplit || ','
+            findV = findV.split(split)
+            value.o[value.k] = findV
+        }
+    } else {
+        //TODO 这里有点暴力，为了实现响应式
+        context.$set(context.$attrs.model, props.prop, attrs.multiple ? [] : '')
+    }
     return {
         //v-loading 指令
         directives: [
@@ -40,7 +48,7 @@ function computeArgs(props, context, isCustom) {
             //手动声明属性
             ...other,
             //v-model 展开
-            value: value.v
+            value: findV
         },
         on: {
             //声明的监听方法
@@ -128,7 +136,15 @@ export default {
             } else {
                 const valid = await this.$refs.form.validate()
                 if (valid) {
-                    const result = await this.$post(url, {...formData, ...appendParams})
+                    const parsedFormData = {}
+                    Object.keys(formData).forEach(k => {
+                        let value = formData[k]
+                        if (Array.isArray(value)) {
+                            value = value.join(',')
+                        }
+                        parsedFormData[k] = value
+                    })
+                    const result = await this.$post(url, {...parsedFormData, ...appendParams})
                     if (result.status === 200) {
                         return result.data
                     } else {

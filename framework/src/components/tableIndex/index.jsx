@@ -6,6 +6,22 @@ import tableRender, {makeArray} from '../tableRender'
 import abstractTableIndex from "./abstractTableIndex";
 
 /**
+ * 过滤掉设置为false的属性，没有设置属性默认为true
+ * @param arr
+ * @param key
+ */
+function filterFalse(arr, key) {
+    return arr.filter(f => {
+        //所有字典默认都是可编辑的，除非手动声明edit为false
+        if (Object.hasOwnProperty.call(f, key)) {
+            return f[key]
+        } else {
+            return true
+        }
+    })
+}
+
+/**
  * 渲染查询表单
  * @param fields
  * @param ctx
@@ -43,6 +59,22 @@ function renderSearchForm(fields, ctx) {
             (<el-button type='primary' onClick={() => ctx.showEdit(ctx.defaultInsertForm)}>添 加</el-button>)
         )
     }
+    /**
+     * 多选删除
+     */
+    if (ctx.deleteMulti) {
+        const callBack = () => {
+            const select = ctx.tableSelection
+            if (!select || select.length === 0) {
+                ctx.$message.warning('请选择要删除的列')
+            } else {
+                ctx.remove(select.map(s => s.id))
+            }
+        }
+        btnChildren.push(() =>
+            (<el-button type='danger' onClick={callBack}>删 除</el-button>)
+        )
+    }
     if (btnChildren.length > 0) {
         slotChildren.push(<el-form-item>{btnChildren.map(b => b(ctx.searchFormModel))}</el-form-item>)
     }
@@ -68,6 +100,8 @@ function renderSearchForm(fields, ctx) {
  * @return {JSX.Element}
  */
 function renderTable(columns, ctx) {
+    //所有字段默认都是可编辑的，除非手动声明edit为false
+    columns = filterFalse(columns, 'column')
     const propSlots = []
     if (ctx.$slots.default) {
         //自定义slots
@@ -133,9 +167,10 @@ function renderTable(columns, ctx) {
     //表格参数
     const tableArgs = {
         ref: 'table',
-        props: {index: true, page: ctx.data.page, columns},
+        props: {index: true, page: ctx.data.page, columns, checkAble: ctx.deleteMulti},
         attrs: {data: ctx.data.data, ...ctx.tableProp},
         on: {
+            'selection-change': v => (ctx.tableSelection = v),
             'page-current-change': v => (ctx.loadData({pageIndex: v - 1})),
             'size-change': s => {
                 ctx.data.page.size = s
@@ -156,14 +191,8 @@ function renderTable(columns, ctx) {
  */
 function renderEditDialog(fields, ctx, loadingArgs) {
     if (ctx.insert || ctx.edit) {
-        fields = fields.filter(f => {
-            //所有字典默认都是可编辑的，除非手动声明edit为false
-            if (Object.hasOwnProperty.call(f, 'edit')) {
-                return f.edit
-            } else {
-                return true
-            }
-        })
+        //所有字段默认都是可编辑的，除非手动声明edit为false
+        fields = filterFalse(fields, 'edit')
         const {defaultFieldProps, ...other} = ctx.editFormProp
         const slotChildren = []
         if (ctx.$scopedSlots.edit) {

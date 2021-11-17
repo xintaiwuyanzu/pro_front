@@ -37,15 +37,31 @@ export const makeArray = (arr) => {
  * @return {(*)[]}
  */
 export const computeChildren = (arr, context, vNodeFunction) => {
-    const slotObject = (context.$slots.default || []).reduce((obj, vNode) => {
-        const props = vNode.componentOptions ? vNode.componentOptions.propsData : vNode.asyncMeta.data.props
-        const key = props.prop || 'default'
-        const arr = obj[key] = obj[key] || []
-        arr.push(vNode)
-        return obj
-    }, {})
-    const useSlotNameArr = []
-    const children = makeArray(arr)
+    arr = makeArray(arr)
+    const allPropName = arr.map(a => a.prop)
+    let lastName = 'default'
+    const slotObject = {}
+    const slotDefault = context.$slots.default
+    if (slotDefault) {
+        //倒序排列slot
+        for (let i = slotDefault.length; i > 0; i--) {
+            const vNode = slotDefault[i - 1]
+            const props = vNode.componentOptions ? vNode.componentOptions.propsData : vNode.asyncMeta.data.props
+            let key = props.prop
+            if (key) {
+                if (allPropName.indexOf(key) < 0) {
+                    key = lastName
+                } else {
+                    lastName = key
+                }
+            } else {
+                key = lastName
+            }
+            const arr = slotObject[key] = slotObject[key] || []
+            arr.unshift(vNode)
+        }
+    }
+    const children = arr
         .filter(f => {
             //过滤掉不显示的子项
             const show = f.show
@@ -58,17 +74,9 @@ export const computeChildren = (arr, context, vNodeFunction) => {
             const prop = props.prop
             const propSlot = slotObject[prop]
             if (propSlot) {
-                useSlotNameArr.push(prop)
                 return propSlot
             } else {
                 return vNodeFunction(props)
-            }
-        })
-    Object.keys(slotObject)
-        .forEach(k => {
-            if (useSlotNameArr.indexOf(k) < 0 && k !== 'default') {
-                slotObject[k]
-                    .forEach(v => children.push(v))
             }
         })
     //添加默认slot

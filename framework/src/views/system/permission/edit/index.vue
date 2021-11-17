@@ -53,7 +53,7 @@ export default {
           required: true,
           disabled: !!this.id,
           fieldType: 'select',
-          data: this.providers,
+          mapper: this.providers,
           valueKey: 'type',
           labelKey: 'name',
           on: {
@@ -69,7 +69,7 @@ export default {
           required: true,
           show: this.groups.length > 1,
           fieldType: 'select',
-          data: this.groups,
+          mapper: this.groups,
           valueKey: 'id',
           labelKey: 'name',
         }

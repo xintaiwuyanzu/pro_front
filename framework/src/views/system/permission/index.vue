@@ -32,7 +32,7 @@ export default {
       columns: [
         {prop: "name", label: "权限名称", component: 'text', route: true},
         {prop: "description", label: "权限描述"},
-        {prop: "type", label: "权限类型", propMapper: this.getProvideLabel}
+        {prop: "type", label: "权限类型", mapper: this.providers, labelKey: 'type'}
       ],
       path: '/sysPermission/'
     }

@@ -111,6 +111,10 @@ $--nav-height: 42px !default;
           .el-form-item {
             margin-bottom: 0px;
             margin-right: 0px;
+
+            .el-form-item__label {
+              padding: 0px 8px;
+            }
           }
 
           .el-dialog {

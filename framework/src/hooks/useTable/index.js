@@ -6,7 +6,7 @@ import {http} from "../../plugins/http";
 import {Message, MessageBox} from "element-ui";
 
 export const useTable = (args) => {
-    const {basePath, pagePath, deletePath} = args
+    const {basePath, pagePath, deletePath, initParams} = args
 
     const tableData = reactive({
         data: [],
@@ -38,7 +38,7 @@ export const useTable = (args) => {
         tableData.loading = false
     }
     //启动后自动加载数据
-    onMounted(loadData)
+    onMounted(() => loadData(initParams))
     /**
      * 数据删除函数
      * @param params
@@ -57,7 +57,7 @@ export const useTable = (args) => {
         const id = Array.isArray(params) ? params.join(',') : params
         if (id) {
             tableData.loading = true
-            const result = await http().post(deletePath || `${basePath}/delete`, {id})
+            const result = await http().post(deletePath || `${basePath}/delete`, {id, ids: id})
             if (result.data) {
                 if (result.data.success) {
                     Message.success('删除成功！')
