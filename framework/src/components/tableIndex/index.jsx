@@ -46,7 +46,11 @@ function renderSearchForm(fields, ctx) {
     if (fields.length > 0) {
         //搜索按钮
         btnChildren.push(() =>
-            (<el-button type='primary' onClick={() => ctx.loadData(ctx.searchFormModel)}>搜索</el-button>)
+            (<el-button type='primary'
+                        loading={ctx.data.loading}
+                        onClick={() => ctx.loadData(ctx.searchFormModel)}>
+                搜 索
+            </el-button>)
         )
         //重置按钮
         btnChildren.push(() =>
@@ -56,7 +60,11 @@ function renderSearchForm(fields, ctx) {
     //添加按钮
     if (ctx.insert) {
         btnChildren.push(() =>
-            (<el-button type='primary' onClick={() => ctx.showEdit(ctx.defaultInsertForm)}>添 加</el-button>)
+            (<el-button type='primary'
+                        loading={ctx.data.loading}
+                        onClick={() => ctx.showEdit(ctx.defaultInsertForm)}>
+                添 加
+            </el-button>)
         )
     }
     /**
@@ -221,8 +229,9 @@ function renderEditDialog(fields, ctx, loadingArgs) {
         //dialog foot
         const footerChild =
             <div slot='footer'>
-                <el-button type='info' onClick={() => ctx.dialogVisible = false}>取 消</el-button>
-                <el-button type="primary" onClick={() => ctx.submit()} {...loadingArgs}>保 存</el-button>
+                <el-button type='info' loading={ctx.data.loading} onClick={() => ctx.dialogVisible = false}>取 消
+                </el-button>
+                <el-button type="primary" loading={ctx.data.loading} onClick={() => ctx.submit()}>保 存</el-button>
                 {footSlot}
             </div>
         const dialogArgs = {

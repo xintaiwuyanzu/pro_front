@@ -39,7 +39,7 @@ export const makeArray = (arr) => {
 export const computeChildren = (arr, context, vNodeFunction) => {
     arr = makeArray(arr)
     const allPropName = arr.map(a => a.prop)
-    let lastName = 'default'
+    let lastName = '$default'
     const slotObject = {}
     const slotDefault = context.$slots.default
     if (slotDefault) {
@@ -80,8 +80,8 @@ export const computeChildren = (arr, context, vNodeFunction) => {
             }
         })
     //添加默认slot
-    if (slotObject.default) {
-        slotObject.default.forEach(v => children.push(v))
+    if (slotObject.$default) {
+        slotObject.$default.forEach(v => children.push(v))
     }
     return children
 }

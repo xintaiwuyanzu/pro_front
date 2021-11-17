@@ -134,23 +134,27 @@ export default {
                 console.error(`没有指定表单model`)
                 return {success: false, message: `没有指定表单model`}
             } else {
-                const valid = await this.$refs.form.validate()
-                if (valid) {
-                    const parsedFormData = {}
-                    Object.keys(formData).forEach(k => {
-                        let value = formData[k]
-                        if (Array.isArray(value)) {
-                            value = value.join(',')
+                try {
+                    const valid = await this.$refs.form.validate()
+                    if (valid) {
+                        const parsedFormData = {}
+                        Object.keys(formData).forEach(k => {
+                            let value = formData[k]
+                            if (Array.isArray(value)) {
+                                value = value.join(',')
+                            }
+                            parsedFormData[k] = value
+                        })
+                        const result = await this.$post(url, {...parsedFormData, ...appendParams})
+                        if (result.status === 200) {
+                            return result.data
+                        } else {
+                            return {success: false, message: result.statusText}
                         }
-                        parsedFormData[k] = value
-                    })
-                    const result = await this.$post(url, {...parsedFormData, ...appendParams})
-                    if (result.status === 200) {
-                        return result.data
                     } else {
-                        return {success: false, message: result.statusText}
+                        return {success: false, message: `请填写完整表单`}
                     }
-                } else {
+                } catch {
                     return {success: false, message: `请填写完整表单`}
                 }
             }

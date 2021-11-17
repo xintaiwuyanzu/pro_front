@@ -148,7 +148,7 @@ export default {
          * @return {Promise<void>}
          */
         async submit() {
-            this.loading = true
+            this.data.loading = true
             const url = this.editFormModel.id ? (this.updatePath ? this.updatePath : this.path + "/update") : (this.insertPath ? this.insertPath : this.path + "/insert")
             const result = await this.editForm.submit(url)
             if (result.success) {
@@ -158,7 +158,7 @@ export default {
             } else {
                 this.$message.error(result.message)
             }
-            this.loading = false
+            this.data.loading = false
         }
     }
 }
