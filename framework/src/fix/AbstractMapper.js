@@ -2,7 +2,7 @@
  *抽象父类，用来声明value需要转换显示的参数
  * @type {{props: {}}}
  */
-import {reactive, watchEffect} from "vue-demi";
+import {reactive, watch, watchEffect} from "vue-demi";
 import {useDict} from "../hooks/useDict";
 import {getPropByPath} from 'element-ui/src/utils/util';
 import {http} from "../plugins/http";
@@ -45,15 +45,11 @@ export const AbstractMapper = {
          */
         multipleSplit: {type: String, default: ','},
         /**
-         * 数据异步加载方法
-         */
-        loadFunction: {type: Function},
-        /**
          * 异步请求地址
          */
         url: {type: String},
         /**
-         * loadFunction请求参数
+         * mapper和url异步请求参数
          */
         params: {type: Object, default: () => ({})},
         /**
@@ -79,7 +75,7 @@ export const AbstractMapper = {
          * @type {UnwrapRef<{data: *[], loading: boolean}>}
          */
         let mapperData
-        let watch = false
+        let needWatch = false
         if (props.dictKey) {
             //声明了字典参数
             mapperData = useDict(props.dictKey).dict
@@ -87,11 +83,13 @@ export const AbstractMapper = {
             //不是字典
             //声明了mapper参数
             mapperData = reactive({data: props.mapper, loading: false})
+            //响应式监听属性
+            watch(() => props.mapper, v => mapperData.data = v)
         } else if (props.mapper) {
             //异步获取的数据
             if (props.mapper.then) {
                 //异步数据
-                watch = true
+                needWatch = true
                 mapperData = reactive({data: [], loading: false})
             } else {
                 //同步数据
@@ -99,10 +97,10 @@ export const AbstractMapper = {
             }
         } else if (props.url) {
             //异步数据
-            watch = true
+            needWatch = true
             mapperData = reactive({data: [], loading: false})
         }
-        if (watch) {
+        if (needWatch) {
             watchEffect(async () => {
                 //mapper是异步方法
                 let result

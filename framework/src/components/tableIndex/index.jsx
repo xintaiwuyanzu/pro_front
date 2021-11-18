@@ -83,6 +83,10 @@ function renderSearchForm(fields, ctx) {
             (<el-button type='danger' onClick={callBack}>删 除</el-button>)
         )
     }
+    if (ctx.$scopedSlots['search-$btns']) {
+        ctx.$scopedSlots['search-$btns'](ctx.searchFormModel)
+            .forEach(v => btnChildren.push(v))
+    }
     if (btnChildren.length > 0) {
         slotChildren.push(<el-form-item>{btnChildren.map(b => b(ctx.searchFormModel))}</el-form-item>)
     }
@@ -238,7 +242,8 @@ function renderEditDialog(fields, ctx, loadingArgs) {
             props: {
                 ...ctx.dialogProp,
                 title: ctx.dialogTitle,
-                visible: ctx.dialogVisible
+                visible: ctx.dialogVisible,
+                'show-close': false
             },
             on: {
                 'update:visible': () => {

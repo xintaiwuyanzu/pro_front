@@ -154,7 +154,7 @@ export default {
             if (result.success) {
                 this.$message.success('保存成功！')
                 this.dialogVisible = false
-                await this.loadData()
+                await this.loadData(this.searchFormModel)
             } else {
                 this.$message.error(result.message)
             }
