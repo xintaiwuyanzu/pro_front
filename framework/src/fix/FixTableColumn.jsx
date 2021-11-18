@@ -7,6 +7,7 @@ import {TableColumn} from 'element-ui'
  * 状态列，用来辅助渲染列表
  */
 export default {
+    name: 'ElTableColumn',
     extends: TableColumn,
     mixins: [AbstractMapper],
     props: {

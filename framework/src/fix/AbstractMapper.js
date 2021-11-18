@@ -124,15 +124,6 @@ export const AbstractMapper = {
          * @param v
          */
         const findValue = (v) => {
-            if (props.dateFormat) {
-                //没有自定义映射参数，额外定义了日期格式化的参数，尝试使用dayjs格式化日期
-                const fmt = props.dateFormat === 'boolean' ? 'YYYY-MM-DD' : props.dateFormat
-                try {
-                    return dayjs(v).format(fmt)
-                } catch (e) {
-                    console.error(`尝试使用${fmt}格式化日期数据：${v}失败`, e)
-                }
-            }
             let findV
             if (Array.isArray(mapperData.data)) {
                 //数组类型字典
@@ -161,6 +152,14 @@ export const AbstractMapper = {
                     return value.split(props.multipleSplit).map(findValue)
                 } else {
                     return findValue(value)
+                }
+            } else if (props.dateFormat) {
+                //没有自定义映射参数，额外定义了日期格式化的参数，尝试使用dayjs格式化日期
+                const fmt = (typeof props.dateFormat === 'boolean') ? 'YYYY-MM-DD' : props.dateFormat
+                try {
+                    return dayjs(value).format(fmt)
+                } catch (e) {
+                    console.error(`尝试使用${fmt}格式化日期数据：${value}失败`, e)
                 }
             }
             return value
@@ -195,15 +194,6 @@ export const AbstractMapper = {
 
         const findValueWithShowType = (v, row, page, index) => {
             let showType = 'info'
-            if (props.dateFormat) {
-                //没有自定义映射参数，额外定义了日期格式化的参数，尝试使用dayjs格式化日期
-                const fmt = props.dateFormat === 'boolean' ? 'YYYY-MM-DD' : props.dateFormat
-                try {
-                    return {value: dayjs(v).format(fmt), showType}
-                } catch (e) {
-                    console.error(`尝试使用${fmt}格式化日期数据：${v}失败`, e)
-                }
-            }
             let findV
             if (Array.isArray(mapperData.data) && mapperData.data.length > 0) {
                 //数组类型字典
@@ -236,6 +226,14 @@ export const AbstractMapper = {
                     return value.split(props.multipleSplit).map(v => findValueWithShowType(v, row, page, index))
                 } else {
                     return findValueWithShowType(value, row, page, index)
+                }
+            } else if (props.dateFormat) {
+                //没有自定义映射参数，额外定义了日期格式化的参数，尝试使用dayjs格式化日期
+                const fmt = (typeof props.dateFormat === 'boolean') ? 'YYYY-MM-DD' : props.dateFormat
+                try {
+                    return {value: dayjs(value).format(fmt), showType: 'info'}
+                } catch (e) {
+                    console.error(`尝试使用${fmt}格式化日期数据：${value}失败`, e)
                 }
             }
             return {value, showType: 'info'}
