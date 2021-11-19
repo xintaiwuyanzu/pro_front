@@ -42,7 +42,7 @@ const readVars = (api, libs) => {
 }
 
 
-module.exports = (api, options, {views, libs, selector, limit}) => {
+module.exports = (api, options, {libs, limit}) => {
     //修改css相关默认配置
     if (!Object.hasOwnProperty(options, 'productionSourceMap')) {
         options.productionSourceMap = false
@@ -116,6 +116,8 @@ module.exports = (api, options, {views, libs, selector, limit}) => {
         cfg.plugin('hard-source-webpack-plugin').use(require('hard-source-webpack-plugin'))
         //@vue/composition-api
         cfg.resolve.alias.set('@vue/composition-api$', '@vue/composition-api/dist/vue-composition-api.esm.js')
+        //babel添加添加自定义preset
+        cfg.module.rule('js').uses.get('babel-loader').options({presets: ['@dr/vue-cli-plugin-dr/preset']})
         //添加最小限制
         if (api.service.mode === 'production') {
             //控制chunk数量
@@ -137,9 +139,6 @@ module.exports = (api, options, {views, libs, selector, limit}) => {
                 .minimizer('terser')
                 .use(require('terser-webpack-plugin'), [Object.assign(terserOptions(options), {terserOptions: {output: {comments: false}}})])
         }
-        //babel添加exclude
-        cfg.module.rule('js').exclude.clear().add(config.buildBabelExclude(options, libs))
-        cfg.module.rule('js').uses.get('babel-loader').options({presets: ['@dr/vue-cli-plugin-dr/preset']})
         //计算title
         const pkg = api.service.pkg
         const computeTitle = (arg) => {

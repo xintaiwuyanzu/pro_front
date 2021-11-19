@@ -60,6 +60,12 @@ const parseOptions = ({service}, options) => {
                 })
         }
     }
+    const libTran = libs.map(l => l.name)
+    if (options.transpileDependencies) {
+        options.transpileDependencies = options.transpileDependencies.concat(libTran)
+    } else {
+        options.transpileDependencies = libTran
+    }
     if (!selector) {
         selector = defaultSelector
     }

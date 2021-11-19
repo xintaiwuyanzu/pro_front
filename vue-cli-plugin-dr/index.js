@@ -1,6 +1,5 @@
 const plugin = require('./src/cliPlugin')
 const codeGen = require('./src/codeGen')
-const command = require('./src/command')
 const utils = require('./src/utils')
 const babelPlugin = require('@vue/cli-plugin-babel')
 /**
