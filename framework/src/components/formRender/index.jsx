@@ -86,6 +86,36 @@ const defaultFields = {
         } else {
             return (<select-async  {...args}/>)
         }
+    },
+    /**
+     * 日期选择
+     * @param props
+     * @param context
+     * @return {JSX.Element}
+     */
+    date(props, context) {
+        const args = computeArgs(props, context, true)
+        return (<el-date-picker value-format='timestamp' {...args}  />)
+    },
+    /**
+     * 时间选择
+     * @param props
+     * @param context
+     * @return {JSX.Element}
+     */
+    time(props, context) {
+        const args = computeArgs(props, context, true)
+        return (<el-time-select value-format='timestamp' {...args}  />)
+    },
+    /**
+     * 日期时间
+     * @param props
+     * @param context
+     * @return {JSX.Element}
+     */
+    dateTime(props, context) {
+        const args = computeArgs(props, context, true)
+        return (<el-date-picker value-format='timestamp' {...args} type='datetime'/>)
     }
 }
 /**

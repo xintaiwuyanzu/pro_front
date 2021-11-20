@@ -130,7 +130,7 @@ export const AbstractMapper = {
                 findV = mapperData.data.find(f => `${getPropByPath(f, props.valueKey).v}` === `${v}`)
             } else {
                 //Object类型数据
-                findV = mapperData[v]
+                findV = mapperData.data[v]
             }
             if (findV) {
                 const valueType = typeof findV
@@ -153,7 +153,7 @@ export const AbstractMapper = {
                 } else {
                     return findValue(value)
                 }
-            } else if (props.dateFormat) {
+            } else if (value && props.dateFormat) {
                 //没有自定义映射参数，额外定义了日期格式化的参数，尝试使用dayjs格式化日期
                 const fmt = (typeof props.dateFormat === 'boolean') ? 'YYYY-MM-DD' : props.dateFormat
                 try {
@@ -227,7 +227,7 @@ export const AbstractMapper = {
                 } else {
                     return findValueWithShowType(value, row, page, index)
                 }
-            } else if (props.dateFormat) {
+            } else if (value && props.dateFormat) {
                 //没有自定义映射参数，额外定义了日期格式化的参数，尝试使用dayjs格式化日期
                 const fmt = (typeof props.dateFormat === 'boolean') ? 'YYYY-MM-DD' : props.dateFormat
                 try {

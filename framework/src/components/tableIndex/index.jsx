@@ -38,7 +38,7 @@ function renderSearchForm(fields, ctx) {
         })
     const slotChildren = []
     if (ctx.$scopedSlots.search) {
-        ctx.$scopedSlots.search(ctx.searchFormModel)
+        (ctx.$scopedSlots.search(ctx.searchFormModel) || [])
             .forEach(v => slotChildren.push(v))
     }
     //计算操作按钮
@@ -84,8 +84,7 @@ function renderSearchForm(fields, ctx) {
         )
     }
     if (ctx.$scopedSlots['search-$btns']) {
-        ctx.$scopedSlots['search-$btns'](ctx.searchFormModel)
-            .forEach(v => btnChildren.push(v))
+        btnChildren.push(ctx.$scopedSlots['search-$btns'])
     }
     if (btnChildren.length > 0) {
         slotChildren.push(<el-form-item>{btnChildren.map(b => b(ctx.searchFormModel))}</el-form-item>)
@@ -101,7 +100,8 @@ function renderSearchForm(fields, ctx) {
             model: ctx.searchFormModel,
             inline: true,
             ...other
-        }
+        },
+        on: {...ctx.$listeners}
     }
     return (<formRender {...searchFormArgs}>{slotChildren}</formRender>)
 }
@@ -117,7 +117,7 @@ function renderTable(columns, ctx) {
     const propSlots = []
     if (ctx.$slots.default) {
         //自定义slots
-        ctx.$slots.default.filter(v => v.componentOptions.tag === 'el-table-column')
+        (ctx.$slots.default || []).filter(v => v.componentOptions.tag === 'el-table-column')
             .forEach(v => propSlots.push(v))
     }
     let editColumnWidth = 30
@@ -138,7 +138,7 @@ function renderTable(columns, ctx) {
         editColumnWidth += 30
     }
     if (ctx.$scopedSlots['table-$btns']) {
-        editBtns.push(ctx.$scopedSlots['table-$btns'])
+        editBtns.push(ctx.$scopedSlots['table-$btns'] || [])
     }
     if (editBtns.length > 0) {
         const btnsColumnArgs = {
@@ -182,6 +182,7 @@ function renderTable(columns, ctx) {
         props: {index: true, page: ctx.data.page, columns, checkAble: ctx.deleteMulti},
         attrs: {data: ctx.data.data, ...ctx.tableProp},
         on: {
+            ...ctx.$listeners,
             'selection-change': v => (ctx.tableSelection = v),
             'page-current-change': v => (ctx.loadData({pageIndex: v - 1})),
             'size-change': s => {
@@ -208,7 +209,7 @@ function renderEditDialog(fields, ctx, loadingArgs) {
         const {defaultFieldProps, ...other} = ctx.editFormProp
         const slotChildren = []
         if (ctx.$scopedSlots.edit) {
-            ctx.$scopedSlots.edit(ctx.editFormModel)
+            (ctx.$scopedSlots.edit(ctx.editFormModel) || [])
                 .forEach(v => slotChildren.push(v))
         }
         //添加编辑表单的字段
@@ -227,7 +228,7 @@ function renderEditDialog(fields, ctx, loadingArgs) {
         const formChild = <form-render {...formArgs} {...loadingArgs}>{slotChildren}</form-render>
         const footSlot = []
         if (ctx.$scopedSlots['edit-btns']) {
-            ctx.$scopedSlots['edit-btns'](ctx.editFormModel)
+            (ctx.$scopedSlots['edit-btns'](ctx.editFormModel) || [])
                 .forEach(v => footSlot.push(v))
         }
         //dialog foot
@@ -242,13 +243,11 @@ function renderEditDialog(fields, ctx, loadingArgs) {
             props: {
                 ...ctx.dialogProp,
                 title: ctx.dialogTitle,
-                visible: ctx.dialogVisible,
-                'show-close': false
+                visible: ctx.dialogVisible
             },
             on: {
-                'update:visible': () => {
-                    ctx.dialogVisible = true
-                }
+                ...ctx.$listeners,
+                'update:visible': v => ctx.dialogVisible = v
             }
         }
         return (<el-dialog {...dialogArgs}>{formChild}{footerChild}</el-dialog>)
@@ -257,6 +256,7 @@ function renderEditDialog(fields, ctx, loadingArgs) {
 
 export default {
     extends: abstractTableIndex,
+    name: 'tableIndex',
     render() {
         const fields = makeArray(this.fields)
         const loadingArgs = {directives: [{name: 'loading', value: this.data.loading}]}

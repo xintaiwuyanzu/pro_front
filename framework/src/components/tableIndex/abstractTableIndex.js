@@ -3,7 +3,6 @@ import {useTable} from "../../hooks/useTable";
 import {useMenu} from "../../hooks/useMenu";
 
 export default {
-    name: 'tableIndex',
     props: {
         /**
          * 首页标题
@@ -141,6 +140,7 @@ export default {
          */
         showEdit(params) {
             this.editFormModel = Object.assign({}, params)
+            this.$emit('editShow', this.editFormModel)
             this.dialogVisible = true
         },
         /**

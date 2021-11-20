@@ -47,18 +47,24 @@ export const computeChildren = (arr, context, vNodeFunction) => {
         for (let i = slotDefault.length; i > 0; i--) {
             const vNode = slotDefault[i - 1]
             const props = vNode.componentOptions ? vNode.componentOptions.propsData : vNode.asyncMeta.data.props
-            let key = props.prop
-            if (key) {
-                if (allPropName.indexOf(key) < 0) {
-                    key = lastName
-                } else {
-                    lastName = key
-                }
+            if ('expand' === props.type) {
+                const arr = slotObject['$expand'] = slotObject['$expand'] || []
+                //table的expand放在最前面
+                arr.push(vNode)
             } else {
-                key = lastName
+                let key = props.prop
+                if (key) {
+                    if (allPropName.indexOf(key) < 0) {
+                        key = lastName
+                    } else {
+                        lastName = key
+                    }
+                } else {
+                    key = lastName
+                }
+                const arr = slotObject[key] = slotObject[key] || []
+                arr.unshift(vNode)
             }
-            const arr = slotObject[key] = slotObject[key] || []
-            arr.unshift(vNode)
         }
     }
     const children = arr
@@ -82,6 +88,9 @@ export const computeChildren = (arr, context, vNodeFunction) => {
     //添加默认slot
     if (slotObject.$default) {
         slotObject.$default.forEach(v => children.push(v))
+    }
+    if (slotObject.$expand) {
+        slotObject.$expand.forEach(v => children.unshift(v))
     }
     return children
 }
