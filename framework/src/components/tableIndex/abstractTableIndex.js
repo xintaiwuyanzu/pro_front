@@ -123,14 +123,14 @@ export default {
             return `${this.editFormModel.id ? '编辑' : '添加'}${title}`
         }
     },
-    setup(props) {
+    setup(props, context) {
         const {menuData} = useMenu()
         const result = useTable({
             basePath: props.path,
             pagePath: props.pagePath,
             deletePath: props.deletePath,
             initParams: props.defaultSearchForm
-        })
+        }, context)
         return {...result, menuData}
     },
     methods: {

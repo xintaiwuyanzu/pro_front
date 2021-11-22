@@ -5,7 +5,7 @@ import {onMounted, reactive} from "vue-demi";
 import {http} from "../../plugins/http";
 import {Message, MessageBox} from "element-ui";
 
-export const useTable = (args) => {
+export const useTable = (args, context) => {
     const {basePath, pagePath, deletePath, initParams} = args
 
     const tableData = reactive({
@@ -36,6 +36,7 @@ export const useTable = (args) => {
             tableData.page.total = resultData.total
         }
         tableData.loading = false
+        context.emit('dataLoaded', tableData, queryParams)
     }
     //启动后自动加载数据
     onMounted(() => loadData(initParams))
