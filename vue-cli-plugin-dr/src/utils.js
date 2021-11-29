@@ -72,6 +72,7 @@ const parseOptions = ({service}, options) => {
         readLibs(pkg, libs, 0, libNameArr)
     }
     const libTran = libs.map(l => l.name)
+    libTran.push('element-ui')
     if (options.transpileDependencies) {
         options.transpileDependencies = options.transpileDependencies.concat(libTran)
     } else {
