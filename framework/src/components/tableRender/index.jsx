@@ -29,6 +29,11 @@ export const makeArray = (arr) => {
     }
     return result
 }
+
+function getProps(vNode) {
+    return vNode.componentOptions ? vNode.componentOptions.propsData : vNode.asyncMeta.data.props
+}
+
 /**
  * 根据field计算children
  * @param arr
@@ -41,13 +46,18 @@ export const computeChildren = (arr, context, vNodeFunction) => {
     const allPropName = arr.map(a => a.prop)
     let lastName = '$default'
     const slotObject = {}
+    //设置了before和after的vNodes
+    const beforeAfter = []
     const slotDefault = context.$slots.default
     if (slotDefault) {
         //倒序排列slot
         for (let i = slotDefault.length; i > 0; i--) {
             const vNode = slotDefault[i - 1]
-            const props = vNode.componentOptions ? vNode.componentOptions.propsData : vNode.asyncMeta.data.props
-            if ('expand' === props.type) {
+            const props = getProps(vNode)
+            //前后的slot
+            if (props.brfore || props.after) {
+                beforeAfter.unshift(vNode)
+            } else if ('expand' === props.type) {
                 const arr = slotObject['$expand'] = slotObject['$expand'] || []
                 //table的expand放在最前面
                 arr.push(vNode)
@@ -92,9 +102,25 @@ export const computeChildren = (arr, context, vNodeFunction) => {
     if (slotObject.$expand) {
         slotObject.$expand.forEach(v => children.unshift(v))
     }
+
+    if (beforeAfter.length > 0) {
+        beforeAfter.forEach(vNode => {
+            const props = getProps(vNode)
+            const propName = props.before || props.after
+            const isBefore = !!props.before
+            const propIndex = children.findIndex(v => {
+                const vProp = getProps(v)
+                return vProp.prop === propName
+            })
+            if (propIndex < children.length && props >= 0) {
+                children.splice(isBefore ? propIndex : propIndex + 1, 0, vNode)
+            } else {
+                children.push(vNode)
+            }
+        })
+    }
     return children
 }
-
 
 export const tableFunctions = [
     'clearSelection',
