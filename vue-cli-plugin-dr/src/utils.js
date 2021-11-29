@@ -19,7 +19,7 @@ const defaultSelector = (type, name, arr) => {
 /**
  * 根据package.json读取所有依赖的dlib
  */
-const readLibs = (pkg, arr, rootIndex = 0) => {
+const readLibs = (pkg, arr, rootIndex = 0, libNameArr) => {
     if (pkg && pkg.dependencies) {
         Object.keys(pkg.dependencies)
             .map(p => {
@@ -34,8 +34,11 @@ const readLibs = (pkg, arr, rootIndex = 0) => {
             })
             .filter(p => p.dlib)
             .forEach((p, index) => {
-                arr.push({name: p.name, index, rootIndex})
-                readLibs(p, arr, index)
+                if (libNameArr.indexOf(p.name) === -1) {
+                    arr.push({name: p.name, index, rootIndex})
+                    readLibs(p, arr, index, libNameArr)
+                    libNameArr.push(p.name)
+                }
             })
     }
 }
@@ -65,7 +68,8 @@ const parseOptions = ({service}, options) => {
         }
     } else {
         libs = []
-        readLibs(pkg, libs)
+        const libNameArr = []
+        readLibs(pkg, libs, 0, libNameArr)
     }
     const libTran = libs.map(l => l.name)
     if (options.transpileDependencies) {
