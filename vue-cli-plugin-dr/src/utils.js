@@ -16,6 +16,29 @@ const makeArray = (arr) => {
 const defaultSelector = (type, name, arr) => {
     return arr.sort((a, b) => a.index - b.index)[0]
 }
+/**
+ * 根据package.json读取所有依赖的dlib
+ */
+const readLibs = (pkg, arr, rootIndex = 0) => {
+    if (pkg && pkg.dependencies) {
+        Object.keys(pkg.dependencies)
+            .map(p => {
+                //TODO 这里有重复的代码
+                //这里加载可能失败ahooks-vue，失败的就不处理了
+                let pkg = {}
+                try {
+                    pkg = require(moduleFilePath(p, `package.json`))
+                } catch (e) {
+                }
+                return pkg
+            })
+            .filter(p => p.dlib)
+            .forEach((p, index) => {
+                arr.push({name: p.name, index, rootIndex})
+                readLibs(p, arr, index)
+            })
+    }
+}
 
 /**
  * 从pluginOptions读取配置信息并且传给 autoCodePlugin
@@ -41,24 +64,8 @@ const parseOptions = ({service}, options) => {
             })
         }
     } else {
-        libs = makeArray(libs)
-        if (libs.length === 0) {
-            libs = Object.keys(pkg.dependencies)
-                .map(p => {
-                    //TODO 这里有重复的代码
-                    //这里加载可能失败ahooks-vue，失败的就不处理了
-                    let pkg = {}
-                    try {
-                        pkg = require(moduleFilePath(p, `package.json`))
-                    } catch (e) {
-                    }
-                    return pkg
-                })
-                .filter(p => p.dlib)
-                .map((pkg, index) => {
-                    return {name: pkg.name, index}
-                })
-        }
+        libs = []
+        readLibs(pkg, libs)
     }
     const libTran = libs.map(l => l.name)
     if (options.transpileDependencies) {

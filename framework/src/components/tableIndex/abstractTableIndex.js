@@ -61,6 +61,10 @@ export default {
         edit: {type: Boolean, default: true},
         //默认update
         updatePath: String,
+        /**
+         * 是否有返回按钮
+         */
+        back: {type: Boolean, default: false}
     },
     data() {
         return {

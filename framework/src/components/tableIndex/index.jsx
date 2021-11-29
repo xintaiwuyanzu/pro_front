@@ -53,9 +53,7 @@ function renderSearchForm(fields, ctx) {
             </el-button>)
         )
         //重置按钮
-        btnChildren.push(() =>
-            (<el-button type='info' onClick={() => ctx.searchForm.resetFields()}>重 置</el-button>)
-        )
+        btnChildren.push(() => (<el-button type='info' onClick={() => ctx.searchForm.resetFields()}>重 置</el-button>))
     }
     //添加按钮
     if (ctx.insert) {
@@ -79,9 +77,10 @@ function renderSearchForm(fields, ctx) {
                 ctx.remove(select.map(s => s.id))
             }
         }
-        btnChildren.push(() =>
-            (<el-button type='danger' onClick={callBack}>删 除</el-button>)
-        )
+        btnChildren.push(() => (<el-button type='danger' onClick={callBack}>删 除</el-button>))
+    }
+    if (ctx.back) {
+        btnChildren.push(() => (<el-button type='info' onClick={() => ctx.$router.back()}>返 回</el-button>))
     }
     if (ctx.$scopedSlots['search-$btns']) {
         btnChildren.push(ctx.$scopedSlots['search-$btns'])
@@ -227,8 +226,8 @@ function renderEditDialog(fields, ctx, loadingArgs) {
         }
         const formChild = <form-render {...formArgs} {...loadingArgs}>{slotChildren}</form-render>
         const footSlot = []
-        if (ctx.$scopedSlots['edit-btns']) {
-            (ctx.$scopedSlots['edit-btns'](ctx.editFormModel) || [])
+        if (ctx.$scopedSlots['edit-$btns']) {
+            (ctx.$scopedSlots['edit-$btns'](ctx.editFormModel) || [])
                 .forEach(v => footSlot.push(v))
         }
         //dialog foot
