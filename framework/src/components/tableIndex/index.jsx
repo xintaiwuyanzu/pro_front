@@ -80,7 +80,7 @@ function renderSearchForm(fields, ctx) {
         btnChildren.push(() => (<el-button type='danger' onClick={callBack}>删 除</el-button>))
     }
     if (ctx.back) {
-        btnChildren.push(() => (<el-button type='info' onClick={() => ctx.$router.back()}>返 回</el-button>))
+        btnChildren.push(() => (<el-button type='primary' onClick={() => ctx.$router.back()}>返 回</el-button>))
     }
     if (ctx.$scopedSlots['search-$btns']) {
         btnChildren.push(ctx.$scopedSlots['search-$btns'])

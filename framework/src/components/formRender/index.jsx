@@ -204,11 +204,12 @@ export default {
                 return
             }
             const children = defaultFields[fieldType](props, this)
-            return (<el-form-item
-                    //声明属性
-                    {...{props}}
+            return (
+                <el-form-item
                     //默认属性
-                    {...{props: this.defaultFieldProps}}>
+                    {...{props: this.defaultFieldProps}}
+                    //声明属性
+                    {...{props}}>
                     {children}
                 </el-form-item>
             )

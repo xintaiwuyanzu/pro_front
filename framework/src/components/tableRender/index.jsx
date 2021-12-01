@@ -55,7 +55,7 @@ export const computeChildren = (arr, context, vNodeFunction) => {
             const vNode = slotDefault[i - 1]
             const props = getProps(vNode)
             //前后的slot
-            if (props.brfore || props.after) {
+            if (vNode.data && vNode.data.attrs && (vNode.data.attrs.before || vNode.data.attrs.after)) {
                 beforeAfter.unshift(vNode)
             } else if ('expand' === props.type) {
                 const arr = slotObject['$expand'] = slotObject['$expand'] || []
@@ -105,14 +105,13 @@ export const computeChildren = (arr, context, vNodeFunction) => {
 
     if (beforeAfter.length > 0) {
         beforeAfter.forEach(vNode => {
-            const props = getProps(vNode)
-            const propName = props.before || props.after
-            const isBefore = !!props.before
+            const propName = vNode.data.attrs.before || vNode.data.attrs.after
+            const isBefore = !!vNode.data.attrs.before
             const propIndex = children.findIndex(v => {
                 const vProp = getProps(v)
                 return vProp.prop === propName
             })
-            if (propIndex < children.length && props >= 0) {
+            if (propIndex < children.length && propIndex >= 0) {
                 children.splice(isBefore ? propIndex : propIndex + 1, 0, vNode)
             } else {
                 children.push(vNode)
@@ -181,10 +180,10 @@ export default {
     methods: functionUtils('table', tableFunctions),
     render() {
         const children = computeChildren(this.columns, this, props => <el-table-column
-            //声明属性
-            {...{props}}
             //默认属性
             {...{props: this.defaultColumnProps}}
+            //声明属性
+            {...{props}}
         />)
         //是否添加列
         if (this.index && this.page) {

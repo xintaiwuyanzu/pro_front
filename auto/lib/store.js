@@ -10,7 +10,7 @@ const store = ({vue}) => {
         plugins.push(createLogger())
     }
     const modules = {}
-    stores.forEach(s => modules[s.name] = s.value)
+    stores.forEach(s => modules[s.name] = s.value.default ? s.value.default : s.value)
     return new vuex.Store({
         strict: utils.dev,
         modules,
