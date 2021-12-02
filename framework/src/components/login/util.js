@@ -33,15 +33,24 @@ export default {
      *获取前端缓存
      */
     getCookie(key) {
-        return cookieApi.get(key)
+        let result = cookieApi.get(key)
+        if (!result) {
+            result = sessionStorage.getItem(key)
+        }
+        return result
     },
     /**
      * 设置前端缓存
      */
     setCookie(key, value) {
         cookieApi.set(key, value)
+        const result = this.getCookie(key)
+        if (!result && result !== value) {
+            sessionStorage.setItem(key, value)
+        }
     },
     cleanCookie(key) {
         cookieApi.remove(key)
+        sessionStorage.removeItem(key)
     }
 }
