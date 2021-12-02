@@ -92,7 +92,7 @@ export default {
             column.renderCell = (h, {$index, row, column}) => {
                 const property = column.property;
                 const value = property && getPropByPath(row, property).v;
-                const valueWithShowType = this.simpleMapperWithShowType(value, row, this.page, $index)
+                const valueWithShowType = this.simpleMapperWithShowType(value, row, this.page, $index, column)
                 let renderValue
                 if (Array.isArray(valueWithShowType)) {
                     renderValue = valueWithShowType.map(v => v.value).join(this.multipleSplit)

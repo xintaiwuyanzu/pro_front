@@ -220,7 +220,7 @@ export const AbstractMapper = {
          * @param index 当前行
          * @return {{value: *}|{showType: *|String|Object|Function|undefined, value: *}|*}
          */
-        const simpleMapperWithShowType = (value, row, page, index) => {
+        const simpleMapperWithShowType = (value, row, page, index, column) => {
             if (value && mapperData) {
                 if (props.multiple) {
                     return value.split(props.multipleSplit).map(v => findValueWithShowType(v, row, page, index))
@@ -235,6 +235,8 @@ export const AbstractMapper = {
                 } catch (e) {
                     console.error(`尝试使用${fmt}格式化日期数据：${value}失败`, e)
                 }
+            } else if (value && props.formatter) {
+                return {value: props.formatter(row, column, value, index), showType: 'info'}
             }
             return {value, showType: 'info'}
         }
