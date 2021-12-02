@@ -5,6 +5,7 @@ import qs from 'qs'
 import util from '../../components/login/util'
 import {Message} from "element-ui";
 import './style.scss'
+
 /**
  * 默认配置项
  */
@@ -58,7 +59,10 @@ export default (vue, router, store) => {
     //拦截所有的请求，添加token
     instance.interceptors.request.use(config => {
         const header = config.headers
-        header['$token'] = header['dauth'] = util.getToken()
+        const token = util.getToken()
+        if (token) {
+            header['$token'] = header['dauth'] = token
+        }
         return config;
     }, err => {
         return Promise.reject(err);
