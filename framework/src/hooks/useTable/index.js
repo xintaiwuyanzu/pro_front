@@ -70,6 +70,7 @@ export const useTable = (args, context) => {
                 Message.warning(result.statusText)
             }
             tableData.loading = false
+            context.emit('remove', id)
         }
     }
     return {
