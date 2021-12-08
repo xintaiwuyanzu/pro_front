@@ -24,7 +24,7 @@ function computeArgs(props, context, isCustom) {
     //这里为了删除type属性
     const value = getPropByPath(context.$attrs.model, props.prop)
     let findV = value.v
-    if (findV) {
+    if (findV || findV === 0) {
         //这里要处理一下多选的问题
         if (attrs.multiple && !Array.isArray(findV)) {
             const split = attrs.multipleSplit || ','

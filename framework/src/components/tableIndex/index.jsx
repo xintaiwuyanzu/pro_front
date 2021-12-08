@@ -114,10 +114,18 @@ function renderTable(columns, ctx) {
     //所有字段默认都是可编辑的，除非手动声明edit为false
     columns = filterFalse(columns, 'column')
     const propSlots = []
+    const otherChild = []
     if (ctx.$slots.default) {
         //自定义slots
-        (ctx.$slots.default || []).filter(v => v.componentOptions.tag === 'el-table-column')
-            .forEach(v => propSlots.push(v))
+        (ctx.$slots.default || [])
+            .forEach(v => {
+                    if (v.componentOptions?.tag === 'el-table-column') {
+                        propSlots.push(v)
+                    } else {
+                        otherChild.push(v)
+                    }
+                }
+            )
     }
     let editColumnWidth = 30
     const editBtns = []
@@ -183,16 +191,15 @@ function renderTable(columns, ctx) {
         on: {
             ...ctx.$listeners,
             'selection-change': v => (ctx.tableSelection = v),
-            'page-current-change': v => (ctx.loadData({pageIndex: v - 1})),
+            'page-current-change': v => (ctx.loadData({pageIndex: v - 1, ...ctx.searchFormModel})),
             'size-change': s => {
                 ctx.data.page.size = s
                 ctx.loadData(ctx.searchFormModel)
             }
         }
     }
-    return (<tableRender {...tableArgs}>
-        {propSlots}
-    </tableRender>)
+    const tableChild = (<tableRender {...tableArgs}>{propSlots}</tableRender>)
+    return {tableChild, otherChild}
 }
 
 /**
@@ -260,7 +267,7 @@ export default {
         const fields = makeArray(this.fields)
         const loadingArgs = {directives: [{name: 'loading', value: this.data.loading}]}
         //列表
-        const tableChild = renderTable(fields, this, loadingArgs)
+        const {tableChild, otherChild} = renderTable(fields, this, loadingArgs)
         //查询表单
         const formChild = renderSearchForm(fields, this, loadingArgs)
         //添加编辑弹窗
@@ -271,6 +278,7 @@ export default {
                     {formChild}
                 </nac-info>
                 {tableChild}
+                {otherChild}
                 {dialogChild}
             </section>
         )

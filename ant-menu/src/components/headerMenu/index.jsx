@@ -41,6 +41,7 @@ export default {
             return (
                 <section>
                     <Menu class="header-menu" mode='horizontal' defaultSelectedKeys={[menuData.defaultIndex]}
+                          subMenuCloseDelay={0}
                           theme="dark">
                         {menuChildren}
                     </Menu>
