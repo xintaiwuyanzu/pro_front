@@ -45,6 +45,11 @@ export default {
          */
         defaultInsertForm: {type: Object},
         /**
+         * 后台方法带回来的数据太多，在编辑的时候过滤掉指定的字段
+         * 不再往后台发送
+         */
+        editFilterFields: {type: Array, required: false},
+        /**
          * 添加编辑表单属性
          */
         editFormProp: {type: Object, default: () => ({labelWidth: '120px'})},
@@ -143,7 +148,17 @@ export default {
          * @param params
          */
         showEdit(params) {
-            this.editFormModel = Object.assign({}, params)
+            if (this.editFilterFields) {
+                const tempModel = {}
+                for (const key in params) {
+                    if (!this.editFilterFields.includes(key)) {
+                        tempModel[key] = params[key]
+                    }
+                }
+                this.editFormModel = tempModel
+            } else {
+                this.editFormModel = Object.assign({}, params)
+            }
             this.$emit('editShow', this.editFormModel)
             this.dialogVisible = true
         },

@@ -143,7 +143,12 @@ export default {
         /**
          * 字段默认属性
          */
-        defaultFieldProps: {type: Object, default: () => ({clearable: true})}
+        defaultFieldProps: {type: Object, default: () => ({clearable: true})},
+        /**
+         * 提交之前回调，总共两个参数
+         * 第一个参数是表单数据，第二个参数是提交参数
+         */
+        beforeSubmit: {type: Function}
     },
     data() {
         //保存状态
@@ -175,11 +180,19 @@ export default {
                             }
                             parsedFormData[k] = value
                         })
-                        const result = await this.$post(url, {...parsedFormData, ...appendParams})
-                        if (result.status === 200) {
-                            return result.data
-                        } else {
-                            return {success: false, message: result.statusText}
+                        const requestParams = {...parsedFormData, ...appendParams}
+                        if (this.beforeSubmit) {
+                            const result = await this.beforeSubmit(formData, requestParams)
+                            if (result === true || result === undefined) {
+                                const result = await this.$post(url, requestParams)
+                                if (result.status === 200) {
+                                    return result.data
+                                } else {
+                                    return {success: false, message: result.statusText}
+                                }
+                            } else {
+                                return {success: false, message: result}
+                            }
                         }
                     } else {
                         return {success: false, message: `请填写完整表单`}

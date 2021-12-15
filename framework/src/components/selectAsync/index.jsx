@@ -6,7 +6,7 @@ export default {
     name: 'selectAsync',
     extends: AbstractMapper,
     props: {
-        value: [String, Number, Array]
+        value: {}
     },
     render() {
         return selectRender(this)

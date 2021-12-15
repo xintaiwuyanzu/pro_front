@@ -25,10 +25,24 @@ export const selectRender = (context) => {
     if (Array.isArray(mapperData)) {
         children = mapperData.map(d => {
             let value = d[context.valueKey]
-            if (typeof context.value === 'number') {
+            const valueType = context.value
+            if (valueType === 'number') {
                 try {
                     //处理一下数字类型的字典
                     value = parseInt(value)
+                } catch (ignore) {
+                    /*eslint-disable*/
+                }
+            } else if (valueType === 'boolean') {
+                try {
+                    if (value === 'false') {
+                        value = false
+                    } else if (value === 'true') {
+                        value = true
+                    } else {
+                        //处理一下boolean类型的
+                        value = !!value
+                    }
                 } catch (ignore) {
                     /*eslint-disable*/
                 }

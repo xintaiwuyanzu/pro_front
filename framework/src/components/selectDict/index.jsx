@@ -6,7 +6,7 @@ export default {
     props: {
         //要渲染的字典的字段
         type: {type: String, require: true},
-        value: [String, Number, Array]
+        value: {}
     },
     setup(prop, context) {
         const {dict} = useDict(prop.type)
