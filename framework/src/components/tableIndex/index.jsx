@@ -79,11 +79,11 @@ function renderSearchForm(fields, ctx) {
         }
         btnChildren.push(() => (<el-button type='danger' onClick={callBack}>删 除</el-button>))
     }
-    if (ctx.back) {
-        btnChildren.push(() => (<el-button type='primary' onClick={() => ctx.$router.back()}>返 回</el-button>))
-    }
     if (ctx.$scopedSlots['search-$btns']) {
         btnChildren.push(ctx.$scopedSlots['search-$btns'])
+    }
+    if (ctx.back) {
+        btnChildren.push(() => (<el-button type='primary' onClick={() => ctx.$router.back()}>返 回</el-button>))
     }
     if (btnChildren.length > 0) {
         slotChildren.push(<el-form-item>{btnChildren.map(b => b(ctx.searchFormModel))}</el-form-item>)

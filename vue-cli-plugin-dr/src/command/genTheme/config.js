@@ -2,6 +2,7 @@ const path = require('path')
 const fs = require('fs')
 const rootPath = process.cwd();
 const util = require('../../utils')
+const readPkg = require('read-pkg')
 const pkg = require(path.resolve(rootPath, 'package.json'))
 
 const nodeModulePath = path.resolve(rootPath, 'node_modules')
@@ -9,15 +10,7 @@ const elementThemePath = util.moduleFilePath('element-ui', 'packages/theme-chalk
 const config = []
 
 Object.keys(pkg.dependencies)
-    .map(p => {
-        //这里加载可能失败ahooks-vue，失败的就不处理了
-        let pkg = {}
-        try {
-            pkg = require(util.moduleFilePath(p, `package.json`))
-        } catch (e) {
-        }
-        return pkg
-    })
+    .map(p => readPkg.sync({cwd: util.moduleDir(p)}))
     .filter(p => p.dlib)
     .forEach(p => {
         const configFile = util.moduleFilePath(p.name, 'src/styles/var.scss')

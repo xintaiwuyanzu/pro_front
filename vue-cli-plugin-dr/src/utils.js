@@ -1,4 +1,6 @@
 const path = require('path')
+const readPkg = require('read-pkg')
+
 const makeArray = (arr) => {
     if (arr) {
         if (Array.isArray(arr)) {
@@ -22,16 +24,7 @@ const defaultSelector = (type, name, arr) => {
 const readLibs = (pkg, arr, rootIndex = 0, libNameArr) => {
     if (pkg && pkg.dependencies) {
         Object.keys(pkg.dependencies)
-            .map(p => {
-                //TODO 这里有重复的代码
-                //这里加载可能失败ahooks-vue，失败的就不处理了
-                let pkg = {}
-                try {
-                    pkg = require(moduleFilePath(p, `package.json`))
-                } catch (e) {
-                }
-                return pkg
-            })
+            .map(p => readPkg.sync({cwd: moduleDir(p)}))
             .filter(p => p.dlib)
             .forEach((p, index) => {
                 if (libNameArr.indexOf(p.name) === -1) {
@@ -93,7 +86,7 @@ const parseOptions = ({service}, options) => {
  * 则尝试使用环境变量定义默认的browserslist
  */
 const checkBrowserList = () => {
-    if (require(`${process.cwd()}/package.json`).browserslist) {
+    if (readPkg().browserslist) {
         return
     }
     const fs = require('fs')
