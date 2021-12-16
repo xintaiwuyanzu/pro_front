@@ -27,7 +27,7 @@ export default {
         /**
          * 当类型是text的时候，跳转路由查询参数的key
          */
-        queryProp: {type: String, default: 'id'},
+        queryProp: {type: [String, Array], default: 'id'},
         //text属性完毕
         /**
          * 分页参数，分页组件和index组件用到了
@@ -104,7 +104,7 @@ export default {
                         const on = {}
                         if (this.route) {
                             const query = {}
-                            query[this.queryProp] = row[this.queryProp]
+                            (Array.isArray(this.queryProp) ? this.queryProp : [this.queryProp]).forEach(p => query[p] = row[p])
                             on.click = () => this.$router.push({
                                 path: this.routerPath || `${this.$route.path}/edit`,
                                 query
