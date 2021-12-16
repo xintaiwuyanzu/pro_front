@@ -62,7 +62,6 @@ export const useTable = (args, context) => {
             if (result.data) {
                 if (result.data.success) {
                     Message.success('删除成功！')
-                    await loadData()
                 } else {
                     Message.warning(result.data.message)
                 }

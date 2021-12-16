@@ -69,12 +69,19 @@ function renderSearchForm(fields, ctx) {
      * 多选删除
      */
     if (ctx.deleteMulti) {
-        const callBack = () => {
+        //监听数据删除事件，刷新数据
+        ctx.$on('remove', async id => {
+            if (id) {
+                await ctx.loadData(ctx.searchFormModel)
+            }
+        })
+        //删除按钮点击回调
+        const callBack = async () => {
             const select = ctx.tableSelection
             if (!select || select.length === 0) {
                 ctx.$message.warning('请选择要删除的列')
             } else {
-                ctx.remove(select.map(s => s.id))
+                await ctx.remove(select.map(s => s.id))
             }
         }
         btnChildren.push(() => (<el-button type='danger' onClick={callBack}>删 除</el-button>))
@@ -105,6 +112,10 @@ function renderSearchForm(fields, ctx) {
     return (<formRender {...searchFormArgs}>{slotChildren}</formRender>)
 }
 
+function getComponentName(opts) {
+    return opts && (opts.Ctor.options.name || opts.tag)
+}
+
 /**
  * 渲染列表页面
  * @param ctx
@@ -119,7 +130,7 @@ function renderTable(columns, ctx) {
         //自定义slots
         (ctx.$slots.default || [])
             .forEach(v => {
-                    if (v.componentOptions?.tag === 'el-table-column') {
+                    if ('el-table-column' === getComponentName(v.componentOptions)) {
                         propSlots.push(v)
                     } else {
                         otherChild.push(v)
