@@ -179,5 +179,15 @@ export default {
             }
             this.data.loading = false
         }
+    },
+    mounted() {
+        if (this.delete || this.deleteMulti) {
+            //监听数据删除事件，刷新数据
+            this.$on('remove', async id => {
+                if (id) {
+                    await this.loadData(this.searchFormModel)
+                }
+            })
+        }
     }
 }

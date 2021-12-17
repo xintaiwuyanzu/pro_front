@@ -69,12 +69,6 @@ function renderSearchForm(fields, ctx) {
      * 多选删除
      */
     if (ctx.deleteMulti) {
-        //监听数据删除事件，刷新数据
-        ctx.$on('remove', async id => {
-            if (id) {
-                await ctx.loadData(ctx.searchFormModel)
-            }
-        })
         //删除按钮点击回调
         const callBack = async () => {
             const select = ctx.tableSelection
@@ -143,16 +137,12 @@ function renderTable(columns, ctx) {
     //操作列
     if (ctx.edit) {
         //编辑按钮
-        editBtns.push((scope) => {
-            return (<el-button onClick={() => ctx.showEdit(scope.row)} type='text'>编辑</el-button>)
-        })
+        editBtns.push((scope) => (<el-button onClick={() => ctx.showEdit(scope.row)} type='text'>编辑</el-button>))
         editColumnWidth += 30
     }
     if (ctx.delete) {
         //删除按钮
-        editBtns.push((scope) => {
-            return (<el-button onClick={() => ctx.remove(scope.row.id)} type='text'>删除</el-button>)
-        })
+        editBtns.push((scope) => (<el-button onClick={() => ctx.remove(scope.row.id)} type='text'>删除</el-button>))
         editColumnWidth += 30
     }
     if (ctx.$scopedSlots['table-$btns']) {

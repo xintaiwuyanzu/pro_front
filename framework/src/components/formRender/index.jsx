@@ -182,17 +182,16 @@ export default {
                         })
                         const requestParams = {...parsedFormData, ...appendParams}
                         if (this.beforeSubmit) {
-                            const result = await this.beforeSubmit(formData, requestParams)
-                            if (result === true || result === undefined) {
-                                const result = await this.$post(url, requestParams)
-                                if (result.status === 200) {
-                                    return result.data
-                                } else {
-                                    return {success: false, message: result.statusText}
-                                }
-                            } else {
-                                return {success: false, message: result}
+                            const submitResult = await this.beforeSubmit(formData, requestParams)
+                            if (!(submitResult === true || submitResult === undefined)) {
+                                return {success: false, message: submitResult}
                             }
+                        }
+                        const result = await this.$post(url, requestParams)
+                        if (result.status === 200) {
+                            return result.data
+                        } else {
+                            return {success: false, message: result.statusText}
                         }
                     } else {
                         return {success: false, message: `请填写完整表单`}

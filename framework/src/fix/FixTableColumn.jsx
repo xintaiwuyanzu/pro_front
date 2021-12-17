@@ -103,8 +103,12 @@ export default {
                     if (this.component === 'text') {
                         const on = {}
                         if (this.route) {
-                            const query = {}
-                            (Array.isArray(this.queryProp) ? this.queryProp : [this.queryProp]).forEach(p => query[p] = row[p])
+                            const query = {};
+                            if (Array.isArray(this.queryProp)) {
+                                this.queryProp.forEach(p => query[p] = row[p])
+                            } else {
+                                query[this.queryProp] = row[this.queryProp]
+                            }
                             on.click = () => this.$router.push({
                                 path: this.routerPath || `${this.$route.path}/edit`,
                                 query
