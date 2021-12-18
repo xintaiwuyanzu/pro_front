@@ -157,7 +157,7 @@ export const AbstractMapper = {
                 //没有自定义映射参数，额外定义了日期格式化的参数，尝试使用dayjs格式化日期
                 const fmt = (typeof props.dateFormat === 'boolean') ? 'YYYY-MM-DD' : props.dateFormat
                 try {
-                    return dayjs(value).format(fmt)
+                    return value === 0 ? '-' : dayjs(value).format(fmt)
                 } catch (e) {
                     console.error(`尝试使用${fmt}格式化日期数据：${value}失败`, e)
                 }
@@ -231,7 +231,7 @@ export const AbstractMapper = {
                 //没有自定义映射参数，额外定义了日期格式化的参数，尝试使用dayjs格式化日期
                 const fmt = (typeof props.dateFormat === 'boolean') ? 'YYYY-MM-DD' : props.dateFormat
                 try {
-                    return {value: dayjs(value).format(fmt), showType: 'info'}
+                    return {value: value === 0 ? '-' : dayjs(value).format(fmt), showType: 'info'}
                 } catch (e) {
                     console.error(`尝试使用${fmt}格式化日期数据：${value}失败`, e)
                 }

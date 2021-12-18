@@ -110,6 +110,18 @@ function getComponentName(opts) {
     return opts && (opts.Ctor.options.name || opts.tag)
 }
 
+function isTableColumn(v) {
+    if (v.componentOptions) {
+        const name = getComponentName(v.componentOptions)
+        if (name) {
+            return 'el-table-column' === name || 'ElTableColumn' === name
+        }
+    } else if (v.tag) {
+        return v.tag.indexOf('ElTableColumn') >= 0
+    }
+    return false
+}
+
 /**
  * 渲染列表页面
  * @param ctx
@@ -124,7 +136,7 @@ function renderTable(columns, ctx) {
         //自定义slots
         (ctx.$slots.default || [])
             .forEach(v => {
-                    if ('el-table-column' === getComponentName(v.componentOptions)) {
+                    if (isTableColumn(v)) {
                         propSlots.push(v)
                     } else {
                         otherChild.push(v)
