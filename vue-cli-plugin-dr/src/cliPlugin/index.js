@@ -127,6 +127,8 @@ module.exports = (api, options, {libs, limit}) => {
         cfg.plugin('hard-source-webpack-plugin').use(require('hard-source-webpack-plugin'))
         //@vue/composition-api
         cfg.resolve.alias.set('@vue/composition-api$', '@vue/composition-api/dist/vue-composition-api.esm.js')
+        //TODO 强制设置，需要详细研究mjs和esm区别
+        cfg.resolve.alias.set('@vue/composition-api/dist/vue-composition-api.mjs', '@vue/composition-api/dist/vue-composition-api.esm.js')
         //babel添加添加自定义preset
         cfg.module.rule('js').uses.get('babel-loader').options({presets: ['@dr/vue-cli-plugin-dr/preset']})
         //添加最小限制

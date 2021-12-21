@@ -14,6 +14,9 @@
         <el-form-item label="角色描述" prop="description">
           <el-input v-model="form.description" clearable/>
         </el-form-item>
+        <el-form-item prop="order" label="排序">
+          <el-input v-model="form.order" type="number" clearable/>
+        </el-form-item>
         <el-form-item label="角色权限">
           <el-transfer filterable :filter-method="filterMethod"
                        :titles="['所有权限','选中权限']" filter-placeholder="请输入权限名称搜索"
@@ -32,7 +35,8 @@ export default {
       form: {
         name: '',
         description: '',
-        code: ''
+        code: '',
+        order: 0
       },
       rolePermissions: [],
       permissions: [],

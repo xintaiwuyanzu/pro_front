@@ -28,13 +28,15 @@ import indexMixin from '@dr/auto/lib/util/indexMixin'
 export default {
   extends: abstractResource,
   data() {
-    return {
-      columns: [
+    return {path: '/sysPermission/'}
+  },
+  computed: {
+    columns() {
+      return [
         {prop: "name", label: "权限名称", component: 'text', route: true},
         {prop: "description", label: "权限描述"},
-        {prop: "type", label: "权限类型", mapper: this.providers, labelKey: 'type'}
-      ],
-      path: '/sysPermission/'
+        {prop: "type", label: "权限类型", mapper: this.providers, valueKey: 'type', labelKey: 'name'}
+      ]
     }
   },
   components: {ConfigForm},

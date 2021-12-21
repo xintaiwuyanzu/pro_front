@@ -21,6 +21,9 @@
           </el-dialog>
           <el-input type="textarea" v-model="form.code" clearable/>
         </el-form-item>
+        <el-form-item prop="order" label="排序">
+          <el-input v-model="form.order" type="number" placeholder="请输入排序"/>
+        </el-form-item>
       </form-render>
     </div>
   </section>
@@ -37,7 +40,8 @@ export default {
       form: {
         type: '',
         groupId: '',
-        code: ''
+        code: '',
+        order: 0
       },
       dialogShow: false
     }

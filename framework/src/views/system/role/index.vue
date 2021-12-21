@@ -1,8 +1,12 @@
 <template>
   <section>
     <nac-info title="角色管理">
-      <el-button type="primary" @click="$router.push('/system/role/edit')">添加角色
-      </el-button>
+      <el-form inline>
+        <el-form-item>
+          <el-button type="primary" @click="$router.push('/system/role/edit')">添加角色
+          </el-button>
+        </el-form-item>
+      </el-form>
     </nac-info>
     <div class="index_main" v-loading="loading">
       <div class="table-container">
