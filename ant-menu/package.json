@@ -15,14 +15,14 @@
     "@dr/auto": "^0.0.2",
     "@dr/framework": "^0.0.3",
     "ant-design-vue": "^1.7.8",
-    "vue": "^2.6.11"
+    "vue": "^2.6.14"
   },
   "devDependencies": {
     "@dr/vue-cli-plugin-dr": "^1.0.2",
     "@vue/cli-plugin-eslint": "^4.5.15",
     "@vue/cli-service": "^4.5.15",
     "babel-eslint": "^10.1.0",
-    "eslint": "^7.8.1",
+    "eslint": "^7.32.0",
     "eslint-plugin-vue": "^6.2.2"
   }
 }

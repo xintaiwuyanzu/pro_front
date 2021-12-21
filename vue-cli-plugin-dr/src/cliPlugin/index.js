@@ -92,10 +92,21 @@ module.exports = (api, options, {libs, limit}) => {
         if (sass.additionalData) {
             sassAddArr.unshift(sass.additionalData)
         }
-        sass.additionalData = sassAddArr.join(eol)
+        const sassVar = sassAddArr.join(eol)
         console.info('追加全局sass变量')
-        console.info(sass.additionalData)
+        console.info(sassVar)
 
+        sass.additionalData = async (content) => {
+            const arr = content.split('@use')
+            //todo 这里不会写正则，用暴力的方法
+            if (arr.length > 1) {
+                const last = arr[arr.length - 1]
+                const index = last.indexOf(";")
+                arr[arr.length - 1] = last.substring(0, index + 1) + sassVar + last.substring(index + 1)
+                return arr.join('@use')
+            }
+            return [sassVar, content].join(eol)
+        }
     }
     api.chainWebpack(cfg => {
         //入口文件是否存在
