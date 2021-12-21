@@ -159,6 +159,7 @@ export const AbstractMapper = {
                 try {
                     return value === 0 ? '-' : dayjs(value).format(fmt)
                 } catch (e) {
+                    /*eslint-disable-next-line no-console*/
                     console.error(`尝试使用${fmt}格式化日期数据：${value}失败`, e)
                 }
             }
@@ -233,6 +234,7 @@ export const AbstractMapper = {
                 try {
                     return {value: value === 0 ? '-' : dayjs(value).format(fmt), showType: 'info'}
                 } catch (e) {
+                    /*eslint-disable-next-line no-console*/
                     console.error(`尝试使用${fmt}格式化日期数据：${value}失败`, e)
                 }
             } else if (value && props.formatter) {

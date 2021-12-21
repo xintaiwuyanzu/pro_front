@@ -95,6 +95,7 @@ export default {
                                 }
                             }
                         } catch (e) {
+                            /*eslint-disable-next-line no-console*/
                             console.warn(`设置字段${this.prop}数据类型失败`, e)
                         }
                     }

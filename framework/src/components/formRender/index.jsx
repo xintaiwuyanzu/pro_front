@@ -166,6 +166,7 @@ export default {
         async submit(url, appendParams) {
             const formData = this.$attrs.model
             if (!formData) {
+                /*eslint-disable-next-line no-console*/
                 console.error(`没有指定表单model`)
                 return {success: false, message: `没有指定表单model`}
             } else {
@@ -208,10 +209,12 @@ export default {
             //判断字段类型，选择组件
             const fieldType = props.fieldType || 'input'
             if (!defaultFields[fieldType]) {
+                /*eslint-disable-next-line no-console*/
                 console.error(`没有指定的表单字段类型${fieldType}`, prop)
                 return
             }
             if (!this.$attrs.model) {
+                /*eslint-disable-next-line no-console*/
                 console.error(`没有指定表单model`)
                 return
             }
