@@ -3,11 +3,21 @@
  */
 import {useMenu} from "@dr/framework/src/hooks/useMenu";
 import Menu from "ant-design-vue/es/menu";
+import {reactive, watchEffect} from 'vue-demi'
 import "./style.less";
-
+//TODO 需要全局统一菜单和router，监听手动push的情况
 export default {
     setup() {
         const {menuData} = useMenu()
+        const selectedKeys = reactive({selectedKeys: []})
+        watchEffect(() => {
+            if (menuData.currentMenu?.id) {
+                selectedKeys.selectedKeys = [menuData.currentMenu.id]
+            } else {
+                selectedKeys.selectedKeys = []
+            }
+        })
+
         const createChildren = data => {
             return data.map(md => {
                 if (md.children) {
@@ -36,13 +46,18 @@ export default {
                 }
             })
         }
+        const selectChange = (v) => selectedKeys.selectedKeys = v
         return () => {
             const menuChildren = createChildren(menuData.menu)
+            const props = {
+                mode: 'horizontal',
+                theme: 'dark',
+                subMenuCloseDelay: 0,
+                selectedKeys: selectedKeys.selectedKeys
+            }
             return (
                 <section>
-                    <Menu class="header-menu" mode='horizontal' defaultSelectedKeys={[menuData.defaultIndex]}
-                          subMenuCloseDelay={0}
-                          theme="dark">
+                    <Menu class="header-menu" props={{...props}} onSelectChange={selectChange}>
                         {menuChildren}
                     </Menu>
                 </section>

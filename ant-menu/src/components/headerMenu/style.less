@@ -21,6 +21,9 @@ dVars()
 @menu-dark-color: @--color-primary-light-9;
 //行间距
 @menu-item-boundary-margin: 4px;
+.ant-menu-submenu-title {
+  padding: 0px 14px;
+}
 
 /**
 这里面用element-ui里面定义的变量修改ant样式
@@ -34,20 +37,19 @@ dVars()
   color: @--color-white;
 }
 
+.header-icon {
+  height: auto;
+  margin-right: 10px;
+  width: 14px;
+}
+
 .header-menu {
   width: 100%;
   max-width: 100%;
   font-size: 16px;
   margin-left: 40px;
 
-  .ant-menu-submenu-title {
-    padding: 0px 14px;
+  .ant-menu-submenu-selected {
+    background-color: @--color-primary-dark-3;
   }
-
-}
-
-.header-icon {
-  height: auto;
-  margin-right: 10px;
-  width: 14px;
 }
