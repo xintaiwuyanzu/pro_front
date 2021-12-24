@@ -1,8 +1,15 @@
 <template>
   <section>
     <nac-info title="角色管理">
-      <el-form inline>
+      <el-form inline v-model="searchForm">
+        <el-form-item prop="name" label="角色名称">
+          <el-input v-model="searchForm.name" clearable style="width: 140px"/>
+        </el-form-item>
+        <el-form-item prop="code" label="角色编码">
+          <el-input v-model="searchForm.code" clearable style="width: 140px"/>
+        </el-form-item>
         <el-form-item>
+          <el-button type="primary" @click="loadData(searchForm)">搜 索</el-button>
           <el-button type="primary" @click="$router.push('/system/role/edit')">添加角色
           </el-button>
         </el-form-item>
@@ -59,6 +66,7 @@ export default {
   data() {
     return {
       path: 'sysrole',
+      searchForm: {name: '', code: ''},
       dialogShow: false,
       rolePersons: [],
       selectRoleId: '',
@@ -67,7 +75,7 @@ export default {
   },
   methods: {
     $init() {
-      this.loadData()
+      this.loadData(this.searchForm)
     },
     filterMethod(query, item) {
       return item.label.indexOf(query) > -1;
