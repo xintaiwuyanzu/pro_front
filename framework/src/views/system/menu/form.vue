@@ -30,7 +30,10 @@
           <el-input v-model="form.order"></el-input>
         </el-form-item>
         <el-form-item label="描述：" prop="description">
-          <el-input type="textarea" v-model="form.description"></el-input>
+          <el-input type="textarea" v-model="form.description"/>
+        </el-form-item>
+        <el-form-item label="请求参数：" prop="params">
+          <el-input type="textarea" v-model="form.params" :autosize="{ minRows: 3, maxRows: 5}"/>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">

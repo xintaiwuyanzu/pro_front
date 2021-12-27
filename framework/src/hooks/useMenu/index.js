@@ -1,6 +1,7 @@
 import {inject, onMounted, provide, reactive, unref, watch} from "vue-demi";
 import {http} from "../../plugins/http";
 import {useRouter} from '@u3u/vue-hooks'
+import qs from "qs";
 
 /**
  * 默认菜单加载
@@ -83,13 +84,31 @@ export const useMenuContext = (menuLoader = defaultMenuLoader) => {
     watch(() => providerData.currentMenu,
         (newMenu) => {
             if (newMenu.data && newMenu.data.url) {
+                //额外的请求参数
+                let query = newMenu.data.params
+                if (query) {
+                    //如果有额外的请求参数
+                    try {
+                        query = JSON.parse(query)
+                    } catch (e) {
+                        /*eslint-disable-next-line*/
+                    }
+                    if (typeof query === 'string') {
+                        query = {query}
+                    }
+                } else {
+                    query = {}
+                }
                 const url = trimUrl(newMenu.data.url)
                 //过滤重复跳转
                 if (trimUrl(route.value.path) !== url) {
                     if (url.indexOf('http:') >= 0 || url.indexOf('https:') >= 0) {
-                        router.push({name: 'frame', params: {$url: url}, query: {$url: url}})
+                        router.push({
+                            path: '/main/frame',
+                            query: {$url: `${url}?${qs.stringify(query)}`}
+                        })
                     } else {
-                        router.push(url)
+                        router.push({path: url, query})
                     }
                 }
             }
