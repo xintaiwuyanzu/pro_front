@@ -2,6 +2,7 @@ const plugin = require('./src/cliPlugin')
 const codeGen = require('./src/codeGen')
 const utils = require('./src/utils')
 const babelPlugin = require('@vue/cli-plugin-babel')
+const eslintPlugin = require('@vue/cli-plugin-eslint')
 /**
  * 导出vue-cli-plugin
  * @type {function(*=, *=): void}
@@ -20,6 +21,10 @@ module.exports = (api, options) => {
     //先执行babel，在执行自己
     //TODO 这里应该可以拦截babel配置，注入自定义的preset
     babelPlugin(api, options)
+    if (api.service.mode === 'development') {
+        //直接内置eslint
+        eslintPlugin(api, options)
+    }
     //在魔改配置项
     plugin(api, options, drOptions)
 }

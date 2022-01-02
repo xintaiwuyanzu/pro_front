@@ -75,13 +75,13 @@ module.exports = (cacheDirectory) => {
             if (css) {
                 return `            { 
                 name:"${name}",
-                component:import(/* webpackChunkName: "el-${name}" */"${path}"),
-                css:import(/* webpackChunkName: "elcs-${name}" */"${css}"),
+                component:import("${path}"),
+                css:import("${css}"),
             }`
             } else {
                 return `            {
                 name:"${name}",
-                component:import(/* webpackChunkName: "el-${name}" */"${path}")
+                component:import("${path}")
             }`
             }
         }).join(`,${eol}`)

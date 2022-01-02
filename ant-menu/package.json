@@ -5,7 +5,7 @@
   "dlib": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build --report",
+    "build": "vue-cli-service build  --no-module --report",
     "lint": "vue-cli-service lint"
   },
   "files": [
@@ -18,11 +18,6 @@
     "vue": "^2.6.14"
   },
   "devDependencies": {
-    "@dr/vue-cli-plugin-dr": "^1.0.2",
-    "@vue/cli-plugin-eslint": "^4.5.15",
-    "@vue/cli-service": "^4.5.15",
-    "babel-eslint": "^10.1.0",
-    "eslint": "^7.32.0",
-    "eslint-plugin-vue": "^6.2.2"
+    "@dr/vue-cli-plugin-dr": "^1.0.2||^2.0.0"
   }
 }

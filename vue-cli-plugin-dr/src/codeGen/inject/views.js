@@ -14,6 +14,6 @@ module.exports = {
      * @returns {string}
      */
     template({name, requirePath}) {
-        return `{path:'/${name}',component: import(/* webpackChunkName: "${name}" */'${requirePath}')}`
+        return `{path:'/${name}',component: import('${requirePath}')}`
     }
 }

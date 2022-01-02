@@ -14,6 +14,6 @@ module.exports = {
      * @returns {string}
      */
     template({name, requirePath}) {
-        return `{name:"${name}",component:import(/* webpackChunkName: "cpn-${name}" */"${requirePath}")}`
+        return `{name:"${name}",component:import("${requirePath}")}`
     }
 }

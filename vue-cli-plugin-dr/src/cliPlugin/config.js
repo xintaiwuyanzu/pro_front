@@ -1,36 +1,36 @@
 const cacheGroups = {
     cpn: {
-        name: `cpn`,
+        idHint: `cpn`,
         test: /[\\/](src\/components)[\\/]/,
         priority: -9,
         chunks: 'initial'
     },
     ve: {
-        name: `ve`,
+        idHint: `ve`,
         test: /[\\/]node_modules[\\/](vue|vue-router|vuex|core-js)[\\/]/,
         priority: -9,
         chunks: 'initial'
     },
     ec: {
-        name: `ec`,
+        idHint: `ec`,
         test: /[\\/]node_modules[\\/](echarts|v-charts)[\\/]/,
         priority: -9,
         chunks: 'initial'
     },
     el: {
-        name: `el`,
+        idHint: `el`,
         test: /[\\/]node_modules[\\/](element-ui)[\\/]/,
         priority: -9,
         chunks: 'initial'
     },
-    vendors: {
-        name: `vendors`,
+    defaultVendors: {
+        idHint: `vendors`,
         test: /[\\/]node_modules[\\/]/,
         priority: -15,
         chunks: 'initial'
     },
     common: {
-        name: `common`,
+        idHint: `common`,
         minChunks: 2,
         priority: -16,
         chunks: 'initial',
@@ -45,6 +45,7 @@ module.exports = {
      *optimization.splitChunks参数
      */
     splitChunks: {
+        chunks: 'all',
         cacheGroups
     },
     chunks: Object.keys(cacheGroups)

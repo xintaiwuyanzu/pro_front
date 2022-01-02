@@ -11,20 +11,6 @@ const varPath = 'src/styles/var.scss'
  */
 const prjVarExist = fs.existsSync(path.resolve(rootPath, varPath))
 const prjVarPath = prjVarExist ? `@import "@/styles/var.scss";` : ''
-/**
- * 读取配置或者设置新的配置
- * @param obj
- * @param key
- * @returns {*}
- */
-const readOrCreate = (obj, key) => {
-    let value = obj[key]
-    if (!value) {
-        value = {}
-        obj[key] = value
-    }
-    return value
-}
 
 
 /**
@@ -34,11 +20,10 @@ const readOrCreate = (obj, key) => {
  * @returns {*}
  */
 const readVars = (api, libs) => {
-    const result = libs.map(l => ({name: l.name, varPath: path.resolve(utils.moduleDir(l.name), varPath)}))
+    return libs.map(l => ({name: l.name, varPath: path.resolve(utils.moduleDir(l.name), varPath)}))
         .filter(p => fs.existsSync(p.varPath))
         .map(p => `~${p.name}/${varPath}`)
         .reverse()
-    return result
 }
 
 
@@ -47,11 +32,11 @@ module.exports = (api, options, {libs, limit}) => {
     if (!Object.hasOwnProperty(options, 'productionSourceMap')) {
         options.productionSourceMap = false
     }
-    const cssOptions = readOrCreate(options, 'css')
-    const loaderOptions = readOrCreate(cssOptions, 'loaderOptions')
+    const cssOptions = utils.readOrCreate(options, 'css')
+    const loaderOptions = utils.readOrCreate(cssOptions, 'loaderOptions')
 
-    const less = readOrCreate(loaderOptions, 'less')
-    const lessOptions = readOrCreate(less, 'lessOptions')
+    const less = utils.readOrCreate(loaderOptions, 'less')
+    const lessOptions = utils.readOrCreate(less, 'lessOptions')
     lessOptions.javascriptEnabled = true
     const vars = readVars(api, libs)
     if (vars.length > 0 || prjVarExist) {
@@ -67,7 +52,7 @@ module.exports = (api, options, {libs, limit}) => {
         lessOptions.plugins.push({
             install: (less, pluginManager) => {
                 pluginManager.addPreProcessor({
-                    process: (src, ext) => {
+                    process: (src) => {
                         if (src.indexOf('dVars()') >= 0) {
                             src = src.split('dVars()').join(lessAddArr.join(eol))
                         }
@@ -85,7 +70,7 @@ module.exports = (api, options, {libs, limit}) => {
         console.info('追加全局less变量')
         lessOptions.modifyVars = `${addStrLess}${eol}${prjVarPath}`
         console.info(less.additionalData)*/
-        const sass = readOrCreate(loaderOptions, 'sass')
+        const sass = utils.readOrCreate(loaderOptions, 'sass')
         //sass全局变量有默认变量的存在，所以优先加载项目上的变量
         const sassAddArr = [prjVarPath, addStrLess]
         //TODO function
@@ -108,6 +93,9 @@ module.exports = (api, options, {libs, limit}) => {
             return [sassVar, content].join(eol)
         }
     }
+    api.configureWebpack(cfg => {
+        cfg.cache = {type: "filesystem"}
+    })
     api.chainWebpack(cfg => {
         //入口文件是否存在
         const mainJsExist = fs.existsSync(path.resolve(rootPath, 'src/main.js'));
@@ -123,8 +111,6 @@ module.exports = (api, options, {libs, limit}) => {
             }
         }
         const webpack = require('webpack')
-        //添加缓存
-        cfg.plugin('hard-source-webpack-plugin').use(require('hard-source-webpack-plugin'))
         //@vue/composition-api
         cfg.resolve.alias.set('@vue/composition-api$', '@vue/composition-api/dist/vue-composition-api.esm.js')
         //TODO 强制设置，需要详细研究mjs和esm区别
@@ -138,19 +124,17 @@ module.exports = (api, options, {libs, limit}) => {
             cfg.plugin('MinChunkSizePlugin').use(webpack.optimize.MinChunkSizePlugin, [{minChunkSize: limit.minChunkSize}])
             //gzip压缩文件
             cfg.plugin('CompressionWebpackPlugin').use(require('compression-webpack-plugin'), [{
-                test: /\.(js|css|json|txt|html|ico|svg)(\?.*)?$/i,
-                threshold: 128 * 1000
+                test: /\.(js|css|json|txt|html|ico|svg)(\?.*)?$/i, threshold: 128 * 1000
             }])
             //moment
             cfg.plugin('moment').use(webpack.ContextReplacementPlugin, [/moment[/\\]locale$/, /zh-cn/])
-            //添加代码打包
-            cfg.optimization.splitChunks(config.splitChunks)
-            cfg.performance.maxEntrypointSize(512 * 1000).maxAssetSize(384 * 1000)
-            //压缩
-            const terserOptions = require('@vue/cli-service/lib/config/terserOptions')
-            cfg.optimization
-                .minimizer('terser')
-                .use(require('terser-webpack-plugin'), [Object.assign(terserOptions(options), {terserOptions: {output: {comments: false}}})])
+            //添加代码打包 TODO 暂时不处理打包优化的问题，好像默认的就可以了
+            /*cfg.optimization.splitChunks(Object.assign(config.splitChunks, {
+                minSize: limit.minChunkSize,
+                maxSize: 384 * 1000,
+                defaultSizeTypes: ['javascript', 'css']
+            }))
+            cfg.performance.maxEntrypointSize(512 * 1000).maxAssetSize(384 * 1000)*/
         }
         //计算title
         const pkg = api.service.pkg

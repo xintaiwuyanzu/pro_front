@@ -1,5 +1,13 @@
 const path = require('path')
 const readPkg = require('read-pkg')
+const readOrCreate = (obj, key) => {
+    let value = obj[key]
+    if (!value) {
+        value = {}
+        obj[key] = value
+    }
+    return value
+}
 
 const makeArray = (arr) => {
     if (arr) {
@@ -47,7 +55,7 @@ const readLibs = (pkg, arr, rootIndex = 0, libNameArr) => {
 const parseOptions = ({service}, options) => {
     checkBrowserList()
     let drOpt = options.pluginOptions ? options.pluginOptions.dr : {}
-    const {pkg, context} = service
+    const {pkg} = service
     //router　视图　　库文件
     let {views, libs, selector, limit} = drOpt
     views = makeArray(views)
@@ -66,17 +74,26 @@ const parseOptions = ({service}, options) => {
     }
     const libTran = libs.map(l => l.name)
     libTran.push('element-ui')
+    //修改babel的配置
     if (options.transpileDependencies) {
         options.transpileDependencies = options.transpileDependencies.concat(libTran)
     } else {
         options.transpileDependencies = libTran
     }
+    //修改terser的配置
+    const terser = readOrCreate(options, 'terser')
+    if (!terser.minify) {
+        terser.minify = "esbuild"
+    }
+    if (terser.minify !== 'esbuild') {
+        const terserOptions = readOrCreate(terser, 'terserOptions')
+        readOrCreate(terserOptions, 'output').comments = false
+    }
     if (!selector) {
         selector = defaultSelector
     }
     limit = Object.assign({
-        maxChunks: 100,
-        minChunkSize: 128 * 1000
+        maxChunks: 100, minChunkSize: 128 * 1000
     }, limit)
     return {views, libs, selector, limit}
 }
@@ -98,11 +115,7 @@ const checkBrowserList = () => {
     }
     if (!process.env.BROWSERSLIST) {
         //添加默认的配置
-        process.env.BROWSERSLIST =
-            ['> 1%',
-                'last 2 versions',
-                'not dead'
-            ]
+        process.env.BROWSERSLIST = ['> 1%', 'last 2 versions', 'not dead']
     }
 }
 /**
@@ -118,8 +131,5 @@ const moduleDir = (mod) => `${path.dirname(require.resolve(`${mod}/package.json`
  */
 const moduleFilePath = (mod, subPath) => path.resolve(moduleDir(mod), subPath)
 module.exports = {
-    parseOptions,
-    defaultSelector,
-    moduleDir,
-    moduleFilePath
+    parseOptions, defaultSelector, moduleDir, moduleFilePath, readOrCreate
 }
