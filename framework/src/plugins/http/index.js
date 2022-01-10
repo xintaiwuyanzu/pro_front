@@ -76,7 +76,7 @@ export default (vue, router, store) => {
                 response.status === 403
             ) {
                 Message.warning("用户未登录！")
-                router.replace({path: 'login', query: {redirect: router.currentRoute.fullPath}})
+                router.replace({path: '/login', query: {redirect: router.currentRoute.fullPath}})
             } else {
                 return response
             }
