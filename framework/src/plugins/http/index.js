@@ -70,11 +70,13 @@ export default (vue, router, store) => {
     instance.interceptors.response.use(
         response => {
             if (
-                response.data.message === 'needLogin' ||
-                response.data.code === '403' ||
-                response.data.code === 403 ||
-                response.status === 403
+                (response.data.message === 'needLogin' ||
+                    response.data.code === '403' ||
+                    response.data.code === 403 ||
+                    response.status === 403)
+                && router.currentRoute.path !== '/login'
             ) {
+
                 Message.warning("用户未登录！")
                 router.replace({path: '/login', query: {redirect: router.currentRoute.fullPath}})
             } else {
