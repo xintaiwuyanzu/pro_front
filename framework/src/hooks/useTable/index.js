@@ -6,7 +6,7 @@ import {http} from "../../plugins/http";
 import {Message, MessageBox} from "element-ui";
 
 export const useTable = (args, context) => {
-    const {basePath, pagePath, deletePath, initParams} = args
+    const {basePath, pagePath, deletePath, initParams, dataWrapper} = args
 
     const tableData = reactive({
         data: [],
@@ -29,7 +29,11 @@ export const useTable = (args, context) => {
         let resultData = result.data
         if (resultData && resultData.success) {
             resultData = resultData.data
-            tableData.data = reactive(resultData.data)
+            const data = reactive(resultData.data)
+            if (dataWrapper) {
+                await dataWrapper(data)
+            }
+            tableData.data = data
 
             tableData.page.index = resultData.start / resultData.size + 1
             tableData.page.size = resultData.size

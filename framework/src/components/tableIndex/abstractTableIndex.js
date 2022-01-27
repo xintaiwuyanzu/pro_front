@@ -16,10 +16,24 @@ export default {
          * 所有接口基础路径
          */
         path: {type: String, required: true},
-        //默认page
+        /**
+         * 分页查询后台请求路径
+         * 默认page
+         */
         pagePath: String,
-        //默认delete
+        /**
+         *  删除后台请求路径
+         *  默认delete
+         */
         deletePath: String,
+        /**
+         *分页查询返回结果映射方法
+         * 函数类型，参数是后台返回的分页数据的list，方法返回结果没用到
+         *
+         * 注意：这个参数只是用来处理异步处理数据的场景，正常不需要使用该参数。
+         *      需要同步监听可以使用 dataLoaded 事件监听
+         */
+        dataWrapper: Function,
         /**
          * 是否在每一行添加删除按钮
          */
@@ -138,7 +152,8 @@ export default {
             basePath: props.path,
             pagePath: props.pagePath,
             deletePath: props.deletePath,
-            initParams: props.defaultSearchForm
+            initParams: props.defaultSearchForm,
+            dataWrapper: props.dataWrapper
         }, context)
         return {...result, menuData}
     },
