@@ -1,6 +1,7 @@
 import './main.scss'
 import {useMenuContext} from "../../hooks/useMenu";
 import vue from "vue";
+import tabs from "./tabs";
 
 export default {
     name: 'indexMain',
@@ -35,8 +36,11 @@ export default {
                                 </el-aside> : ''
                         }
                         <el-main style="padding: 0px;" class={props.mainClassName}>
+                            <tabs/>
                             <transition name="fade-transform" mode="out-in">
-                                <router-view class="main-container"/>
+                                <keep-alive max={5}>
+                                    <router-view className="main-container"/>
+                                </keep-alive>
                             </transition>
                         </el-main>
                     </el-container>

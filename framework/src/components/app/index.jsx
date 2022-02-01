@@ -1,4 +1,6 @@
 import "./normal.css";
+import 'html5-boilerplate/dist/css/main.css'
+import 'html5-boilerplate/dist/css/normalize.css'
 
 export default {
     name: 'app',

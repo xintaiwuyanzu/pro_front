@@ -1,3 +1,5 @@
+@import "~element-ui/packages/theme-chalk/src/common/var";
+
 /**
 *下面代码是定制element的样式，所以需要放在全局
  */
@@ -23,3 +25,129 @@ $--button-small-padding-horizontal: #{$--button-padding-horizontal-base - 4}px !
 
 $--button-mini-padding-vertical: #{$--button-padding-vertical-base - 6}px !default;
 $--button-mini-padding-horizontal: #{$--button-padding-horizontal-base - 4}px !default;
+
+$--color-primary: #0173c7 !default;
+
+$--color-primary-dark-1: mix($--color-black, $--color-primary, 10%) !default;
+$--color-primary-dark-2: mix($--color-black, $--color-primary, 20%) !default;
+$--color-primary-dark-3: mix($--color-black, $--color-primary, 30%) !default;
+$--color-primary-dark-4: mix($--color-black, $--color-primary, 40%) !default;
+$--color-primary-dark-5: mix($--color-black, $--color-primary, 50%) !default;
+$--color-primary-dark-6: mix($--color-black, $--color-primary, 60%) !default;
+$--color-primary-dark-7: mix($--color-black, $--color-primary, 70%) !default;
+$--color-primary-dark-8: mix($--color-black, $--color-primary, 80%) !default;
+$--color-primary-dark-9: mix($--color-black, $--color-primary, 90%) !default;
+
+$--menu-item-hover-fill: $--color-primary;
+/**
+头部导航栏高度
+ */
+$--header-height: 50px !default;
+/**
+左侧菜单关闭时的宽度
+ */
+$--left-menu-collapse-width: 70px !default;
+
+
+// 主要字体颜色
+$font-color: #4e5862;
+// 次要字体颜色
+$font-color-sub: #919ca7;
+
+// 默认字体大小
+$font-size: 14px;
+// 标题字体大小
+$font-title: 18px;
+// 次级标题字体大小
+$font-title-sub: 16px;
+
+// 头部高度
+$header-height: 50px;
+// 登录页底部高度
+$login-footer-height: 50px;
+// 页面标签高度
+$header-tags-height: 40px;
+// 页面标签背景色
+$header-tags-color: #f8f8f8;
+
+// body的背景色
+$background-color: #eee;
+// 菜单和卡片背景色
+$default-bg: #fff;
+// 表格头部背景色
+$table-header-bg: #f2f2f2;
+// 表单背景色
+$form-bg: #f6f6f6;
+
+
+/*主题颜色-主题蓝*/
+$--color-primary: #0173c7;
+
+$--color-success: #28a745;
+
+$--color-warning: #17a2b8;
+
+$--color-danger: #dc3545;
+
+$--color-info: #919ca7;
+// 边框色
+$--border-color-base: #e8e8e8;
+$--border-color-light: #e8e8e8;
+$--border-color-lighter: #e8e8e8;
+// 背景色
+$--background-color-base: $default-bg;
+$--color-white: $default-bg;
+// 表格悬浮背景色
+$--table-row-hover-background-color: #eee;
+// 表格选中行背景色
+$--table-current-row-background-color: #eee;
+// 输入框禁用时配色
+$--disabled-fill-base: $form-bg;
+$--disabled-color-base: $font-color;
+$--disabled-border-base: $--border-color-base;
+
+/*字体*/
+$--button-small-font-size: $font-size;
+$--color-text-primary: $font-color;
+$--color-text-regular: $font-color;
+$--color-text-secondary: $font-color;
+
+/*边距*/
+$--main-padding: 15px;
+
+$--dialog-padding-primary: 15px;
+
+$--header-padding: 0 15px;
+
+$--footer-padding: 0 15px;
+
+$--steps-padding: 15px;
+
+$--card-padding: 15px;
+
+$--button-padding-horizontal: 15px;
+
+$--button-medium-padding-horizontal: 15px;
+
+/*圆角*/
+$--border-radius-base: 0;
+
+$--border-radius-small: 0;
+
+$--msgbox-border-radius: 0;
+
+$--notification-radius: 0;
+
+$--switch-core-border-radius: 0;
+
+$--pagination-border-radius: 0;
+
+$--tag-border-radius: 0;
+
+$--badge-radius: 10px;
+
+$--card-border-radius: 0;
+
+$--slider-border-radius: 0;
+
+$--steps-border-radius: 0;
