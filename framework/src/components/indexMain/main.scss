@@ -3,7 +3,7 @@
 /**
 navinfo 背景颜色
  */
-$--background-color: #f3f4fc !default;
+$--background-color: #eee !default;
 
 /**
 navinfo 高度
@@ -21,9 +21,7 @@ $--nav-height: 42px !default;
   height: 100%;
   overflow: auto;
 
-
   @import "./header.scss";
-  @import "./left.scss";
 
   .main {
     overflow: auto;

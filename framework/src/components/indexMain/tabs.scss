@@ -1,0 +1,39 @@
+@import "../../styles/var";
+
+.router-nav {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  background-color: #f8f8f8;
+  //导航栏
+  .tabs {
+    flex: 1;
+    overflow-x: auto;
+
+    .el-tabs__header {
+      margin: 0px;
+    }
+
+    .el-tabs__nav {
+      border-width: 0px !important;
+    }
+
+    .el-tabs__item {
+      padding: 0px 15px !important;
+    }
+
+    .is-active {
+      background-color: $background-color;
+      border-width: 0px;
+    }
+
+    .el-tabs__content {
+      display: none;
+    }
+  }
+
+  //操作按钮
+  .btns {
+    margin: 0px 10px;
+  }
+}

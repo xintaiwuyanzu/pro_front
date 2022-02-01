@@ -1,6 +1,6 @@
 {
   "name": "@dr/framework",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "达融基础开发平台",
   "dlib": true,
   "scripts": {
@@ -9,7 +9,8 @@
     "lint": "vue-cli-service lint"
   },
   "files": [
-    "src"
+    "src",
+    "lib"
   ],
   "dependencies": {
     "@dr/auto": "^0.0.2",
@@ -20,6 +21,7 @@
     "axios": "^0.24.0",
     "dayjs": "^1.10.7",
     "element-ui": "^2.15.7",
+    "html5-boilerplate": "^8.0.0",
     "js-base64": "^3.7.2",
     "js-cookie": "^3.0.1",
     "nprogress": "^0.2.0",
