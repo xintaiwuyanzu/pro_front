@@ -1,98 +1,12 @@
 const fs = require('fs')
 const path = require('path')
 const config = require('./config')
-const rootPath = process.cwd();
 const utils = require('../utils')
-const {EOL: eol} = require("os");
-const varPath = 'src/styles/var.scss'
-/**
- *项目级变量
- * @type {string}
- */
-const prjVarExist = fs.existsSync(path.resolve(rootPath, varPath))
-const prjVarPath = prjVarExist ? `@import "@/styles/var.scss";` : ''
-
-
-/**
- * 读取所有模块的var文件
- * @param api
- * @param libs
- * @returns {*}
- */
-const readVars = (api, libs) => {
-    return libs.map(l => ({name: l.name, varPath: path.resolve(utils.moduleDir(l.name), varPath)}))
-        .filter(p => fs.existsSync(p.varPath))
-        .map(p => `~${p.name}/${varPath}`)
-        .reverse()
-}
-
-
-module.exports = (api, options, {libs, limit}) => {
-    //修改css相关默认配置
-    if (!Object.hasOwnProperty(options, 'productionSourceMap')) {
-        options.productionSourceMap = false
-    }
-    const cssOptions = utils.readOrCreate(options, 'css')
-    const loaderOptions = utils.readOrCreate(cssOptions, 'loaderOptions')
-
-    const less = utils.readOrCreate(loaderOptions, 'less')
-    const lessOptions = utils.readOrCreate(less, 'lessOptions')
-    lessOptions.javascriptEnabled = true
-    const vars = readVars(api, libs)
-    if (vars.length > 0 || prjVarExist) {
-        //按顺序添加所有模块的变量
-        const addStrLess = vars.map(v => `@import "${v}";`).join(eol)
-
-        const lessAddArr = [addStrLess, prjVarPath]
-
-        if (!lessOptions.plugins) {
-            lessOptions.plugins = []
-        }
-
-        lessOptions.plugins.push({
-            install: (less, pluginManager) => {
-                pluginManager.addPreProcessor({
-                    process: (src) => {
-                        if (src.indexOf('dVars()') >= 0) {
-                            src = src.split('dVars()').join(lessAddArr.join(eol))
-                        }
-                        return src
-                    }
-                }, 1)
-            }
-        })
-        lessOptions.plugins.push(require('less-plugin-sass2less'))
-        //less 变量是懒加载的，项目级的变量是最后的  https://www.tutorialspoint.com/less/less_default_variables.htm
-        /*if (less.additionalData) {
-            lessAddArr.push(less.additionalData)
-        }
-        less.additionalData = lessAddArr.join(eol)
-        console.info('追加全局less变量')
-        lessOptions.modifyVars = `${addStrLess}${eol}${prjVarPath}`
-        console.info(less.additionalData)*/
-        const sass = utils.readOrCreate(loaderOptions, 'sass')
-        //sass全局变量有默认变量的存在，所以优先加载项目上的变量
-        const sassAddArr = [prjVarPath, addStrLess]
-        //TODO function
-        if (sass.additionalData) {
-            sassAddArr.unshift(sass.additionalData)
-        }
-        const sassVar = sassAddArr.join(eol)
-        console.info('追加全局sass变量')
-        console.info(sassVar)
-
-        sass.additionalData = async (content) => {
-            const arr = content.split('@use')
-            //todo 这里不会写正则，用暴力的方法
-            if (arr.length > 1) {
-                const last = arr[arr.length - 1]
-                const index = last.indexOf(";")
-                arr[arr.length - 1] = last.substring(0, index + 1) + sassVar + last.substring(index + 1)
-                return arr.join('@use')
-            }
-            return [sassVar, content].join(eol)
-        }
-    }
+const css = require('./css')
+const rootPath = process.cwd();
+module.exports = (api, options, drOptions) => {
+    //css相关的配置太多了，单独抽到一个独立的文件中
+    css(api, options, drOptions)
     api.configureWebpack(cfg => {
         cfg.cache = {type: "filesystem"}
     })
@@ -120,8 +34,8 @@ module.exports = (api, options, {libs, limit}) => {
         //添加最小限制
         if (api.service.mode === 'production') {
             //控制chunk数量
-            cfg.plugin('LimitChunkCountPlugin').use(webpack.optimize.LimitChunkCountPlugin, [{maxChunks: limit.maxChunks}])
-            cfg.plugin('MinChunkSizePlugin').use(webpack.optimize.MinChunkSizePlugin, [{minChunkSize: limit.minChunkSize}])
+            cfg.plugin('LimitChunkCountPlugin').use(webpack.optimize.LimitChunkCountPlugin, [{maxChunks: drOptions.limit.maxChunks}])
+            cfg.plugin('MinChunkSizePlugin').use(webpack.optimize.MinChunkSizePlugin, [{minChunkSize: drOptions.limit.minChunkSize}])
             //gzip压缩文件
             cfg.plugin('CompressionWebpackPlugin').use(require('compression-webpack-plugin'), [{
                 test: /\.(js|css|json|txt|html|ico|svg)(\?.*)?$/i, threshold: 128 * 1000

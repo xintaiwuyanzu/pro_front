@@ -1,6 +1,7 @@
 <template>
   <section>
     <full-screen/>
+    <theme-select/>
     <el-tooltip content="退出登录" placement="bottom" effect="light">
       <el-button circle size="mini" @click="logout()">
         <icon icon="delete" style="width: 18px"/>
@@ -16,10 +17,11 @@
  */
 import loginUtil from '../login/util'
 import FullScreen from "./fullScreen";
+import ThemeSelect from "./themeSelect";
 
 export default {
   name: 'headerRight',
-  components: {FullScreen},
+  components: {ThemeSelect, FullScreen},
   methods: {
     logout() {
       this.$confirm("确定要退出登录吗？", '提 醒', {type: 'waring'})

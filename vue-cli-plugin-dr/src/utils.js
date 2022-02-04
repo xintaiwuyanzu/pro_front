@@ -1,5 +1,7 @@
 const path = require('path')
 const readPkg = require('read-pkg')
+const fs = require("graceful-fs");
+const writeJsonFile = require("write-json-file");
 const readOrCreate = (obj, key) => {
     let value = obj[key]
     if (!value) {
@@ -43,22 +45,15 @@ const readLibs = (pkg, arr, rootIndex = 0, libNameArr) => {
             })
     }
 }
-
 /**
- * 从pluginOptions读取配置信息并且传给 autoCodePlugin
- * 用来判断自动加载哪些页面
- *
- * @param service
+ * 解析项目lib依赖
+ * @param libs
+ * @param cacheDir
+ * @param api
  * @param options
- * @returns {{libs: *, views: *}}
+ * @returns {[{name: string, index: number}]}
  */
-const parseOptions = ({service}, options) => {
-    checkBrowserList()
-    let drOpt = options.pluginOptions ? options.pluginOptions.dr : {}
-    const {pkg} = service
-    //router　视图　　库文件
-    let {views, libs, selector, limit} = drOpt
-    views = makeArray(views)
+const parseLibs = (libs, cacheDir, api, options) => {
     if (libs) {
         if (libs.length === 0) {
             libs = [{name: '@dr/auto', index: 0}]
@@ -70,16 +65,33 @@ const parseOptions = ({service}, options) => {
     } else {
         libs = []
         const libNameArr = []
-        readLibs(pkg, libs, 0, libNameArr)
+        const libFile = path.resolve(cacheDir, 'libs.json')
+        if (fs.existsSync(libFile)) {
+            libs = require(libFile)
+        } else {
+            readLibs(api.service.pkg, libs, 0, libNameArr)
+            writeJsonFile.sync(libFile, libs)
+        }
     }
+
     const libTran = libs.map(l => l.name)
     libTran.push('element-ui')
+    libTran.push('color')
     //修改babel的配置
     if (options.transpileDependencies) {
         options.transpileDependencies = options.transpileDependencies.concat(libTran)
     } else {
         options.transpileDependencies = libTran
     }
+
+    return libs
+}
+
+/**
+ * 解析 terser配置
+ * @param options
+ */
+function parseTerser(options) {
     //修改terser的配置
     const terser = readOrCreate(options, 'terser')
     if (!terser.minify) {
@@ -89,13 +101,44 @@ const parseOptions = ({service}, options) => {
         const terserOptions = readOrCreate(terser, 'terserOptions')
         readOrCreate(terserOptions, 'output').comments = false
     }
-    if (!selector) {
-        selector = defaultSelector
+}
+
+/**
+ * 从pluginOptions读取配置信息并且传给 autoCodePlugin
+ * 用来判断自动加载哪些页面
+ *
+ * @param api
+ * @param options
+ * @returns {{libs: *, views: *}}
+ */
+const parseOptions = (api, options) => {
+    checkBrowserList()
+    parseTerser(options)
+
+    //计算缓存文件夹和环境hash
+    const {cacheDirectory, cacheIdentifier} = api.genCacheConfig('pluginDr', {}, ['vue.config.js'])
+    //先判断缓存是否存在
+    const cacheDir = path.resolve(cacheDirectory, cacheIdentifier)
+    if (!fs.existsSync(cacheDir)) {
+        fs.mkdirSync(cacheDir, {recursive: true})
     }
-    limit = Object.assign({
-        maxChunks: 100, minChunkSize: 128 * 1000
-    }, limit)
-    return {views, libs, selector, limit}
+
+    let drOpt = options.pluginOptions ? options.pluginOptions.dr : {}
+    //router　视图　　库文件
+    let {views, libs, selector, limit} = drOpt
+    views = makeArray(views)
+    //处理依赖库
+    libs = parseLibs(libs, cacheDir, api, options)
+
+    return {
+        views,
+        libs,
+        selector: selector || defaultSelector,
+        limit: Object.assign({maxChunks: 100, minChunkSize: 128 * 1000}, limit),
+        cacheDirectory,
+        cacheIdentifier,
+        cacheDir
+    }
 }
 /**
  * 校验browserslist，
