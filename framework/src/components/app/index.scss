@@ -1,0 +1,34 @@
+@import "./normal.css";
+@import 'html5-boilerplate/dist/css/main.css';
+@import 'html5-boilerplate/dist/css/normalize.css';
+@import "../../styles/var";
+
+//这里覆盖element默认样式
+.el-dialog__header {
+  border-bottom: $--border-base;
+
+  .el-dialog__title {
+    font-size: $--font-size-medium;
+  }
+}
+
+.root {
+
+  .card {
+    .el-card {
+      margin: 5px 2px;
+
+      .el-form {
+        .el-form-item {
+          width: auto;
+          margin-bottom: 10px;
+        }
+      }
+
+      .el-card__header, .el-card__body {
+        padding: 10px;
+        clear: both;
+      }
+    }
+  }
+}

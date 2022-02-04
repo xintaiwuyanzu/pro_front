@@ -1,4 +1,3 @@
-import './style.scss'
 import {useTable} from "../../hooks/useTable";
 import {useMenu} from "../../hooks/useMenu";
 

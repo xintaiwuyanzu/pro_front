@@ -1,5 +1,7 @@
+import './nac.scss'
 import {useMenu} from "../../hooks/useMenu";
 import {useRouter} from "@u3u/vue-hooks";
+import {Breadcrumb, BreadcrumbItem} from 'element-ui'
 
 export default {
     name: 'nacInfo',
@@ -25,12 +27,17 @@ export default {
                 children.push((<el-button onClick={() => router.back()} type="primary" size="mini">返 回 </el-button>))
             }
             return (
-                <div class="breadcrumb-container">
-                    <strong class="title">{props.title || menuData.currentMenu.label || ''} </strong>
+                <section class="breadcrumb-container">
+                    <Breadcrumb separator-class="el-icon-arrow-right">
+                        <el-breadcrumb-item>您当前的位置</el-breadcrumb-item>
+                        <BreadcrumbItem class='title'>
+                            {props.title || menuData.currentMenu.label || ''}
+                        </BreadcrumbItem>
+                    </Breadcrumb>
                     <section class="slot">
                         {children}
                     </section>
-                </div>
+                </section>
             )
         }
     }

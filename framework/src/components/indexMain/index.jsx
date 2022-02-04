@@ -39,7 +39,7 @@ export default {
                             <tabs/>
                             <transition name="fade-transform" mode="out-in">
                                 <keep-alive max={5}>
-                                    <router-view className="main-container"/>
+                                    <router-view class="main-container"/>
                                 </keep-alive>
                             </transition>
                         </el-main>

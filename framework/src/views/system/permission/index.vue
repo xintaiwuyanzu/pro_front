@@ -10,7 +10,7 @@
                     :page="page"
                     @size-change="s=>this.page.size=s"
                     @page-current-change="p=>this.loadData({pageIndex:p-1})">
-        <el-table-column label="操作" width="80" header-align="center" align="center" fixed="right">
+        <el-table-column label="操作" width="80" header-align="center" align="center">
           <template slot-scope="scope">
             <el-button type="text" size="small" @click="remove(scope.row.id)" v-if="!scope.row.sys">删 除
             </el-button>

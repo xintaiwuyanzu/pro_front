@@ -1,6 +1,4 @@
-import "./normal.css";
-import 'html5-boilerplate/dist/css/main.css'
-import 'html5-boilerplate/dist/css/normalize.css'
+import './index.scss'
 
 export default {
     name: 'app',

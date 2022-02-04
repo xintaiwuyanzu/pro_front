@@ -1,10 +1,13 @@
 @import "../../styles/var";
 
+/**
+导航切换tab样式
+ */
 .router-nav {
   display: flex;
   align-items: center;
   width: 100%;
-  background-color: #f8f8f8;
+  background-color: $--background-color-base;
   //导航栏
   .tabs {
     flex: 1;
@@ -23,7 +26,7 @@
     }
 
     .is-active {
-      background-color: $background-color;
+      background-color: #f8f8f8;
       border-width: 0px;
     }
 

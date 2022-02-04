@@ -184,6 +184,15 @@ module.exports = (api, options, {cacheDir, libs}) => {
                             defaultScopeName: 'default',
                             multipleScopeVars: multipleScopeVarsSass,
                             outputDir: extractCssOutputDir,
+                            includeStyleWithColors: [
+                                {
+                                    color: "#ffffff",
+                                    // 排除掉样式属性，这里将非背景的白色提升权重
+                                    excludeCssProps: ["background", "background-color"],
+                                    // 此类颜色的是否跟随主题色梯度变化，默认false
+                                    // inGradient: true,
+                                },
+                            ],
                         }]
                     )
             })

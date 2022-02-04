@@ -1,4 +1,5 @@
 import vue from "vue";
+import './header.scss'
 
 /**
  * 头部分为左中右三部分

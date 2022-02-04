@@ -1,15 +1,9 @@
-@import "../../styles/var";
+@import "src/styles/var";
 
 .header {
-  /**
-头部样式参数
- */
-
-  $--header-background: linear-gradient(to right, $--color-primary-dark-1 0%, $--color-primary 100%) !default;
-
   background: $--header-background;
-  vertical-align: middle;
   height: $--header-height !important;
+  vertical-align: middle;
 
   .header-content {
     display: flex;

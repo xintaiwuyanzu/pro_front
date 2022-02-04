@@ -1,69 +1,30 @@
-@import "~element-ui/packages/theme-chalk/src/common/var";
-
-/**
-navinfo 背景颜色
- */
-$--background-color: #eee !default;
-
-/**
-navinfo 高度
- */
-$--nav-height: 42px !default;
-.el-dialog__header {
-  border-bottom: $--border-base;
-
-  .el-dialog__title {
-    font-size: $--font-size-medium;
-  }
-}
+@import "../../styles/var";
 
 .root {
   height: 100%;
   overflow: auto;
 
-  @import "./header.scss";
-
   .main {
     overflow: auto;
     padding: 0px;
     height: 100%;
-
-    .el-table {
-      th, td {
-        padding: $--table-content-padding 0px;
-      }
-    }
-
-    .el-table--medium {
-      td, th {
-        padding: #{$--table-content-padding - 2} 0px;
-      }
-    }
-
-    .el-table--small {
-      td, th {
-        padding: #{$--table-content-padding - 4} 0px;
-      }
-    }
-
-    .el-table--mini {
-      td, th {
-        padding: #{$--table-content-padding - 6} 0px;
-      }
-    }
+    display: flex;
+    flex-direction: column;
 
     .main-container {
       overflow: auto;
       display: flex;
       flex-direction: column;
-      height: 100%;
+      flex: 1;
+      padding: 10px 15px;
 
       .index_main {
         display: flex;
         flex-direction: column;
         flex: 1;
-        padding: 5px;
         overflow: auto;
+        padding: 15px;
+        background-color: $--color-white;
 
         .table-container {
           flex: 1;
@@ -72,6 +33,7 @@ $--nav-height: 42px !default;
 
         .el-pagination {
           text-align: right;
+          margin-top: 10px;
         }
 
         .form_detail {
@@ -79,66 +41,6 @@ $--nav-height: 42px !default;
             margin-bottom: 4px;
           }
         }
-      }
-
-      .breadcrumb-container {
-        display: flex;
-        background: $--background-color;
-        align-items: center;
-        min-height: $--nav-height;
-
-        .title {
-          margin-left: 10px;
-          font-size: $--font-size-base;
-          font-weight: bold;
-          font-stretch: normal;
-          letter-spacing: 1px;
-          color: #373c45;
-          min-width: 80px;
-        }
-
-        .slot {
-          padding: 4px 6px;
-          margin-left: auto;
-
-          .el-button {
-            padding: $--button-small-padding-vertical $--button-small-padding-horizontal;
-            margin-left: 6px;
-          }
-
-          .el-form-item {
-            margin-bottom: 0px;
-            margin-right: 0px;
-
-            .el-form-item__label {
-              padding: 0px 8px;
-            }
-          }
-
-          .el-dialog {
-            .el-form-item {
-              margin-bottom: 18px;
-            }
-          }
-        }
-      }
-    }
-  }
-
-  .card {
-    .el-card {
-      margin: 5px 2px;
-
-      .el-form {
-        .el-form-item {
-          width: auto;
-          margin-bottom: 10px;
-        }
-      }
-
-      .el-card__header, .el-card__body {
-        padding: 10px;
-        clear: both;
       }
     }
   }

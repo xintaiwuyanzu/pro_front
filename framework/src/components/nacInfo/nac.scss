@@ -1,0 +1,43 @@
+@import "../../styles/var";
+
+.breadcrumb-container {
+  display: flex;
+  align-items: center;
+  min-height: $--nav-height;
+  margin-bottom: 10px;
+
+  .title {
+    margin-left: 10px;
+    font-size: $--font-size-base;
+    font-weight: bold;
+    font-stretch: normal;
+    letter-spacing: 1px;
+    color: #373c45;
+    min-width: 80px;
+  }
+
+  .slot {
+    padding: 4px 6px;
+    margin-left: auto;
+
+    .el-button {
+      padding: $--button-small-padding-vertical $--button-small-padding-horizontal;
+      margin-left: 6px;
+    }
+
+    .el-form-item {
+      margin-bottom: 0px;
+      margin-right: 0px;
+
+      .el-form-item__label {
+        padding: 0px 8px;
+      }
+    }
+
+    .el-dialog {
+      .el-form-item {
+        margin-bottom: 18px;
+      }
+    }
+  }
+}

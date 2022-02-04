@@ -1,3 +1,6 @@
+import {Table} from 'element-ui'
+import TableColumn from '../../fix/FixTableColumn'
+import page from '../page'
 import './style.scss'
 
 export const functionUtils = (refId, functionArr) => {
@@ -179,7 +182,7 @@ export default {
     },
     methods: functionUtils('table', tableFunctions),
     render() {
-        const children = computeChildren(this.columns, this, props => <el-table-column
+        const children = computeChildren(this.columns, this, props => <TableColumn
             //默认属性
             {...{props: this.defaultColumnProps}}
             //声明属性
@@ -187,10 +190,10 @@ export default {
         />)
         //是否添加列
         if (this.index && this.page) {
-            children.unshift(<el-table-column page={this.page}/>)
+            children.unshift(<TableColumn page={this.page}/>)
         }
         if (this.checkAble) {
-            children.unshift(<el-table-column type='selection'/>)
+            children.unshift(<TableColumn type='selection'/>)
         }
         const tableArgs = {
             ref: 'table',
@@ -213,15 +216,15 @@ export default {
             return (
                 <div class="table-wrapper">
                     <div class='render-table'>
-                        <el-table {...tableArgs} height='100%'>
+                        <Table {...tableArgs} height='100%'>
                             {children}
-                        </el-table>
+                        </Table>
                     </div>
                     <page page={this.page} {...pageArgs} class='render-page'/>
                 </div>
             )
         } else {
-            return (<el-table {...tableArgs}>{children}</el-table>)
+            return (<Table {...tableArgs}>{children}</Table>)
         }
     }
 }

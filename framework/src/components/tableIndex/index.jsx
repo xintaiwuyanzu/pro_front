@@ -4,6 +4,10 @@
 import formRender from '../formRender'
 import tableRender, {makeArray} from '../tableRender'
 import abstractTableIndex from "./abstractTableIndex";
+import {Button} from "element-ui";
+import FormItem from '../../fix/FixFormItem'
+import TableColumn from '../../fix/FixTableColumn'
+import './style.scss'
 
 /**
  * 过滤掉设置为false的属性，没有设置属性默认为true
@@ -46,23 +50,23 @@ function renderSearchForm(fields, ctx) {
     if (fields.length > 0) {
         //搜索按钮
         btnChildren.push(() =>
-            (<el-button type='primary'
-                        loading={ctx.data.loading}
-                        onClick={() => ctx.loadData(ctx.searchFormModel)}>
+            (<Button type='primary'
+                     loading={ctx.data.loading}
+                     onClick={() => ctx.loadData(ctx.searchFormModel)}>
                 搜 索
-            </el-button>)
+            </Button>)
         )
         //重置按钮
-        btnChildren.push(() => (<el-button type='info' onClick={() => ctx.searchForm.resetFields()}>重 置</el-button>))
+        btnChildren.push(() => (<Button type='info' onClick={() => ctx.searchForm.resetFields()}>重 置</Button>))
     }
     //添加按钮
     if (ctx.insert) {
         btnChildren.push(() =>
-            (<el-button type='primary'
-                        loading={ctx.data.loading}
-                        onClick={() => ctx.showEdit(ctx.defaultInsertForm)}>
+            (<Button type='primary'
+                     loading={ctx.data.loading}
+                     onClick={() => ctx.showEdit(ctx.defaultInsertForm)}>
                 添 加
-            </el-button>)
+            </Button>)
         )
     }
     /**
@@ -78,16 +82,16 @@ function renderSearchForm(fields, ctx) {
                 await ctx.remove(select.map(s => s.id))
             }
         }
-        btnChildren.push(() => (<el-button type='danger' onClick={callBack}>删 除</el-button>))
+        btnChildren.push(() => (<Button type='danger' onClick={callBack}>删 除</Button>))
     }
     if (ctx.$scopedSlots['search-$btns']) {
         btnChildren.push(ctx.$scopedSlots['search-$btns'])
     }
     if (ctx.back) {
-        btnChildren.push(() => (<el-button type='primary' onClick={() => ctx.$router.back()}>返 回</el-button>))
+        btnChildren.push(() => (<Button type='primary' onClick={() => ctx.$router.back()}>返 回</Button>))
     }
     if (btnChildren.length > 0) {
-        slotChildren.push(<el-form-item>{btnChildren.map(b => b(ctx.searchFormModel))}</el-form-item>)
+        slotChildren.push(<FormItem>{btnChildren.map(b => b(ctx.searchFormModel))}</FormItem>)
     }
     const searchFormArgs = {
         ref: 'searchForm',
@@ -114,7 +118,7 @@ function isTableColumn(v) {
     if (v.componentOptions) {
         const name = getComponentName(v.componentOptions)
         if (name) {
-            return 'el-table-column' === name || 'ElTableColumn' === name
+            return 'TableColumn' === name || 'ElTableColumn' === name
         }
     } else if (v.tag) {
         return v.tag.indexOf('ElTableColumn') >= 0
@@ -149,12 +153,12 @@ function renderTable(columns, ctx) {
     //操作列
     if (ctx.edit) {
         //编辑按钮
-        editBtns.push((scope) => (<el-button onClick={() => ctx.showEdit(scope.row)} type='text'>编辑</el-button>))
+        editBtns.push((scope) => (<Button onClick={() => ctx.showEdit(scope.row)} type='text'>编辑</Button>))
         editColumnWidth += 30
     }
     if (ctx.delete) {
         //删除按钮
-        editBtns.push((scope) => (<el-button onClick={() => ctx.remove(scope.row.id)} type='text'>删除</el-button>))
+        editBtns.push((scope) => (<Button onClick={() => ctx.remove(scope.row.id)} type='text'>删除</Button>))
         editColumnWidth += 30
     }
     if (ctx.$scopedSlots['table-$btns']) {
@@ -192,9 +196,7 @@ function renderTable(columns, ctx) {
                 }
             }
         }
-        propSlots.push(
-            <el-table-column {...btnsColumnArgs}/>
-        )
+        propSlots.push(<TableColumn {...btnsColumnArgs}/>)
     }
     //表格参数
     const tableArgs = {
@@ -253,9 +255,9 @@ function renderEditDialog(fields, ctx, loadingArgs) {
         //dialog foot
         const footerChild =
             <div slot='footer'>
-                <el-button type='info' loading={ctx.data.loading} onClick={() => ctx.dialogVisible = false}>取 消
-                </el-button>
-                <el-button type="primary" loading={ctx.data.loading} onClick={() => ctx.submit()}>保 存</el-button>
+                <Button type='info' loading={ctx.data.loading} onClick={() => ctx.dialogVisible = false}>取 消
+                </Button>
+                <Button type="primary" loading={ctx.data.loading} onClick={() => ctx.submit()}>保 存</Button>
                 {footSlot}
             </div>
         const dialogArgs = {

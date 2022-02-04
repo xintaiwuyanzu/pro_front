@@ -50,7 +50,7 @@ export default {
                             bodyMaxHeight -= dialogFooterEl.clientHeight
                         }
                         //TODO 这个值不知道是怎么漏掉的
-                        bodyMaxHeight -= 50;
+                        bodyMaxHeight -= 70;
                         dialogBodyEl.style.setProperty('overflow', 'auto')
                         //设置最高高度
                         dialogBodyEl.style.setProperty('max-height', parseFloat(bodyMaxHeight).toFixed(2) + 'px')

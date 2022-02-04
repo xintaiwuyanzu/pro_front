@@ -5,7 +5,7 @@
     </el-button>
     <el-dropdown-menu slot="dropdown">
       <el-dropdown-item v-for="theme in themes" :key="theme.scopeName" :command="theme.scopeName">
-        {{ theme.scopeName === 'default' ? '默认' : theme.scopeName }}
+        {{ themeNameMapper(theme.scopeName) }}
       </el-dropdown-item>
     </el-dropdown-menu>
   </el-dropdown>
@@ -23,7 +23,7 @@ export default {
   name: "themeSelect",
   data() {
     return {
-      themes: themeConfig.multipleScopeVars
+      themes: themeConfig.multipleScopeVars.reverse()
     }
   },
   methods: {
@@ -36,6 +36,18 @@ export default {
         publicPath: themeConfig.publicPath,
         outputDir: themeConfig.extractCssOutputDir,
       });
+    },
+    themeNameMapper(name) {
+      switch (name) {
+        case 'default':
+          return '默认';
+        case 'red':
+          return '主题红';
+        case 'green':
+          return '活力绿'
+        default:
+          return name
+      }
     }
   },
   mounted() {
