@@ -17,11 +17,12 @@ export default {
         leftClassName: {type: String, default: 'left'}
     },
     //TODO 这里应该可以从@dr/auto 查询判断
-    setup(props) {
+    setup(props, {slots}) {
         const hasHeaderMenu = !vue.component('headerMenu')
         //TODO 菜单加载状态
         const {menuLoading} = useMenuContext()
         return () => {
+            const children = slots.default ? slots.default() : ''
             const directives = [{name: 'loading', value: menuLoading, modifiers: {fullscreen: true}}]
             return (
                 <el-container class={props.rootClassName} direction='vertical' {...{directives}}>
@@ -42,6 +43,7 @@ export default {
                                     <router-view class="main-container"/>
                                 </keep-alive>
                             </transition>
+                            {children}
                         </el-main>
                     </el-container>
                 </el-container>

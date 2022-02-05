@@ -8,20 +8,20 @@ const rootPath = process.cwd();
 
 /**
  *获取指定模块下的所有主题样式变量
- * @param modulePath
+ * @param moduleName
  * @param isPrj
  * @returns {{}}
  */
-const readTheme = (modulePath, isPrj) => {
+const readTheme = (moduleName, isPrj) => {
     //样式文件夹
-    const stylePath = path.resolve(modulePath, 'src/styles')
+    const stylePath = path.resolve(isPrj ? rootPath : utils.moduleDir(moduleName), 'src/styles')
     const result = {}
     if (fs.existsSync(stylePath)) {
         fs.readdirSync(stylePath)
             .forEach(f => {
                 if (f.startsWith('var')) {
                     const fileName = f.split('.')[0]
-                    const requirePath = isPrj ? `@/styles/${f}` : `${modulePath}/src/styles/${f}`
+                    const requirePath = isPrj ? `@/styles/${f}` : `${moduleName}/src/styles/${f}`
                     let varName = 'default'
                     if (fileName.startsWith('var-')) {
                         varName = fileName.replace('var-', '')
@@ -45,7 +45,7 @@ const readThemes = (cacheDir, libs) => {
         libTheme = require(cacheFileName)
     } else {
         libs.forEach(l => {
-            const libt = readTheme(utils.moduleDir(l.name), false)
+            const libt = readTheme(l.name, false)
             Object.keys(libt).forEach(k => {
                 const libValue = libTheme[k] = libTheme[k] || []
                 libValue.push(libt[k])
@@ -94,7 +94,7 @@ module.exports = (api, options, {cacheDir, libs}) => {
         })
         multipleScopeVarsSass.push({
             scopeName: k,
-            varsContent: sassVars.map(k => `@import "${k}";`).join(eol)
+            varsContent: sassVars.reverse().map(k => `@import "${k}";`).join(eol)
         })
     })
     //只有包含自定义变量的时候才修改配置
