@@ -1,25 +1,6 @@
-//系统级别全局样式
-@import "~element-ui/packages/theme-chalk/src/common/var";
-
-$--color-white: #fff;
-/**
-*-----------------------------------------------------！
-* 单纯的变量
-* 添加暗色样式变量
- */
-$--color-primary-dark-1: mix($--color-black, $--color-primary, 10%) !default;
-$--color-primary-dark-2: mix($--color-black, $--color-primary, 20%) !default;
-$--color-primary-dark-3: mix($--color-black, $--color-primary, 30%) !default;
-$--color-primary-dark-4: mix($--color-black, $--color-primary, 40%) !default;
-$--color-primary-dark-5: mix($--color-black, $--color-primary, 50%) !default;
-$--color-primary-dark-6: mix($--color-black, $--color-primary, 60%) !default;
-$--color-primary-dark-7: mix($--color-black, $--color-primary, 70%) !default;
-$--color-primary-dark-8: mix($--color-black, $--color-primary, 80%) !default;
-$--color-primary-dark-9: mix($--color-black, $--color-primary, 90%) !default;
-
-
+$--color-white: #fff !default;
 /*主题颜色-主题蓝*/
-$--color-primary: #0173c7 !default;
+$--color-primary: #0168b3 !default;
 
 $--color-success: #52c41a !default;
 
@@ -28,6 +9,24 @@ $--color-warning: #faad14 !default;
 $--color-danger: #ff4d4f !default;
 
 $--color-info: #8c8c8c !default;
+
+//系统级别全局样式
+@import "~element-ui/packages/theme-chalk/src/common/var";
+
+/**
+*-----------------------------------------------------！
+* 单纯的变量
+* 添加暗色样式变量
+ */
+$--color-primary-dark-1: mix($--color-black, $--color-primary, 10%);
+$--color-primary-dark-2: mix($--color-black, $--color-primary, 20%);
+$--color-primary-dark-3: mix($--color-black, $--color-primary, 30%);
+$--color-primary-dark-4: mix($--color-black, $--color-primary, 40%);
+$--color-primary-dark-5: mix($--color-black, $--color-primary, 50%);
+$--color-primary-dark-6: mix($--color-black, $--color-primary, 60%);
+$--color-primary-dark-7: mix($--color-black, $--color-primary, 70%);
+$--color-primary-dark-8: mix($--color-black, $--color-primary, 80%);
+$--color-primary-dark-9: mix($--color-black, $--color-primary, 90%);
 
 /**
 *  单纯的变量
@@ -39,7 +38,7 @@ $--color-info: #8c8c8c !default;
 * 上方进度条样式
 ------------------------------------
  */
-$--process-color: $--color-primary-dark-5 !default;
+$--process-color: $--color-primary-dark-5;
 
 
 /**
@@ -66,35 +65,35 @@ $--menu-item-hover-fill: $--color-primary;
 /**
 背景颜色
  */
-$--table-header-background-color: #f2f2f2 !default;
+$--table-header-background-color: #f2f2f2;
 
 
 /*边距*/
-$--dialog-padding-primary: 15px !default;
+$--dialog-padding-primary: 15px;
 
-$--header-padding: 0 15px !default;
+$--header-padding: 0 15px;
 
-$--footer-padding: 0 15px !default;
+$--footer-padding: 0 15px;
 
-$--steps-padding: 15px !default;
+$--steps-padding: 15px;
 
-$--card-padding: 15px !default;
+$--card-padding: 15px;
 
-$--button-padding-horizontal: 15px !default;
+$--button-padding-horizontal: 15px;
 
-$--button-medium-padding-horizontal: 15px !default;
+$--button-medium-padding-horizontal: 15px;
 /*圆角*/
-$--border-radius-base: $--border-radius-zero !default;
-$--button-small-border-radius: $--border-radius-zero !default;
-$--button-mini-border-radius: $--border-radius-zero !default;
-$--border-radius-small: $--border-radius-zero !default;
-$--msgbox-border-radius: $--border-radius-zero !default;
-$--notification-radius: $--border-radius-zero !default;
-$--switch-core-border-radius: $--border-radius-zero !default;
-$--pagination-border-radius: $--border-radius-zero !default;
-$--tag-border-radius: $--border-radius-zero !default;
-$--badge-radius: $--border-radius-zero !default;
-$--card-border-radius: $--border-radius-zero !default;
-$--slider-border-radius: $--border-radius-zero !default;
-$--steps-border-radius: $--border-radius-zero !default;
-$--input-border-radius: $--border-radius-zero !default;
+$--border-radius-base: $--border-radius-zero;
+$--button-small-border-radius: $--border-radius-zero;
+$--button-mini-border-radius: $--border-radius-zero;
+$--border-radius-small: $--border-radius-zero;
+$--msgbox-border-radius: $--border-radius-zero;
+$--notification-radius: $--border-radius-zero;
+$--switch-core-border-radius: $--border-radius-zero;
+$--pagination-border-radius: $--border-radius-zero;
+$--tag-border-radius: $--border-radius-zero;
+$--badge-radius: $--border-radius-zero;
+$--card-border-radius: $--border-radius-zero;
+$--slider-border-radius: $--border-radius-zero;
+$--steps-border-radius: $--border-radius-zero;
+$--input-border-radius: $--border-radius-zero;
