@@ -1,7 +1,7 @@
 /**
  * 提供table查询常用的方法
  */
-import {onMounted, reactive} from "vue-demi";
+import {onActivated, onMounted, reactive} from "vue-demi";
 import {http} from "../../plugins/http";
 import {Message, MessageBox} from "element-ui";
 
@@ -44,6 +44,7 @@ export const useTable = (args, context) => {
     }
     //启动后自动加载数据
     onMounted(() => loadData(initParams))
+    onActivated(() => loadData(initParams))
     /**
      * 数据删除函数
      * @param params

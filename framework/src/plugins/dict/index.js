@@ -14,6 +14,11 @@ export default (vue, router, store) => {
                     this.$init()
                 }
             })
+        },
+        activated() {
+            if (this.$init) {
+                this.$init()
+            }
         }
     })
 

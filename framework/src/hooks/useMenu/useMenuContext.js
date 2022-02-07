@@ -63,19 +63,23 @@ function findFirstMenu(menus) {
 
 //TODO 这里先暴力的实现了
 export const useMenuContext = (menuLoader = defaultMenuLoader) => {
+    const collapse = localStorage.getItem('collapse') || false
+
     const providerData = reactive({
         //菜单数据
         menu: [],
         //菜单加载状态
         menuLoading: false,
         //菜单关闭状态
-        collapse: false,
+        collapse,
         //当前选中状态
         currentMenu: {},
         //默认选中的key
         defaultIndex: '',
         tabs: []
     })
+    //有改变就写到前端缓存中
+    watch(() => providerData.collapse, (v) => localStorage.setItem('collapse', v))
     const {route, router} = useRouter()
     //监听当前菜单对象，有变化则跳转路由
     watch(() => providerData.currentMenu,
@@ -132,7 +136,7 @@ export const useMenuContext = (menuLoader = defaultMenuLoader) => {
                 providerData.currentMenu = currentMenu
             }
         }
-        providerData.menuLoading = true
+        providerData.menuLoading = false
     })
     provide(MENU_KEY, providerData);
     return providerData

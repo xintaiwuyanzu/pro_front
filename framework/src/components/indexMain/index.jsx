@@ -1,4 +1,5 @@
 import './main.scss'
+import {useRouter} from "@u3u/vue-hooks";
 import {useMenuContext} from "../../hooks/useMenu";
 import vue from "vue";
 import tabs from "./tabs";
@@ -20,10 +21,18 @@ export default {
     setup(props, {slots}) {
         const hasHeaderMenu = !vue.component('headerMenu')
         //TODO 菜单加载状态
-        const {menuLoading} = useMenuContext()
+        const providerData = useMenuContext()
+        const children = slots.default ? slots.default() : ''
+        const directives = [{name: 'loading', value: providerData.menuLoading, modifiers: {fullscreen: true}}]
+        const {route} = useRouter()
         return () => {
-            const children = slots.default ? slots.default() : ''
-            const directives = [{name: 'loading', value: menuLoading, modifiers: {fullscreen: true}}]
+            const include = providerData.tabs.filter(m => m.data && m.data.url).map(m => m.data.url)
+            const routeView = include.includes(route.value.path) ?
+                <keep-alive max={5}>
+                    <router-view class="main-container"/>
+                </keep-alive>
+                :
+                <router-view class="main-container"/>
             return (
                 <el-container class={props.rootClassName} direction='vertical' {...{directives}}>
                     <el-header class={props.headerClassName}>
@@ -39,9 +48,7 @@ export default {
                         <el-main style="padding: 0px;" class={props.mainClassName}>
                             <tabs/>
                             <transition name="fade-transform" mode="out-in">
-                                <keep-alive max={5}>
-                                    <router-view class="main-container"/>
-                                </keep-alive>
+                                {routeView}
                             </transition>
                             {children}
                         </el-main>
