@@ -2,6 +2,7 @@ const path = require('path')
 const readPkg = require('read-pkg')
 const fs = require("graceful-fs");
 const writeJsonFile = require("write-json-file");
+
 const readOrCreate = (obj, key) => {
     let value = obj[key]
     if (!value) {
@@ -94,12 +95,17 @@ const parseLibs = (libs, cacheDir, api, options) => {
 function parseTerser(options) {
     //修改terser的配置
     const terser = readOrCreate(options, 'terser')
-    if (!terser.minify) {
-        terser.minify = "esbuild"
+    if (process.env.NODE_ENV === 'development') {
+        //开发环境使用esbuild
+        if (!terser.minify) {
+            terser.minify = "esbuild"
+        }
     }
     if (terser.minify !== 'esbuild') {
         const terserOptions = readOrCreate(terser, 'terserOptions')
-        readOrCreate(terserOptions, 'output').comments = false
+        //readOrCreate(terserOptions, 'output').comments = false
+        const format = readOrCreate(terserOptions, 'format')
+        format.comments = false
     }
 }
 
