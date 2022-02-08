@@ -22,10 +22,11 @@ export default {
         const hasHeaderMenu = !vue.component('headerMenu')
         //TODO 菜单加载状态
         const providerData = useMenuContext()
-        const children = slots.default ? slots.default() : ''
-        const directives = [{name: 'loading', value: providerData.menuLoading, modifiers: {fullscreen: true}}]
         const {route} = useRouter()
         return () => {
+            const children = slots.default ? slots.default() : ''
+            const directives = [{name: 'loading', value: providerData.menuLoading, modifiers: {fullscreen: true}}]
+
             const include = providerData.tabs.filter(m => m.data && m.data.url).map(m => m.data.url)
             const routeView = include.includes(route.value.path) ?
                 <keep-alive max={5}>
