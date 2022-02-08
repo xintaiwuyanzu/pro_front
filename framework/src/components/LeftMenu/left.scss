@@ -31,12 +31,13 @@ $--collapse-header-height: 36px !default;
       height: 20px;
       margin: 0px;
     }
-  }
-  .el-submenu__title:hover, .left-item:hover {
-    color: $--color-white;
 
-    [class^=el-icon], i {
-      color: $--color-white !important;
+    &:hover, &:focus {
+      color: $--color-white;
+
+      [class^=el-icon], i, .text, svg.icon {
+        color: $--color-white !important;
+      }
     }
   }
 }
