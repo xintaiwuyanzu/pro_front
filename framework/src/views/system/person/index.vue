@@ -7,64 +7,41 @@
                    @getPerson="getPerson"
                    @search="loadData"/>
     </nac-info>
-    <div class="index_main card">
-      <el-row>
-        <el-col :span="5">
+    <div class="index_main card person_main">
+      <el-row type="flex">
+        <el-col :span="5" style="max-width: 280px">
           <el-card shadow="hover">
             <div slot="header">
               <strong>部门单位</strong>
             </div>
-            <div style="min-height:78vh;overflow:auto">
-              <el-tree class="sysMenuTree"
-                       :data="menuData"
-                       default-expand-all
-                       @node-click="click"
-                       ref="menuTree">
-                <div style="flex: 1;margin: 2px; " slot-scope="{ node, data }">
-                  <span v-if="organiseId==data.data.id" style=" color: red;font-family: 等线">{{ data.label }}</span>
-                  <span v-if="organiseId!=data.data.id" style=" color: #409EFF;font-family: 等线">{{ data.label }}</span>
-                </div>
-              </el-tree>
-            </div>
+            <el-tree class="sysMenuTree"
+                     :data="menuData"
+                     default-expand-all
+                     @node-click="click"
+                     ref="menuTree">
+              <div style="flex: 1;margin: 2px; " slot-scope="{ node, data }">
+                <span v-if="organiseId==data.data.id" style=" color: red;font-family: 等线">{{ data.label }}</span>
+                <span v-if="organiseId!=data.data.id" style=" color: #409EFF;font-family: 等线">{{ data.label }}</span>
+              </div>
+            </el-tree>
           </el-card>
         </el-col>
         <el-col :span="19">
-          <el-card shadow="hover" style="min-height:85vh;overflow:auto">
+          <el-card shadow="hover">
             <div slot="header">
               <strong>人员详情</strong>
             </div>
-            <div class="table-container" style="height: 65vh">
-              <el-table :data="personData" border height="100%">
-                <el-table-column label="排序" type="index" fixed align="center"/>
-                <el-table-column prop="userName" label="用户姓名" align="center" header-align="center"/>
-                <el-table-column prop="userCode" label="用户编号" align="center" header-align="center"/>
-                <el-table-column prop="mobile" label="手机号" align="center" header-align="center"
-                                 show-overflow-tooltip/>
-                <el-table-column prop="email" label="邮箱" align="center" header-align="center"
-                                 show-overflow-tooltip/>
-                <el-table-column label="性 别" align="center">
-                  <template slot-scope="scope">
-                    {{ scope.row.sex|dict({0: '女', 1: '男'}) }}
-                  </template>
-                </el-table-column>
-                <el-table-column label="操作" header-align="center" align="center" width="180">
-                  <template slot-scope="scope">
-                    <el-button type="text" size="small" @click="editForm(scope.row)">编 辑</el-button>
-                    <el-button type="text" size="small" @click="removePer(scope.row.id)">删 除
-                    </el-button>
-                    <el-button type="text" size="small" @click="resetPws(scope.row)">重置密码
-                    </el-button>
-                  </template>
-                </el-table-column>
-              </el-table>
-            </div>
-            <el-pagination
-                @current-change="index=>getPerson({pageIndex:index-1},true)"
-                :current-page.sync="page.index"
-                :page-size="page.size"
-                layout="total, prev, pager, next"
-                :total="page.total">
-            </el-pagination>
+            <table-render :columns="columns" :data="personData" :page="page">
+              <el-table-column label="操作" header-align="center" align="center" width="180">
+                <template slot-scope="scope">
+                  <el-button type="text" size="small" @click="editForm(scope.row)">编 辑</el-button>
+                  <el-button type="text" size="small" @click="removePer(scope.row.id)">删 除
+                  </el-button>
+                  <el-button type="text" size="small" @click="resetPws(scope.row)">重置密码
+                  </el-button>
+                </template>
+              </el-table-column>
+            </table-render>
           </el-card>
         </el-col>
       </el-row>
@@ -74,9 +51,10 @@
 <script>
 import ConfigForm from './form'
 import indexMixin from '@dr/auto/lib/util/indexMixin'
+import TableRender from "../../../components/tableRender";
 
 export default {
-  components: {ConfigForm},
+  components: {TableRender, ConfigForm},
   mixins: [indexMixin],
   data() {
     return {
@@ -109,7 +87,14 @@ export default {
       roleDialogVisible: false,
       rolenametitle: '角色列表',
       baseRoleIds: [],
-      shouquanuserid: ''
+      shouquanuserid: '',
+      columns: {
+        userName: {label: '用户姓名'},
+        userCode: {label: '用户编号'},
+        mobile: {label: '手机号'},
+        email: {label: '邮箱'},
+        sex: {label: '性 别', mapper: {0: '女', 1: '男'}},
+      }
     }
   },
   methods: {
@@ -293,21 +278,47 @@ export default {
 }
 </script>
 <style lang="scss">
-.sysMenuTree {
-  height: auto;
-  overflow: auto;
-  margin-bottom: 10px;
-}
+.person_main {
+  flex: 1;
 
-.el-tree-node__content {
-  height: auto;
-}
+  .el-row {
+    flex: 1;
 
-.buttons {
-  float: right;
-}
+    .el-col {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
 
-/*.actives{
-    background-color: #8cc5ff;
-}*/
+    .el-card {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+
+      .el-card__body {
+        flex: 1;
+        overflow: auto;
+        display: flex;
+
+        .table-wrapper {
+          flex: 1;
+        }
+      }
+    }
+  }
+
+
+  .sysMenuTree {
+    flex: 1;
+    overflow: auto;
+  }
+
+  .el-tree-node__content {
+    height: auto;
+  }
+
+  .buttons {
+    float: right;
+  }
+}
 </style>

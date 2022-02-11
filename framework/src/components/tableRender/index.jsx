@@ -1,126 +1,28 @@
+import './style.scss'
 import {Table} from 'element-ui'
 import TableColumn from '../../fix/FixTableColumn'
 import page from '../page'
-import './style.scss'
-
-export const functionUtils = (refId, functionArr) => {
-    return functionArr.reduce((o, funName) => {
-        o[funName] = function () {
-            const ref = this.$refs[refId]
-            if (ref) {
-                const refFunction = ref[funName]
-                if (refFunction) {
-                    refFunction.apply(ref, arguments)
-                }
-            }
-        }
-        return o
-    }, {})
-}
-/**
- * 将对象转换为数组类型
- * @param arr
- * @return {*[]}
- */
-export const makeArray = (arr) => {
-    let result = arr || []
-    if (!Array.isArray(arr) && typeof arr === 'object') {
-        result = []
-        Object.keys(arr).forEach(key => {
-            result.push({prop: key, ...arr[key]})
-        })
-    }
-    return result
-}
-
-function getProps(vNode) {
-    return vNode.componentOptions ? vNode.componentOptions.propsData : vNode.asyncMeta.data.props
-}
+import {functionUtils, makeArray, vNodeSlots} from "./utils";
 
 /**
  * 根据field计算children
  * @param arr
- * @param context
+ * @param slotDefault 默认slot
  * @param vNodeFunction
  * @return {(*)[]}
  */
-export const computeChildren = (arr, context, vNodeFunction) => {
+const computeChildren = (arr, slotDefault, vNodeFunction) => {
     arr = makeArray(arr)
-    const allPropName = arr.map(a => a.prop)
-    let lastName = '$default'
-    const slotObject = {}
-    //设置了before和after的vNodes
-    const beforeAfter = []
-    const slotDefault = context.$slots.default
-    if (slotDefault) {
-        //倒序排列slot
-        for (let i = slotDefault.length; i > 0; i--) {
-            const vNode = slotDefault[i - 1]
-            const props = getProps(vNode)
-            //前后的slot
-            if (vNode.data && vNode.data.attrs && (vNode.data.attrs.before || vNode.data.attrs.after)) {
-                beforeAfter.unshift(vNode)
-            } else if ('expand' === props.type) {
-                const arr = slotObject['$expand'] = slotObject['$expand'] || []
-                //table的expand放在最前面
-                arr.push(vNode)
-            } else {
-                let key = props.prop
-                if (key) {
-                    if (allPropName.indexOf(key) < 0) {
-                        key = lastName
-                    } else {
-                        lastName = key
-                    }
-                } else {
-                    key = lastName
-                }
-                const arr = slotObject[key] = slotObject[key] || []
-                arr.unshift(vNode)
-            }
-        }
-    }
-    const children = arr
-        .filter(f => {
-            //过滤掉不显示的子项
-            const show = f.show
-            if (show === undefined) {
-                return true
-            }
-            return show
-        })
-        .map(props => {
-            const prop = props.prop
-            const propSlot = slotObject[prop]
-            if (propSlot) {
-                return propSlot
-            } else {
-                return vNodeFunction(props)
-            }
-        })
-    //添加默认slot
-    if (slotObject.$default) {
-        slotObject.$default.forEach(v => children.push(v))
-    }
-    if (slotObject.$expand) {
-        slotObject.$expand.forEach(v => children.unshift(v))
-    }
-
-    if (beforeAfter.length > 0) {
-        beforeAfter.forEach(vNode => {
-            const propName = vNode.data.attrs.before || vNode.data.attrs.after
-            const isBefore = !!vNode.data.attrs.before
-            const propIndex = children.findIndex(v => {
-                const vProp = getProps(v)
-                return vProp.prop === propName
-            })
-            if (propIndex < children.length && propIndex >= 0) {
-                children.splice(isBefore ? propIndex : propIndex + 1, 0, vNode)
-            } else {
-                children.push(vNode)
-            }
-        })
-    }
+    const vSlots = new vNodeSlots(slotDefault, (vNode, props) => 'expand' === props.type)
+    //先计算所有中间的child
+    let children = arr.filter(f => f.show || f.show === undefined)
+        .reduce((resultArr, props) => resultArr.concat(vSlots.getField(props, (f) => vNodeFunction(f))), [])
+    //再算最前面的
+    children = vSlots.getFirst().concat(children)
+    //再算默认剩下的
+    children = children.concat(vSlots.getDefault())
+    //最后算最后的
+    children = children.concat(vSlots.getLast())
     return children
 }
 
@@ -182,12 +84,13 @@ export default {
     },
     methods: functionUtils('table', tableFunctions),
     render() {
-        const children = computeChildren(this.columns, this, props => <TableColumn
+        const children = computeChildren(this.columns, this.$slots.default, props => <TableColumn props={{
             //默认属性
-            {...{props: this.defaultColumnProps}}
+            ...this.defaultColumnProps,
             //声明属性
-            {...{props}}
-        />)
+            ...props
+        }
+        }/>)
         //是否添加列
         if (this.index && this.page) {
             children.unshift(<TableColumn page={this.page}/>)

@@ -1,3 +1,45 @@
+import {Option, Select} from "element-ui";
+
+/**
+ * 映射选项
+ * @param context
+ * @returns {*|{label: *, value: boolean|*}[]}
+ */
+export const selectMap = (context) => {
+    const mapperData = context.mapperData.data
+    return Array.isArray(mapperData) ?
+        mapperData.map(d => mapKeyValue(d[context.valueKey], context.value, context.simpleMapper))
+        :
+        Object.keys(mapperData).map(k => mapKeyValue(k, context.value, context.simpleMapper))
+}
+
+const mapKeyValue = (value, modelValue, mapper) => {
+    const valueType = typeof modelValue
+    if (valueType === 'number') {
+        try {
+            //处理一下数字类型的字典
+            value = parseInt(value)
+        } catch (ignore) {
+            /*eslint-disable*/
+        }
+    } else if (valueType === 'boolean') {
+        try {
+            if (value === 'false') {
+                value = false
+            } else if (value === 'true') {
+                value = true
+            } else {
+                //处理一下boolean类型的
+                value = !!value
+            }
+        } catch (ignore) {
+            /*eslint-disable*/
+        }
+    }
+    return {label: mapper(value), value}
+}
+
+
 /**
  * select 用的工具类 用来返回render函数
  * @param prop
@@ -20,50 +62,12 @@ export const selectRender = (context) => {
             input: (v) => context.$emit('input', v)
         }
     }
-    let children
-    const mapperData = context.mapperData.data
-    if (Array.isArray(mapperData)) {
-        children = mapperData.map(d => {
-            let value = d[context.valueKey]
-            const valueType = context.value
-            if (valueType === 'number') {
-                try {
-                    //处理一下数字类型的字典
-                    value = parseInt(value)
-                } catch (ignore) {
-                    /*eslint-disable*/
-                }
-            } else if (valueType === 'boolean') {
-                try {
-                    if (value === 'false') {
-                        value = false
-                    } else if (value === 'true') {
-                        value = true
-                    } else {
-                        //处理一下boolean类型的
-                        value = !!value
-                    }
-                } catch (ignore) {
-                    /*eslint-disable*/
-                }
+    let children = selectMap(context)
+    return (
+        <Select  {...args}>
+            {
+                children.map(({label, value}) => <Option label={label} value={value}/>)
             }
-            const label = context.simpleMapper(value)
-            return <el-option label={label} value={value}/>
-        })
-    } else {
-        children = Object.keys(mapperData)
-            .map(k => {
-                const label = context.simpleMapper(k)
-                if (typeof context.value === 'number') {
-                    try {
-                        //处理一下数字类型的字典
-                        k = parseInt(k)
-                    } catch (ignore) {
-                        /*eslint-disable*/
-                    }
-                }
-                return <el-option label={label} value={k}/>
-            })
-    }
-    return (<el-select  {...args}>{children}</el-select>)
+        </Select>
+    )
 }

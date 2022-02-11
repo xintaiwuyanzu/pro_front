@@ -2,12 +2,15 @@
  * 融合组件，通用列表页
  */
 import formRender from '../formRender'
-import tableRender, {makeArray} from '../tableRender'
+import tableRender from '../tableRender'
 import abstractTableIndex from "./abstractTableIndex";
+import Dialog from '../../fix/FixDialog'
 import {Button} from "element-ui";
 import FormItem from '../../fix/FixFormItem'
 import TableColumn from '../../fix/FixTableColumn'
 import './style.scss'
+import {makeArray} from "../tableRender/utils";
+import nacInfo from "../nacInfo";
 
 /**
  * 过滤掉设置为false的属性，没有设置属性默认为true
@@ -148,7 +151,7 @@ function renderTable(columns, ctx) {
                 }
             )
     }
-    let editColumnWidth = 30
+    let editColumnWidth = 50
     const editBtns = []
     //操作列
     if (ctx.edit) {
@@ -271,7 +274,7 @@ function renderEditDialog(fields, ctx, loadingArgs) {
                 'update:visible': v => ctx.dialogVisible = v
             }
         }
-        return (<el-dialog {...dialogArgs}>{formChild}{footerChild}</el-dialog>)
+        return (<Dialog {...dialogArgs}>{formChild}{footerChild}</Dialog>)
     }
 }
 
@@ -289,9 +292,9 @@ export default {
         const dialogChild = renderEditDialog(fields, this, loadingArgs)
         return (
             <section class='table_index' {...loadingArgs}>
-                <nac-info title={this.title}>
+                <nacInfo title={this.title}>
                     {formChild}
-                </nac-info>
+                </nacInfo>
                 {tableChild}
                 {otherChild}
                 {dialogChild}

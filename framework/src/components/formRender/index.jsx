@@ -1,123 +1,9 @@
-import {computeChildren, functionUtils} from "../tableRender";
-import {getPropByPath} from 'element-ui/src/utils/util';
+import {Form} from "element-ui";
+import {functionUtils, vNodeSlots} from "../tableRender/utils";
+import {renderObject} from "./containerRender";
+import './style.scss'
 
-/**
- * 计算字段的属性
- * @param props
- * @param context
- * @param isCustom 是否自定义的扩展组件，自定义扩展组件通过attrs传参
- * @return {{directives: [{name: string, value}], style, attrs: (*&{placeHolder: (string|`${string}${string}`)}), props: (*&{value: *}), on: (*&{input: (function(*): *)})}}
- */
-function computeArgs(props, context, isCustom) {
-    const {on, style, fieldType, ...other} = props
-    //补全placeHolder
-    const placeHolderPre = fieldType === 'select' ? '请选择' : '请输入'
-    const placeHolder = props.placeHolder || `${placeHolderPre}${props.label}`
-    const attrs = isCustom ? {
-        placeHolder,
-        //默认属性
-        ...context.defaultFieldProps,
-        //手动声明属性
-        ...other,
-    } : {placeHolder}
-
-    //这里为了删除type属性
-    const value = getPropByPath(context.$attrs.model, props.prop)
-    let findV = value.v
-    if (findV || findV === 0) {
-        //这里要处理一下多选的问题
-        if (attrs.multiple && !Array.isArray(findV)) {
-            const split = attrs.multipleSplit || ','
-            findV = findV.split(split)
-            value.o[value.k] = findV
-        }
-    } else {
-        //TODO 这里有点暴力，为了实现响应式
-        context.$set(context.$attrs.model, props.prop, attrs.multiple ? [] : '')
-    }
-    return {
-        //v-loading 指令
-        directives: [
-            {name: 'loading', value: props.loading}
-        ],
-        style,
-        attrs,
-        props: {
-            //默认属性
-            ...context.defaultFieldProps,
-            //手动声明属性
-            ...other,
-            //v-model 展开
-            value: findV
-        },
-        on: {
-            //声明的监听方法
-            ...on,
-            input: (v) => value.o[value.k] = v
-        }
-    }
-}
-
-/**
- * 默认字段类型
- * @type {{}}
- */
-const defaultFields = {
-    /**
-     * input组件
-     * @param props
-     * @param context
-     * @return {JSX.Element}
-     */
-    input(props, context) {
-        const args = computeArgs(props, context, false)
-        return (<el-input {...args} />)
-    },
-    /**
-     * 选择控件
-     * @param props
-     * @param context
-     * @return {JSX.Element}
-     */
-    select(props, context) {
-        const args = computeArgs(props, context, true)
-        if (props.dictKey) {
-            return (<select-dict {...args} type={props.dictKey}/>)
-        } else {
-            return (<select-async  {...args}/>)
-        }
-    },
-    /**
-     * 日期选择
-     * @param props
-     * @param context
-     * @return {JSX.Element}
-     */
-    date(props, context) {
-        const args = computeArgs(props, context, true)
-        return (<el-date-picker value-format='timestamp' {...args}  />)
-    },
-    /**
-     * 时间选择
-     * @param props
-     * @param context
-     * @return {JSX.Element}
-     */
-    time(props, context) {
-        const args = computeArgs(props, context, true)
-        return (<el-time-select value-format='timestamp' {...args}  />)
-    },
-    /**
-     * 日期时间
-     * @param props
-     * @param context
-     * @return {JSX.Element}
-     */
-    dateTime(props, context) {
-        const args = computeArgs(props, context, true)
-        return (<el-date-picker value-format='timestamp' {...args} type='datetime'/>)
-    }
-}
+export {registerField} from './fieldRender'
 /**
  * 表单所有的方法映射出去
  * @type {*[]}
@@ -204,39 +90,15 @@ export default {
         }
     },
     render() {
-        const children = computeChildren(this.fields, this, props => {
-            const prop = props.prop
-            //判断字段类型，选择组件
-            const fieldType = props.fieldType || 'input'
-            if (!defaultFields[fieldType]) {
-                /*eslint-disable-next-line no-console*/
-                console.error(`没有指定的表单字段类型${fieldType}`, prop)
-                return
-            }
-            if (!this.$attrs.model) {
-                /*eslint-disable-next-line no-console*/
-                console.error(`没有指定表单model`)
-                return
-            }
-            const children = defaultFields[fieldType](props, this)
-            return (
-                <el-form-item
-                    //默认属性
-                    {...{props: this.defaultFieldProps}}
-                    //声明属性
-                    {...{props}}>
-                    {children}
-                </el-form-item>
-            )
-        })
+        const vSlots = new vNodeSlots(this.$slots.default)
+        let children = renderObject(this.fields, this, vSlots)
+        //再算最前面的
+        children = vSlots.getFirst().concat(children)
+        //再算默认剩下的
+        children = children.concat(vSlots.getDefault())
+        //最后算最后的
+        children = children.concat(vSlots.getLast())
         //表单参数
-        const args = {
-            ref: 'form',
-            props: {
-                ...this.$attrs
-            },
-            on: this.$listeners
-        }
-        return (<el-form {...args}>{children}</el-form>)
+        return (<Form ref='form' class='form-render' props={this.$attrs} on={this.$listeners}>{children}</Form>)
     }
 }
