@@ -98,7 +98,8 @@ export default {
         children = children.concat(vSlots.getDefault())
         //最后算最后的
         children = children.concat(vSlots.getLast())
-        //表单参数
-        return (<Form ref='form' class='form-render' props={this.$attrs} on={this.$listeners}>{children}</Form>)
+
+        const className = this.props.inline ? 'form-render form-render--inline' : 'form-render'
+        return (<Form ref='form' class={className} props={this.$attrs} on={this.$listeners}>{children}</Form>)
     }
 }

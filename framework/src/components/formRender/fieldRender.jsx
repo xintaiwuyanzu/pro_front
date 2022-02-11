@@ -139,6 +139,7 @@ export const defaultFields = {
      * @returns {JSX.Element}
      */
     checkBox(props, context) {
+        props.multiple = true
         const args = computeArgs(props, context, true)
         return (<CheckBoxAsync {...args}/>)
     }
