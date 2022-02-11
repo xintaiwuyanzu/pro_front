@@ -1,5 +1,5 @@
 import {AbstractMapper} from "../../fix/AbstractMapper";
-import {CheckboxGroup, Checkbox} from "element-ui";
+import {Checkbox, CheckboxGroup} from "element-ui";
 import {selectMap} from "../selectAsync/selectUtil";
 
 /**
@@ -10,7 +10,11 @@ export default {
     extends: AbstractMapper,
     inheritAttrs: false,
     props: {
-        value: {default: () => ([])}
+        value: {
+            default: () => {
+                return []
+            }
+        }
     },
     render() {
         const groupArgs = {
@@ -24,7 +28,7 @@ export default {
             },
             directives: [{name: 'loading', value: this.mapperData.loading, modifiers: {fullscreen: true}}]
         }
-        const children = selectMap(this).map(({label, value}) => <Checkbox label={value}>{label}</Checkbox>)
+        const children = selectMap(this).map(({label, value}) => <Checkbox label={value}/>)
         return (
             <CheckboxGroup {...groupArgs}>
                 {children}

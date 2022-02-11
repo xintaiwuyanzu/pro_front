@@ -16,7 +16,7 @@
     "@dr/auto": "^0.0.2",
     "@types/js-cookie": "^2.2.7",
     "@u3u/vue-hooks": "^2.0.1",
-    "@vue/composition-api": "^1.4.5",
+    "@vue/composition-api": "^1.4.6",
     "async-validator": "^4.0.7",
     "axios": "^0.24.0",
     "dayjs": "^1.10.7",
