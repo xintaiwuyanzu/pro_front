@@ -110,7 +110,11 @@ function renderSearchForm(fields, ctx) {
         },
         on: {...ctx.$listeners}
     }
-    return (<formRender {...searchFormArgs}>{slotChildren}</formRender>)
+    if (slotChildren.length === 0) {
+        return []
+    } else {
+        return (<formRender {...searchFormArgs}>{slotChildren}</formRender>)
+    }
 }
 
 function getComponentName(opts) {
@@ -131,8 +135,9 @@ function isTableColumn(v) {
 
 /**
  * 渲染列表页面
+ * @param columns
  * @param ctx
- * @return {JSX.Element}
+ * @returns {{tableChild: JSX.Element, otherChild: *[]}}
  */
 function renderTable(columns, ctx) {
     //所有字段默认都是可编辑的，除非手动声明edit为false
@@ -288,13 +293,16 @@ export default {
         const {tableChild, otherChild} = renderTable(fields, this, loadingArgs)
         //查询表单
         const formChild = renderSearchForm(fields, this, loadingArgs)
+        //如果导航栏啥都没有，则不显示
+        let nacChild = ''
+        if (this.showTitle || formChild.length > 0) {
+            nacChild = (<nacInfo title={this.title} showTitle={this.showTitle}>{formChild}</nacInfo>)
+        }
         //添加编辑弹窗
         const dialogChild = renderEditDialog(fields, this, loadingArgs)
         return (
             <section class='table_index' {...loadingArgs}>
-                <nacInfo title={this.title}>
-                    {formChild}
-                </nacInfo>
+                {nacChild}
                 {tableChild}
                 {otherChild}
                 {dialogChild}

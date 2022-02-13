@@ -28,7 +28,7 @@ export default {
             },
             directives: [{name: 'loading', value: this.mapperData.loading, modifiers: {fullscreen: true}}]
         }
-        const children = selectMap(this).map(({label, value}) => <Checkbox label={value}/>)
+        const children = selectMap(this).map(({label, value}) => <Checkbox label={value}>{label}</Checkbox>)
         return (
             <CheckboxGroup {...groupArgs}>
                 {children}

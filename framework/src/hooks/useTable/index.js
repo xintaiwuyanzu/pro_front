@@ -23,6 +23,10 @@ export const useTable = (args, context) => {
      * @return {Promise<void>}
      */
     const loadData = async (params) => {
+        if (typeof params === "function") {
+            //如果是函数，则回调函数
+            params = await params()
+        }
         tableData.loading = true
         const queryParams = {pageSize: tableData.page.size, page: true, ...params}
         const result = await http().post(pagePath || `${basePath}/page`, queryParams)

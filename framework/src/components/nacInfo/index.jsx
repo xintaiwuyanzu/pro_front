@@ -11,6 +11,10 @@ export default {
          */
         title: {required: false, type: String, default: ''},
         /**
+         * 是否显示标题
+         */
+        showTitle: {type: Boolean, default: true},
+        /**
          * 是否显示返回按钮
          */
         back: Boolean
@@ -26,14 +30,19 @@ export default {
             if (props.back) {
                 children.push((<el-button onClick={() => router.back()} type="primary" size="mini">返 回 </el-button>))
             }
+
+            const title = props.showTitle ?
+                <Breadcrumb separator-class="el-icon-arrow-right">
+                    <el-breadcrumb-item>您当前的位置</el-breadcrumb-item>
+                    <BreadcrumbItem class='title'>
+                        {props.title || menuData.currentMenu.label || ''}
+                    </BreadcrumbItem>
+                </Breadcrumb>
+                : ''
+
             return (
                 <section class="breadcrumb-container">
-                    <Breadcrumb separator-class="el-icon-arrow-right">
-                        <el-breadcrumb-item>您当前的位置</el-breadcrumb-item>
-                        <BreadcrumbItem class='title'>
-                            {props.title || menuData.currentMenu.label || ''}
-                        </BreadcrumbItem>
-                    </Breadcrumb>
+                    {title}
                     <section class="slot">
                         {children}
                     </section>

@@ -102,32 +102,36 @@ export default {
             ref: 'table',
             props: {
                 border: true,
+                stripe: true,
                 ...this.$attrs
             },
             on: this.$listeners
         }
+        //如果数据量达不到分页，则不显示分页按钮
+        let pageChild = ''
         if (this.showPage && this.page) {
-            const pageArgs = {
-                on: {
-                    //page的事件发送出去，其他的事件都可以直接代理的，但是跟table有个重名的问题
-                    'size-change': v => this.$emit('size-change', v),
-                    'prev-click': (v) => this.$emit('prev-click', v),
-                    'next-click': (v) => this.$emit('next-click', v),
-                    'current-change': (v) => this.$emit('page-current-change', v)
+            if (this.page.total >= this.page.size) {
+                const pageArgs = {
+                    on: {
+                        //page的事件发送出去，其他的事件都可以直接代理的，但是跟table有个重名的问题
+                        'size-change': v => this.$emit('size-change', v),
+                        'prev-click': (v) => this.$emit('prev-click', v),
+                        'next-click': (v) => this.$emit('next-click', v),
+                        'current-change': (v) => this.$emit('page-current-change', v)
+                    }
                 }
+                pageChild = <page page={this.page} {...pageArgs} class='render-page'/>
             }
-            return (
-                <div class="table-wrapper">
-                    <div class='render-table'>
-                        <Table {...tableArgs} height='100%'>
-                            {children}
-                        </Table>
-                    </div>
-                    <page page={this.page} {...pageArgs} class='render-page'/>
-                </div>
-            )
-        } else {
-            return (<Table {...tableArgs}>{children}</Table>)
         }
+        return (
+            <div class="table-wrapper">
+                <div class='render-table'>
+                    <Table {...tableArgs} height='100%'>
+                        {children}
+                    </Table>
+                </div>
+                {pageChild}
+            </div>
+        )
     }
 }

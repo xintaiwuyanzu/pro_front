@@ -8,6 +8,10 @@ export default {
          */
         title: [String],
         /**
+         * 是否显示标题
+         */
+        showTitle: {type: Boolean, default: true},
+        /**
          * 所有需要渲染的字段
          */
         fields: [Object, Array],
@@ -52,7 +56,7 @@ export default {
         /**
          * 添加默认搜索条件
          */
-        defaultSearchForm: {type: Object},
+        defaultSearchForm: {type: [Array, Object]},
         /**
          * 默认添加表单字段
          */
@@ -107,9 +111,6 @@ export default {
              */
             dialogVisible: false
         }
-    },
-    beforeMount() {
-        this.searchFormModel = {...this.searchFormModel, ...this.defaultSearchForm}
     },
     computed: {
         /**
@@ -187,11 +188,24 @@ export default {
             if (result.success) {
                 this.$message.success('保存成功！')
                 this.dialogVisible = false
-                await this.loadData(this.searchFormModel)
+                await this.reload()
             } else {
                 this.$message.error(result.message)
             }
             this.data.loading = false
+        },
+        /**
+         * 刷新数据方法
+         * @returns {Promise<void>}
+         */
+        async reload() {
+            let addArgs = {}
+            if (typeof this.defaultSearchForm === 'function') {
+                addArgs = await this.defaultSearchForm()
+            } else if (this.defaultSearchForm) {
+                addArgs = this.defaultSearchForm
+            }
+            await this.loadData({...addArgs, ...this.searchFormModel})
         }
     },
     mounted() {
@@ -199,7 +213,7 @@ export default {
             //监听数据删除事件，刷新数据
             this.$on('remove', async id => {
                 if (id) {
-                    await this.loadData(this.searchFormModel)
+                    await this.reload()
                 }
             })
         }
