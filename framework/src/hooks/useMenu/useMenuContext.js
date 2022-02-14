@@ -1,16 +1,16 @@
-import {onMounted, provide, reactive, unref, watch} from "vue-demi/lib";
+import {provide, reactive, watch} from "vue-demi/lib";
 import {useRouter} from "@u3u/vue-hooks";
 import qs from "qs";
 import {MENU_KEY} from "./index";
 import {http} from "../../plugins/http";
+import {onMounted} from "vue-demi";
 
 /**
  * 默认菜单加载
  */
-const defaultMenuLoader = async () => {
+export const defaultMenuLoader = async (sysId) => {
     const httpInstance = http();
-    //TODO 这里参数写死了
-    return httpInstance.post('/sysmenu/menutree', {sysId: 'default'})
+    return httpInstance.post('/sysmenu/menutree', {sysId})
 }
 
 function trimUrl(path) {
@@ -23,6 +23,7 @@ function trimUrl(path) {
     }
 }
 
+/*eslint-disable-next-line no-unused-vars*/
 function filterMenu(arr, path) {
     if (arr) {
         for (let i = 0; i < arr.length; i++) {
@@ -44,6 +45,8 @@ function filterMenu(arr, path) {
  * @param menus
  * @returns {undefined}
  */
+
+/*eslint-disable-next-line no-unused-vars*/
 function findFirstMenu(menus) {
     if (menus) {
         for (let i = 0; i < menus.length; i++) {
@@ -61,10 +64,8 @@ function findFirstMenu(menus) {
     return undefined;
 }
 
-//TODO 这里先暴力的实现了
 export const useMenuContext = (menuLoader = defaultMenuLoader) => {
     const collapse = localStorage.getItem('collapse') || false
-
     const providerData = reactive({
         //菜单数据
         menu: [],
@@ -76,7 +77,8 @@ export const useMenuContext = (menuLoader = defaultMenuLoader) => {
         currentMenu: {},
         //默认选中的key
         defaultIndex: '',
-        tabs: []
+        tabs: [],
+        sys: {}
     })
     //有改变就写到前端缓存中
     watch(() => providerData.collapse, (v) => localStorage.setItem('collapse', v))
@@ -114,16 +116,16 @@ export const useMenuContext = (menuLoader = defaultMenuLoader) => {
                 }
             }
         })
-
-
-    /**
-     *组件初始化的时候加载菜单
-     */
-    onMounted(async () => {
+    //监听系统菜单编码，重新加载菜单数据
+    watch(() => providerData.sys, async () => {
         providerData.menuLoading = true
-        const result = await menuLoader()
+        const result = await menuLoader(providerData.sys.id)
         providerData.menu = result.data.data
-        const currentPath = trimUrl(route.value.path)
+        //这里强制跳转home页面
+        providerData.currentMenu = {data: {url: '/home'}}
+        //清空tab
+        providerData.tabs = []
+        /*const currentPath = trimUrl(route.value.path)
         if (currentPath === '/main') {
             const first = findFirstMenu(providerData.menu)
             if (first) {
@@ -135,9 +137,16 @@ export const useMenuContext = (menuLoader = defaultMenuLoader) => {
             if (currentMenu) {
                 providerData.currentMenu = currentMenu
             }
-        }
+        }*/
         providerData.menuLoading = false
     })
+
+    onMounted(() => {
+        //这里的系统名称可以从环境变量获取
+        const sysConfig = process.env.sys;
+        providerData.sys = {id: sysConfig.sysCode || 'default', sysName: document.title}
+    })
+
     provide(MENU_KEY, providerData);
     return providerData
 }

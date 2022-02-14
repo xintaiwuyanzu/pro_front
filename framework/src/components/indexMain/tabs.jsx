@@ -37,7 +37,7 @@ export default {
                               'tab-click': tabClick
                           }}
                           value={menuData.currentMenu.id}>
-                        <TabPane label='首页' name='首页'/>
+                        <TabPane label='首页' name='/home'/>
                         {menuData.tabs.map(m => (<TabPane label={m.label} name={m.id} closable={true} key={m.id}/>))}
                     </Tabs>
                     <Dropdown class='btns' showTimeout={100} on={{command}}>
@@ -47,9 +47,7 @@ export default {
                             <DropdownItem command='closeAll'>关闭所有选项卡</DropdownItem>
                             <DropdownItem divided={true}>首页</DropdownItem>
                             {
-                                menuData.tabs.map(
-                                    (t) => (<DropdownItem command={t.id}>{t.label}</DropdownItem>)
-                                )
+                                menuData.tabs.map((t) => (<DropdownItem command={t.id}>{t.label}</DropdownItem>))
                             }
                         </DropdownMenu>
                     </Dropdown>

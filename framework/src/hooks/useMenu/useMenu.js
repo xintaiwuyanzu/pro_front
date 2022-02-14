@@ -59,6 +59,8 @@ export const useMenu = () => {
         const tab = menu.tabs.find(m => m.id === id)
         if (tab) {
             menu.currentMenu = tab
+        } else if (id === '/home') {
+            menu.currentMenu = {data: {url: '/home'}}
         }
     }
 

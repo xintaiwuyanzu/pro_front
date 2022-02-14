@@ -1,5 +1,3 @@
-@import "../../styles/var";
-
 .header {
   background: $--header-background;
   height: $--header-height !important;
@@ -20,6 +18,23 @@
 
     .header-right {
       margin-left: auto;
+      height: $--header-height;
+
+
+      .top_icon {
+        display: inline-block;
+        color: $--color-white;
+        padding: 12px;
+
+        [class^=el-icon], svg.icon {
+          font-size: 20px;
+          height: 24px;
+        }
+      }
+
+      .top_icon:hover {
+        background-color: $--color-primary-dark-3;
+      }
     }
 
     .title {

@@ -1,8 +1,8 @@
 <template>
-  <el-tooltip content="全屏" placement="bottom" effect="light">
-    <el-button circle size="mini" @click="toggleFull">
+  <el-tooltip content="全屏" placement="bottom">
+    <section class="top_icon" @click="toggleFull">
       <icon :icon="fullscreen?'minimize-2':'maximize-2'"/>
-    </el-button>
+    </section>
   </el-tooltip>
 </template>
 <script>

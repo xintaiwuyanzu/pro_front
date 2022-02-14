@@ -59,6 +59,12 @@ module.exports = (api, options, drOptions) => {
                 }
             }
         }
+        //计算系统编码
+        cfg.plugin("define").tap((args) => {
+            args[0]["process.env"].sys = {sysCode: JSON.stringify(pkg.sysCode || 'default')};
+            return args;
+        });
+
         //html模板路径
         let template = 'public/index.html'
         if (!fs.existsSync(path.resolve(rootPath, template))) {

@@ -35,7 +35,7 @@ const createSubMenu = (m, menuData, addTab) => {
                          hideTimeout={200}
                          popperClass="left-menu-pop">
                     <template slot="title">
-                        <icon icon={item.data.icon}/>
+                        <icon icon={item.data.icon} title={item.label}/>
                         <span class='text'>{item.label}</span>
                     </template>
                     <MenuItem index={item.id} disabled={true} class='menu-header'>{item.label}</MenuItem>
@@ -44,8 +44,8 @@ const createSubMenu = (m, menuData, addTab) => {
             )
         } else {
             return (
-                <MenuItem index={item.id} onClick={() => addTab(item)} class='left-item'>
-                    <icon icon={item.data.icon}/>
+                <MenuItem index={item.id} onClick={() => addTab(item)} class='left-item' title={item.label}>
+                    <icon icon={item.data.icon} title={item.label}/>
                     <span class='text'>{item.label}</span>
                 </MenuItem>
             )

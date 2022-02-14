@@ -1,4 +1,6 @@
 import {useDict} from "../../hooks/useDict";
+import {Option, Select} from 'element-ui'
+import {watch} from "vue-demi";
 
 export default {
     inheritAttrs: false,
@@ -9,7 +11,14 @@ export default {
         value: {}
     },
     setup(prop, context) {
-        const {dict} = useDict(prop.type)
+        const {dict, load} = useDict(prop.type)
+        watch(() => prop.type, (n, o) => {
+            if (n && n !== o) {
+                dict.key = n
+                load()
+            }
+        })
+
         return () => {
             const args = {
                 attrs: {
@@ -36,9 +45,9 @@ export default {
                         /*eslint-disable*/
                     }
                 }
-                return <el-option label={d.label} value={value}/>
+                return <Option label={d.label} value={value}/>
             })
-            return (<el-select  {...args}>{children}</el-select>)
+            return (<Select  {...args}>{children}</Select>)
         }
     }
 }

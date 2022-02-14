@@ -78,7 +78,15 @@ export const AbstractMapper = {
         let needWatch = false
         if (props.dictKey) {
             //声明了字典参数
-            mapperData = useDict(props.dictKey).dict
+            const dictWrapper = useDict(props.dictKey)
+            //字典响应式
+            mapperData = dictWrapper.dict
+            watch(() => props.dictKey, (n, o) => {
+                if (n && n !== o) {
+                    mapperData.key = n
+                    dictWrapper.load()
+                }
+            })
         } else if (props.mapper && (Array.isArray(props.mapper) || typeof props.mapper === 'object')) {
             //不是字典
             //声明了mapper参数
