@@ -56,7 +56,7 @@ export default {
         /**
          * 添加默认搜索条件
          */
-        defaultSearchForm: {type: [Array, Object]},
+        defaultSearchForm: {type: [Array, Object, Function]},
         /**
          * 默认添加表单字段
          */
