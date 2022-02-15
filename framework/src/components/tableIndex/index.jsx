@@ -295,7 +295,7 @@ export default {
         const formChild = renderSearchForm(fields, this, loadingArgs)
         //如果导航栏啥都没有，则不显示
         let nacChild = ''
-        if (this.showTitle || formChild.length > 0) {
+        if (this.showTitle || (formChild && Object.keys(formChild).length > 0)) {
             nacChild = (<nacInfo title={this.title} showTitle={this.showTitle}>{formChild}</nacInfo>)
         }
         //添加编辑弹窗

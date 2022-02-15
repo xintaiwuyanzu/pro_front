@@ -6,7 +6,7 @@ import {http} from "../../plugins/http";
 import {Message, MessageBox} from "element-ui";
 
 export const useTable = (args, context) => {
-    const {basePath, pagePath, deletePath, initParams, dataWrapper} = args
+    const {basePath, pagePath, deletePath, dataWrapper} = args
 
     const tableData = reactive({
         data: [],
@@ -23,12 +23,16 @@ export const useTable = (args, context) => {
      * @return {Promise<void>}
      */
     const loadData = async (params) => {
-        if (typeof params === "function") {
-            //如果是函数，则回调函数
-            params = await params()
+        let initParam = {}
+        if (args.initParams) {
+            if (typeof args.initParams === 'function') {
+                initParam = await args.initParams()
+            } else {
+                initParam = args.initParams
+            }
         }
         tableData.loading = true
-        const queryParams = {pageSize: tableData.page.size, page: true, ...params}
+        const queryParams = {pageSize: tableData.page.size, page: true, ...initParam, ...params}
         const result = await http().post(pagePath || `${basePath}/page`, queryParams)
         let resultData = result.data
         if (resultData && resultData.success) {
@@ -47,8 +51,8 @@ export const useTable = (args, context) => {
         context.emit('dataLoaded', tableData, queryParams)
     }
     //启动后自动加载数据
-    onMounted(() => loadData(initParams))
-    onActivated(() => loadData(initParams))
+    onMounted(() => loadData())
+    onActivated(() => loadData())
     /**
      * 数据删除函数
      * @param params

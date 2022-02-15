@@ -46,7 +46,7 @@ export default {
                 //TODO 有分页属性的就是index类型的列表，这里有点太武断了
                 column.type = 'index'
                 if (!column.width) {
-                    column.width = column.realWidth = column.minWidth = 48
+                    column.width = column.realWidth = column.minWidth = 60
                 }
                 if (!column.label) {
                     column.label = '序号'

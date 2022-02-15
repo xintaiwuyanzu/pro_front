@@ -199,13 +199,7 @@ export default {
          * @returns {Promise<void>}
          */
         async reload() {
-            let addArgs = {}
-            if (typeof this.defaultSearchForm === 'function') {
-                addArgs = await this.defaultSearchForm()
-            } else if (this.defaultSearchForm) {
-                addArgs = this.defaultSearchForm
-            }
-            await this.loadData({...addArgs, ...this.searchFormModel})
+            await this.loadData(this.searchFormModel)
         }
     },
     mounted() {
