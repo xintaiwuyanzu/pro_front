@@ -18,4 +18,12 @@
   .el-input, .el-textarea {
     width: 200px;
   }
+
+  .field_single_line {
+    display: block;
+
+    .el-input, .el-textarea {
+      width: 600px;
+    }
+  }
 }

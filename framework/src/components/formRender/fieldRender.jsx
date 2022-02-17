@@ -167,8 +167,13 @@ export const fieldRender = (fieldType, props, context) => {
         return
     }
     const fieldChild = fieldRender(props, context)
-    return (
-        <FormItem
+    let className = ''
+    if (props.singleLine) {
+        className += ' field_single_line'
+    }
+    const children = [
+        (<FormItem
+            class={className}
             props={{
                 //默认属性
                 ...context.defaultFieldProps,
@@ -176,6 +181,11 @@ export const fieldRender = (fieldType, props, context) => {
                 ...props
             }}>
             {fieldChild}
-        </FormItem>
-    )
+        </FormItem>)
+    ]
+    if (props.newLine) {
+        children.unshift(<br/>)
+    }
+    return children
+
 }

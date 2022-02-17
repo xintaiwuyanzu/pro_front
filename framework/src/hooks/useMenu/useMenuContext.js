@@ -65,7 +65,8 @@ function findFirstMenu(menus) {
 }
 
 export const useMenuContext = (menuLoader = defaultMenuLoader) => {
-    const collapse = localStorage.getItem('collapse') || false
+    const collapse = JSON.parse(localStorage.getItem('collapse') || false)
+
     const providerData = reactive({
         //菜单数据
         menu: [],
