@@ -20,7 +20,7 @@
   }
 
   .field_single_line {
-    display: block;
+    display: block !important;
 
     .el-input, .el-textarea {
       width: 600px;

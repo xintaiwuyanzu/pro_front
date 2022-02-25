@@ -8,7 +8,13 @@ import {Option, Select} from "element-ui";
 export const selectMap = (context) => {
     const mapperData = context.mapperData.data
     return Array.isArray(mapperData) ?
-        mapperData.map(d => mapKeyValue(d[context.valueKey], context.value, context.simpleMapper))
+        mapperData.map(d => {
+            if (typeof d === 'string') {
+                return {label: d, value: d}
+            } else {
+                return mapKeyValue(d[context.valueKey], context.value, context.simpleMapper)
+            }
+        })
         :
         Object.keys(mapperData).map(k => mapKeyValue(k, context.value, context.simpleMapper))
 }

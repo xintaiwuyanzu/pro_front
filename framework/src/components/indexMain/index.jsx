@@ -15,13 +15,14 @@ export default {
         rootClassName: {type: String, default: 'root'},
         headerClassName: {type: String, default: 'header'},
         mainClassName: {type: String, default: 'main'},
-        leftClassName: {type: String, default: 'left'}
+        leftClassName: {type: String, default: 'left'},
+        menuLoader: {type: Function}
     },
     //TODO 这里应该可以从@dr/auto 查询判断
     setup(props, {slots}) {
         const hasHeaderMenu = !vue.component('headerMenu')
         //TODO 菜单加载状态
-        const providerData = useMenuContext()
+        const providerData = useMenuContext(props.menuLoader)
         const {route} = useRouter()
         return () => {
             const children = slots.default ? slots.default() : ''
