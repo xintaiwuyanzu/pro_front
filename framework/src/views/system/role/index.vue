@@ -63,6 +63,7 @@
 import indexMixin from '@dr/auto/lib/util/indexMixin'
 
 export default {
+  role: ['admin'],
   data() {
     return {
       path: 'sysrole',

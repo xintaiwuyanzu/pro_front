@@ -11,8 +11,15 @@ import {functionUtils, makeArray, vNodeSlots} from "./utils";
  * @param vNodeFunction
  * @return {(*)[]}
  */
-const computeChildren = (arr, slotDefault, vNodeFunction) => {
+const computeChildren = (arr, slotDefault, vNodeFunction, context) => {
     arr = makeArray(arr)
+    arr = arr.filter(a => {
+        if (a.role) {
+            return context.hasRole(a.role)
+        } else {
+            return true
+        }
+    })
     const vSlots = new vNodeSlots(slotDefault, (vNode, props) => 'expand' === props.type)
     //先计算所有中间的child
     let children = arr.filter(f => f.show || f.show === undefined)
@@ -90,7 +97,7 @@ export default {
             //声明属性
             ...props
         }
-        }/>)
+        }/>, this)
         //是否添加列
         if (this.index && this.page) {
             children.unshift(<TableColumn page={this.page}/>)

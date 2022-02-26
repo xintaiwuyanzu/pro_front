@@ -3,6 +3,8 @@ import {useRouter} from "@u3u/vue-hooks";
 import {useMenuContext} from "../../hooks/useMenu";
 import vue from "vue";
 import tabs from "./tabs";
+import {useUserContext} from "../../hooks/userUser";
+import {useRoleContext} from "../../hooks/useRole";
 
 export default {
     name: 'indexMain',
@@ -16,10 +18,20 @@ export default {
         headerClassName: {type: String, default: 'header'},
         mainClassName: {type: String, default: 'main'},
         leftClassName: {type: String, default: 'left'},
-        menuLoader: {type: Function}
+        //菜单加载方法
+        menuLoader: {type: Function},
+        //用户加载方法
+        userLoader: {type: Function},
+        //角色加载方法
+        roleLoader: {type: Function}
     },
     //TODO 这里应该可以从@dr/auto 查询判断
     setup(props, {slots}) {
+        //登录用户上下文
+        useUserContext(props.userLoader)
+        //角色上下文
+        useRoleContext(props.roleLoader)
+
         const hasHeaderMenu = !vue.component('headerMenu')
         //TODO 菜单加载状态
         const providerData = useMenuContext(props.menuLoader)

@@ -8,9 +8,11 @@
     "build": "vue-cli-service build --no-module --report",
     "lint": "vue-cli-service lint"
   },
+  "typings": "types/index.d.ts",
   "files": [
     "src",
-    "lib"
+    "lib",
+    "types"
   ],
   "dependencies": {
     "@dr/auto": "^0.0.2",

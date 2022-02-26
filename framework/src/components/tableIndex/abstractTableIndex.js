@@ -42,6 +42,10 @@ export default {
          */
         delete: {type: Boolean, default: true},
         /**
+         *是否显示多选
+         */
+        checkAble: {type: Boolean, default: false},
+        /**
          * 是否支持多选删除
          */
         deleteMulti: {type: Boolean, default: false},

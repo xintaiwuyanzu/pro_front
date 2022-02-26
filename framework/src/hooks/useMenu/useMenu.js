@@ -49,6 +49,7 @@ export const useMenu = () => {
             menu.tabs = menu.tabs.filter(t => t.id === menu.currentMenu.id)
         } else {
             menu.tabs.splice(0, menu.tabs.length)
+            menu.currentMenu = {data: {url: '/home'}}
         }
     }
     /**

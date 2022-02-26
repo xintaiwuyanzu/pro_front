@@ -26,6 +26,7 @@ import abstractResource from "./abstractResource";
 import indexMixin from '@dr/auto/lib/util/indexMixin'
 
 export default {
+  role: ['admin'],
   extends: abstractResource,
   data() {
     return {path: '/sysPermission/'}

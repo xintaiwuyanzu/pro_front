@@ -209,7 +209,7 @@ function renderTable(columns, ctx) {
     //表格参数
     const tableArgs = {
         ref: 'table',
-        props: {index: true, page: ctx.data.page, columns, checkAble: ctx.deleteMulti},
+        props: {index: true, page: ctx.data.page, columns, checkAble: ctx.deleteMulti || ctx.checkAble},
         attrs: {data: ctx.data.data, ...ctx.tableProp},
         on: {
             ...ctx.$listeners,

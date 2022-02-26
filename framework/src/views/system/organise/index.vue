@@ -55,6 +55,7 @@
 import organiseForm from './form'
 
 export default {
+  role: ['admin'],
   components: {organiseForm},
   data() {
     return {
@@ -145,10 +146,7 @@ export default {
             }
             this.loadData()
           })
-    }
-  },
-  mounted() {
-    this.loadData()
+    },
   }
 }
 </script>

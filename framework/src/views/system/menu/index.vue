@@ -73,6 +73,7 @@ import SysMenuForm from './form'
  * TODO 这里的数据修改后需要刷新右侧菜单
  */
 export default {
+  role: ['admin'],
   components: {SysMenuForm},
   data() {
     return {

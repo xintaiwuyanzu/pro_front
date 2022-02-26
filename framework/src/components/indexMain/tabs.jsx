@@ -45,7 +45,7 @@ export default {
                         <DropdownMenu slot='dropdown'>
                             <DropdownItem command='closeOthers'>关闭其他选项卡</DropdownItem>
                             <DropdownItem command='closeAll'>关闭所有选项卡</DropdownItem>
-                            <DropdownItem divided={true}>首页</DropdownItem>
+                            <DropdownItem command='/home' divided={true}>首页</DropdownItem>
                             {
                                 menuData.tabs.map((t) => (<DropdownItem command={t.id}>{t.label}</DropdownItem>))
                             }

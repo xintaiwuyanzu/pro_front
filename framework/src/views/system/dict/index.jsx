@@ -2,6 +2,7 @@
  * 字典模块
  */
 export default {
+    role: ['admin'],
     data() {
         return {
             fields: [

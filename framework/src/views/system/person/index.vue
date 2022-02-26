@@ -32,13 +32,14 @@
               <strong>人员详情</strong>
             </div>
             <table-render :columns="columns" :data="personData" :page="page">
-              <el-table-column label="操作" header-align="center" align="center" width="180">
+              <el-table-column label="操作" header-align="center" align="center" width="220">
                 <template slot-scope="scope">
                   <el-button type="text" size="small" @click="editForm(scope.row)">编 辑</el-button>
                   <el-button type="text" size="small" @click="removePer(scope.row.id)">删 除
                   </el-button>
                   <el-button type="text" size="small" @click="resetPws(scope.row)">重置密码
                   </el-button>
+                  <el-button type="text" size="small" @click="showRole(scope.row)">角色</el-button>
                 </template>
               </el-table-column>
             </table-render>
@@ -46,6 +47,9 @@
         </el-col>
       </el-row>
     </div>
+    <el-dialog title="用户角色" :visible.sync="roleDialogVisible">
+      <table-render :columns="roleColumn" :data="roles" height="300px"/>
+    </el-dialog>
   </section>
 </template>
 <script>
@@ -54,6 +58,7 @@ import indexMixin from '@dr/auto/lib/util/indexMixin'
 import TableRender from "../../../components/tableRender";
 
 export default {
+  role: ['admin'],
   components: {TableRender, ConfigForm},
   mixins: [indexMixin],
   data() {
@@ -81,7 +86,6 @@ export default {
       },
       map22: [],
 
-
       defaultcheckarray: [],
       roleTree: [],
       roleDialogVisible: false,
@@ -94,7 +98,13 @@ export default {
         mobile: {label: '手机号'},
         email: {label: '邮箱'},
         sex: {label: '性 别', mapper: {0: '女', 1: '男'}},
-      }
+      },
+      roles: [],
+      roleColumn: {
+        name: {label: '角色名称', component: 'text', route: true, routerPath: '/system/role/edit'},
+        description: {label: '超级管理员'}
+      },
+      roleDialog: false,
     }
   },
   methods: {
@@ -265,7 +275,6 @@ export default {
         }
       })
     },
-
     getUserName() {
       this.$http.post('/login/info').then(({data}) => {
         this.username = data.data.userName;
@@ -273,6 +282,15 @@ export default {
     },
     getMsgFromForm(searchForm) {
       this.thisForm = searchForm;
+    },
+    async showRole(row) {
+      this.roleDialogVisible = true
+      const {data} = await this.$post('/sysrole/userRole', {id: row.id})
+      if (data.success) {
+        this.roles = data.data
+      } else {
+        this.roles = []
+      }
     }
   }
 }

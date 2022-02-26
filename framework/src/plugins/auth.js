@@ -1,5 +1,6 @@
 import util from '../components/login/util'
 import {Message} from "element-ui";
+import {hasRole} from "../hooks/useRole";
 
 /**
  * 拦截所有的跳转，如果未登录，则跳转登录页面
@@ -30,5 +31,30 @@ export default (vue, router) => {
                 next()
             }
         }
+    })
+
+    vue.mixin({
+        inject: {
+            $role: {
+                default() {
+                    return []
+                }
+            },
+            $sysMenu: {
+                default() {
+                    return {
+                        sys: {}
+                    }
+                }
+            }
+        },
+        methods: {
+            hasRole(roleIdOrCode) {
+                return hasRole(roleIdOrCode, this.$role)
+            },
+            isSys(sysId) {
+                return this.$sysMenu.sys.id === sysId
+            }
+        },
     })
 }
