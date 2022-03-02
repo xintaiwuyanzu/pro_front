@@ -1,4 +1,4 @@
-import {onBeforeMount, reactive} from "vue-demi";
+import {onMounted, reactive} from "vue-demi";
 import {inject, provide} from "vue-demi/lib";
 import {http} from "../../plugins/http";
 import {useRouter} from "@u3u/vue-hooks";
@@ -12,7 +12,7 @@ const roleProviderKey = '$role'
 export const useRoleContext = (roleLoader) => {
     const role = reactive({role: []})
     provide(roleProviderKey, role)
-    onBeforeMount(async () => {
+    onMounted(async () => {
         if (!roleLoader) {
             roleLoader = () => http().post('sysrole/userRole')
         }
