@@ -1,7 +1,7 @@
 <template>
   <section>
     <nac-info title="角色管理">
-      <el-form inline v-model="searchForm">
+      <el-form inline :model="searchForm">
         <el-form-item prop="name" label="角色名称">
           <el-input v-model="searchForm.name" clearable style="width: 140px"/>
         </el-form-item>

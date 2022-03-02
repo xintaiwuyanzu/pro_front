@@ -1,6 +1,5 @@
 import {FormItem} from 'element-ui'
-import {noop} from 'element-ui/src/utils/util';
-
+import {getPropByPath, noop} from 'element-ui/src/utils/util';
 import AsyncValidator from 'async-validator';
 
 const messages = {
@@ -113,6 +112,53 @@ export default {
                 callback(this.validateMessage, invalidFields);
                 this.elForm && this.elForm.$emit('validate', this.prop, !errors, this.validateMessage || null);
             });
-        }
-    }
+        },
+        /**
+         * 重写重置方法，解决重置的问题
+         */
+        resetField() {
+            this.validateState = '';
+            this.validateMessage = '';
+
+            let model = this.form.model;
+            let value = this.fieldValue;
+            let path = this.prop;
+            if (path.indexOf(':') !== -1) {
+                path = path.replace(/:/, '.');
+            }
+            let prop = getPropByPath(model, path, true);
+
+            let initValue = this.initialValue
+            if (initValue === undefined) {
+                let v = value;
+                if (Array.isArray(v) && v.length > 0) {
+                    v = v[0]
+                }
+                if (v) {
+                    switch (typeof v) {
+                        case "string":
+                            initValue = ''
+                            break;
+                        case "number":
+                            initValue = 0;
+                            break;
+                        case "boolean":
+                            initValue = true;
+                    }
+                } else {
+                    initValue = ''
+                }
+            }
+            this.validateDisabled = true;
+            if (Array.isArray(value)) {
+                prop.o[prop.k] = [].concat(initValue);
+            } else {
+                prop.o[prop.k] = initValue;
+            }
+            this.$nextTick(() => {
+                this.validateDisabled = false;
+            });
+            this.broadcast('ElTimeSelect', 'fieldReset', initValue);
+        },
+    },
 }

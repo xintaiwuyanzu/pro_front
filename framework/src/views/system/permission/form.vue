@@ -1,7 +1,7 @@
 <template>
   <section>
     <el-form :model="searchForm" ref="searchForm" inline class="searchForm">
-      <el-form-item label="权限名称：" prop="key">
+      <el-form-item label="权限名称：" prop="name">
         <el-input v-model="searchForm.name" placeholder="请输入权限名称" clearable/>
       </el-form-item>
       <el-form-item>
