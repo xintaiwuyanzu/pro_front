@@ -1,73 +1,24 @@
-import {provide, reactive, watch} from "vue-demi/lib";
-import {useRouter} from "@u3u/vue-hooks";
-import qs from "qs";
+import {computed, onMounted, provide, reactive, watch} from "vue-demi";
+import {pathName, RouteTYPE, tabId, trimUrl} from "./utils";
 import {MENU_KEY} from "./index";
 import {http} from "../../plugins/http";
-import {onMounted} from "vue-demi";
+import {useRouter} from "@u3u/vue-hooks";
+import qs from "qs";
 
+/**
+ * 是否拦截了路由
+ * @type {boolean}
+ */
+let routerModified = false
 /**
  * 默认菜单加载
  */
-export const defaultMenuLoader = async (sysId) => {
-    const httpInstance = http();
-    return httpInstance.post('/sysmenu/menutree', {sysId})
-}
-
-function trimUrl(path) {
-    if (path) {
-        if (path.endsWith('/')) {
-            return path.substr(0, path.length - 1)
-        } else {
-            return path
-        }
-    }
-}
-
-/*eslint-disable-next-line no-unused-vars*/
-function filterMenu(arr, path) {
-    if (arr) {
-        for (let i = 0; i < arr.length; i++) {
-            const a = arr[i]
-            if (a.data && trimUrl(a.data.url) === path) {
-                return a
-            } else if (a.children) {
-                const childResult = filterMenu(a.children, path)
-                if (childResult) {
-                    return childResult
-                }
-            }
-        }
-    }
-}
-
-/**
- * 查找第一个菜单
- * @param menus
- * @returns {undefined}
- */
-
-/*eslint-disable-next-line no-unused-vars*/
-function findFirstMenu(menus) {
-    if (menus) {
-        for (let i = 0; i < menus.length; i++) {
-            const menu = menus[i]
-            if (menu.data && menu.data.url) {
-                return menu
-            } else if (menu.children) {
-                const result = findFirstMenu(menu.children)
-                if (result) {
-                    return result
-                }
-            }
-        }
-    }
-    return undefined;
-}
+export const defaultMenuLoader = (sysId) => http().post('/sysmenu/menutree', {sysId})
 
 export const useMenuContext = (menuLoader = defaultMenuLoader) => {
     const collapse = JSON.parse(localStorage.getItem('collapse') || false)
-
-    const providerData = reactive({
+    const homeTab = {label: '首页', id: '/home', path: '/home', fix: true}
+    const menu = reactive({
         //菜单数据
         menu: [],
         //菜单加载状态
@@ -76,78 +27,156 @@ export const useMenuContext = (menuLoader = defaultMenuLoader) => {
         collapse,
         //当前选中状态
         currentMenu: {},
-        //默认选中的key
-        defaultIndex: '',
-        tabs: [],
-        sys: {}
+        //动态计算路径的中文名称
+        pathName: computed(() => pathName(menu.menu, {})),
+        sys: {},
+        //所有的tab组件
+        tabs: [homeTab],
+        //当前选中的tab组件
+        currentTab: homeTab
     })
+    const {router, route} = useRouter()
+
     //有改变就写到前端缓存中
-    watch(() => providerData.collapse, (v) => localStorage.setItem('collapse', v))
-    const {route, router} = useRouter()
-    //监听当前菜单对象，有变化则跳转路由
-    watch(() => providerData.currentMenu,
-        (newMenu) => {
-            if (newMenu.data && newMenu.data.url) {
-                //额外的请求参数
-                let query = newMenu.data.params
-                if (query) {
-                    //如果有额外的请求参数
-                    try {
-                        query = JSON.parse(query)
-                    } catch (e) {
-                        /*eslint-disable-next-line*/
-                    }
-                    if (typeof query === 'string') {
-                        query = {query}
-                    }
-                } else {
-                    query = {}
-                }
-                const url = trimUrl(newMenu.data.url)
-                //过滤重复跳转
-                if (trimUrl(route.value.path) !== url) {
-                    if (url.indexOf('http:') >= 0 || url.indexOf('https:') >= 0) {
-                        router.push({
-                            path: '/main/frame',
-                            query: {$url: `${url}?${qs.stringify(query)}`}
-                        })
-                    } else {
-                        router.push({path: url, query})
-                    }
-                }
-            }
-        })
+    watch(() => menu.collapse, (v) => localStorage.setItem('collapse', v))
     //监听系统菜单编码，重新加载菜单数据
-    watch(() => providerData.sys, async () => {
-        providerData.menuLoading = true
-        const result = await menuLoader(providerData.sys.id)
-        providerData.menu = result.data.data
-        //这里强制跳转home页面
-        providerData.currentMenu = {data: {url: '/home'}}
-        //清空tab
-        providerData.tabs = []
-        /*const currentPath = trimUrl(route.value.path)
-        if (currentPath === '/main') {
-            const first = findFirstMenu(providerData.menu)
-            if (first) {
-                providerData.defaultIndex = first.id
-                providerData.currentMenu = unref(first)
-            }
+    watch(() => menu.sys, async () => {
+        menu.menuLoading = true
+        const {data} = await menuLoader(menu.sys.id)
+        if (data.success) {
+            menu.menu = data.data
         } else {
-            const currentMenu = filterMenu(providerData.menu, currentPath)
-            if (currentMenu) {
-                providerData.currentMenu = currentMenu
-            }
-        }*/
-        providerData.menuLoading = false
+            menu.menu = []
+        }
+        routeByTab(homeTab)
+        //这里强制跳转home页面
+        menu.menuLoading = false
     })
 
     onMounted(() => {
         //这里的系统名称可以从环境变量获取
         const sysConfig = process.env.sys;
-        providerData.sys = {id: sysConfig.sysCode || 'default', sysName: document.title}
+        menu.sys = {id: sysConfig.sysCode || 'default', sysName: document.title}
     })
+    provide(MENU_KEY, menu);
 
-    provide(MENU_KEY, providerData);
-    return providerData
+    let routeType = RouteTYPE.NONE
+    /**
+     * 菜单路由方法
+     * @param menu
+     */
+    const routeByMenu = (item) => {
+        if (item.data && item.data.url) {
+            const url = trimUrl(item.data.url)
+            //过滤重复跳转
+            if (trimUrl(route.value.path) === url) {
+                return
+            }
+            //额外的请求参数
+            let query = item.data.params
+            if (query) {
+                //如果有额外的请求参数
+                try {
+                    query = JSON.parse(query)
+                } catch (e) {
+                    /*eslint-disable-next-line*/
+                }
+                if (typeof query === 'string') {
+                    query = {query}
+                }
+            } else {
+                query = {}
+            }
+            const params = {
+                $label: item.label,
+                $id: item.id
+            }
+            menu.currentMenu = item
+
+            let tab = menu.tabs.find(m => m.id === item.id)
+            if (!tab) {
+                tab = {
+                    id: item.id,
+                    label: item.label,
+                    query,
+                    name: url,
+                    path: url,
+                    params
+                }
+                if (url.indexOf('http:') >= 0 || url.indexOf('https:') >= 0) {
+                    tab.name = '/main/frame'
+                    tab.query = {$url: `${url}?${qs.stringify(query)}`}
+                }
+                menu.tabs.push(tab)
+            }
+            menu.currentTab = tab
+        }
+    }
+    /**
+     * tab 路由方法
+     * @param tab
+     */
+    const routeByTab = (tab) => {
+        if (routeType === RouteTYPE.ROUTE || routeType === RouteTYPE.BACK) {
+            //代码路由，路由完成后，恢复NONE
+            routeType = RouteTYPE.NONE
+        } else {
+            //点击tab切换路由
+            routeType = RouteTYPE.TAB
+            if (trimUrl(route.value.path) !== trimUrl(tab.path)) {
+                router.push(tab)
+            }
+        }
+        if (tab.id !== menu.currentMenu.id) {
+            menu.currentMenu = {id: tab.id, label: tab.label}
+        }
+    }
+    //拦截修改router
+    if (!routerModified) {
+        const originBack = router.back
+        //拦截返回方法
+        router.back = () => {
+            routeType = RouteTYPE.BACK
+            originBack.call(router)
+        }
+        //拦截之前
+        router.beforeEach((to, from, next) => {
+            if (routeType === RouteTYPE.NONE) {
+                const tab = {query: to.query, name: to.name, path: to.path, params: to.params}
+                //根据路径获取菜单信息
+                const pathMenu = menu.pathName[tab.path]
+                if (pathMenu) {
+                    tab.label = pathMenu.label
+                    tab.id = pathMenu.id
+                } else {
+                    tab.label = menu.currentTab.label
+                    tab.id = tabId(tab)
+                }
+                const oldTab = menu.tabs.find(t => t.id === tab.id)
+                if (oldTab) {
+                    oldTab.query = tab.query
+                    oldTab.params = tab.params
+                    menu.currentTab = oldTab
+                } else {
+                    menu.currentTab = tab
+                    menu.tabs.push(tab)
+                }
+                routeType = RouteTYPE.ROUTE
+            } else if (routeType === RouteTYPE.TAB) {
+                routeType = RouteTYPE.NONE
+            } else if (routeType === RouteTYPE.BACK) {
+                const toTab = menu.tabs.find(t => t.path === to.path)
+                if (toTab) {
+                    menu.tabs.splice(menu.tabs.indexOf(menu.currentTab), 1)
+                    menu.currentTab = toTab
+                }
+            }
+            next()
+        })
+        routerModified = true
+    }
+    //监听菜单
+    watch(() => menu.currentMenu, routeByMenu)
+    watch(() => menu.currentTab, routeByTab)
+    return {menu, routeByMenu, routeByTab}
 }

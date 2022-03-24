@@ -42,7 +42,12 @@ const mapKeyValue = (value, modelValue, mapper) => {
             /*eslint-disable*/
         }
     }
-    return {label: mapper(value), value}
+    let label = mapper(value)
+    if (Array.isArray(label)) {
+        //TODO 这块显示有问题，所以这样强制转换了一下
+        label = label.join(' ')
+    }
+    return {label, value}
 }
 
 

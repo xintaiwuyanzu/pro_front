@@ -2,6 +2,7 @@ import './nac.scss'
 import {useMenu} from "../../hooks/useMenu";
 import {useRouter} from "@u3u/vue-hooks";
 import {Breadcrumb, BreadcrumbItem} from 'element-ui'
+import {onBeforeUnmount, watch} from "vue-demi";
 
 export default {
     name: 'nacInfo',
@@ -20,8 +21,18 @@ export default {
         back: Boolean
     },
     setup(props, context) {
-        const {menuData} = useMenu()
+        const {menuData, setName} = useMenu()
         const {router} = useRouter()
+        let isRunning = true
+        onBeforeUnmount(() => isRunning = false)
+
+        const checkAndSetName = () => {
+            if (props.title && isRunning) {
+                setName(props.title)
+            }
+        }
+        watch(() => props.title, checkAndSetName)
+        checkAndSetName()
         return () => {
             const children = []
             if (context.slots.default) {
@@ -35,11 +46,10 @@ export default {
                 <Breadcrumb separator-class="el-icon-arrow-right">
                     <el-breadcrumb-item>您当前的位置</el-breadcrumb-item>
                     <BreadcrumbItem class='title'>
-                        {props.title || menuData.currentMenu.label || ''}
+                        {props.title || menuData.currentTab.label || ''}
                     </BreadcrumbItem>
                 </Breadcrumb>
                 : ''
-
             return (
                 <section class="breadcrumb-container">
                     {title}

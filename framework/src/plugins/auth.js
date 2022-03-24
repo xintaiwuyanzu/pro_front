@@ -55,6 +55,6 @@ export default (vue, router) => {
             isSys(sysId) {
                 return this.$sysMenu.sys.id === sysId
             }
-        },
+        }
     })
 }

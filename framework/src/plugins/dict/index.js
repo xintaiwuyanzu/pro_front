@@ -10,7 +10,7 @@ export default (vue, router, store) => {
         mounted() {
             const promises = this.dict ? this.dict.map(d => this.$loadDict(d)) : []
             Promise.all(promises).then(() => {
-                if (this.$init) {
+                if (this.$init && !this.$vnode.data.keepAlive) {
                     this.$init()
                 }
             })

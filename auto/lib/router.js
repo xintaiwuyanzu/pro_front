@@ -12,7 +12,9 @@ const router = ({vue}) => {
             path: '/main', component: vue.component('indexMain'),
             children:
                 views.map(({path, component}) => ({
-                    path, component: utils.makeSync(component)
+                    name: path,
+                    path,
+                    component: utils.makeSync(component)
                 }))
         }
     ]

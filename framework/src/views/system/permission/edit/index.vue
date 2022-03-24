@@ -71,7 +71,7 @@ export default {
           disabled: !!this.id,
           label: '权限分组',
           required: true,
-          show: this.groups.length > 1,
+          show: this.groups.length > 0,
           fieldType: 'select',
           mapper: this.groups,
           valueKey: 'id',
@@ -93,13 +93,12 @@ export default {
         this.$message.error(result.message)
       }
     },
-    $init() {
-      this.loadResourceProvider()
+    async $init() {
+      this.id = this.$route.query.id
+      await this.loadResourceProvider()
       if (this.id) {
-        this.$post('/sysPermission/detail', {id: this.id})
-            .then(({data}) => {
-              this.form = data.data
-            })
+        const {data} = await this.$post('/sysPermission/detail', {id: this.id})
+        this.form = data.data
       }
     },
     readCode() {

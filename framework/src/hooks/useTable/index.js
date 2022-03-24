@@ -1,12 +1,12 @@
 /**
  * 提供table查询常用的方法
  */
-import {onActivated, onMounted, reactive} from "vue-demi";
+import {onMounted, reactive} from "vue-demi";
 import {http} from "../../plugins/http";
 import {Message, MessageBox} from "element-ui";
 
 export const useTable = (args, context) => {
-    const {basePath, pagePath, deletePath, dataWrapper} = args
+    const {basePath, pagePath, deletePath, dataWrapper, autoLoadData = true} = args
 
     const tableData = reactive({
         data: [],
@@ -51,8 +51,9 @@ export const useTable = (args, context) => {
         context.emit('dataLoaded', tableData, queryParams)
     }
     //启动后自动加载数据
-    onMounted(() => loadData())
-    onActivated(() => loadData())
+    if (autoLoadData) {
+        onMounted(() => loadData())
+    }
     /**
      * 数据删除函数
      * @param params

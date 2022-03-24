@@ -113,7 +113,8 @@ export default {
             /**
              * 添加编辑dialog显示状态
              */
-            dialogVisible: false
+            dialogVisible: false,
+            deactivated: false
         }
     },
     computed: {
@@ -157,7 +158,8 @@ export default {
             pagePath: props.pagePath,
             deletePath: props.deletePath,
             initParams: props.defaultSearchForm,
-            dataWrapper: props.dataWrapper
+            dataWrapper: props.dataWrapper,
+            autoLoadData: false
         }, context)
         return {...result, menuData}
     },
@@ -215,5 +217,14 @@ export default {
                 }
             })
         }
+        this.reload()
+    },
+    async activated() {
+        if (this.deactivated) {
+            await this.reload()
+        }
+    },
+    deactivated() {
+        this.deactivated = true
     }
 }

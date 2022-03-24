@@ -1,60 +1,8 @@
-import {onMounted, reactive} from "vue-demi";
+import {reactive} from "vue-demi";
 import {inject, provide} from "vue-demi/lib";
 import {http} from "../../plugins/http";
 import {useRouter} from "@u3u/vue-hooks";
 
-const roleProviderKey = '$role'
-/**
- * 角色上下文
- * @param roleLoader
- * @returns {UnwrapRef<{role: *[]}>}
- */
-export const useRoleContext = (roleLoader) => {
-    const role = reactive({role: []})
-    provide(roleProviderKey, role)
-    onMounted(async () => {
-        if (!roleLoader) {
-            roleLoader = () => http().post('sysrole/userRole')
-        }
-        const {data} = await roleLoader()
-        role.role = data.data
-    })
-    const {router} = useRouter()
-    //拦截路由跳转，没有权限的跳转没权限页面
-    router.beforeEach(async (to, from, next) => {
-        let comp = to.matched[to.matched.length - 1]
-        comp = comp.components
-        if (comp.default) {
-            comp = comp.default
-        }
-        if (typeof comp === 'function') {
-            const asyncCom = await comp()
-            if (asyncCom.component) {
-                comp = await asyncCom.component
-                if (comp.default) {
-                    comp = comp.default
-                }
-            }
-        }
-        if (comp?.role) {
-            if (hasRole(comp.role, role)) {
-                next()
-            } else {
-                next({path: '/main/noAuth'})
-            }
-        } else {
-            next()
-        }
-    })
-    return role
-}
-/**
- * 提供角色数据
- * @returns {unknown}
- */
-export const useRole = () => {
-    return inject(roleProviderKey)
-}
 /**
  *工具方法
  * @param roleIdOrCode
@@ -77,4 +25,58 @@ export const hasRole = (roleIdOrCode, roles) => {
         }
     }
     return false
+}
+
+const roleProviderKey = '$role'
+
+let isRouterModify = false
+/**
+ * 角色上下文
+ * @param roleLoader
+ * @return {UnwrapRef<{role: *[]}>}
+ */
+export const useRoleContext = async (roleLoader) => {
+    const role = reactive({role: []})
+    provide(roleProviderKey, role)
+    const loadRole = async () => {
+        if (!roleLoader) {
+            roleLoader = () => http().post('sysrole/userRole')
+        }
+        const {data} = await roleLoader()
+        if (data.success) {
+            role.role = data.data
+        } else {
+            role.role = []
+        }
+    }
+    await loadRole()
+    const {router} = useRouter()
+    if (!isRouterModify) {
+        router.beforeResolve(async (to, from, next) => {
+            //所有子组件的刷新在此拦截
+            let comp = to.matched[to.matched.length - 1]
+            comp = comp.components
+            if (comp.default) {
+                comp = comp.default
+            }
+            if (comp?.role) {
+                if (hasRole(comp.role, role)) {
+                    next()
+                } else {
+                    next({path: '/main/noAuth', replace: true})
+                }
+            } else {
+                next()
+            }
+        })
+        isRouterModify = true
+    }
+    return role
+}
+/**
+ * 提供角色数据
+ * @returns {unknown}
+ */
+export const useRole = () => {
+    return inject(roleProviderKey)
 }

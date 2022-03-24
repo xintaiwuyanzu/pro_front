@@ -1,5 +1,4 @@
-import {onMounted, reactive} from "vue-demi";
-import {inject, provide} from "vue-demi/lib";
+import {inject, provide,onMounted, reactive} from "vue-demi";
 import {http} from "../../plugins/http";
 
 const userProviderKey = '$user'

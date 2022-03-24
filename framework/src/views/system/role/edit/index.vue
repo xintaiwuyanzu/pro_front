@@ -61,6 +61,7 @@ export default {
       return item.label.indexOf(query) > -1;
     },
     async $init() {
+      this.id = this.$route.query.id
       if (this.id) {
         //查询角色基本信息
         const {data} = await this.$post('/sysrole/detail', {id: this.id})
@@ -68,6 +69,13 @@ export default {
         //查询角色的所有权限
         const rp = await this.$post('/sysrole/rolePermission', {id: this.id})
         this.rolePermissions = rp.data.data
+      } else {
+        this.form = {
+          name: '',
+          description: '',
+          code: '',
+          order: 0
+        }
       }
       //查询所有的权限
       const rs = await this.$post('/sysPermission/page', {page: false})

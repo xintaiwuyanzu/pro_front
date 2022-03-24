@@ -1,6 +1,6 @@
 <template>
   <section>
-    <nac-info>
+    <nac-info title="菜单管理">
       <el-form inline style="padding-top: 5px">
         <el-form-item label="请选择系统：" style="margin-right: 10px">
           <el-select v-model="sysId" ref="sysSelect">
@@ -93,41 +93,40 @@ export default {
     }
   },
   methods: {
-    $init() {
-      this.loadSyss()
-      this.loadData()
+    async $init() {
+      await this.loadSyss()
+      await this.loadData()
+      if (this.$refs.menuTree && this.filterText) {
+        this.$refs.menuTree.filter(this.filterText)
+      }
     },
     filterNode(value, data) {
       if (!value) return true
       return data.label.indexOf(value) !== -1
     },
-    loadSyss() {
-      this.$http.post('/subsys/page?page=false')
-          .then(({data}) => {
-            if (data.success) {
-              this.options = data.data
-              if (!this.sysId) {
-                this.sysId = 'default'
-              }
-            }
-          })
+    async loadSyss() {
+      const {data} = await this.$http.post('/subsys/page?page=false')
+      if (data.success) {
+        this.options = data.data
+        if (!this.sysId) {
+          this.sysId = 'default'
+        }
+      }
     },
-    loadData() {
+    async loadData() {
       this.treaLoading = true
       this.menuData = []
-      this.$http.post('/sysmenu/menutree', {all: true, sysId: this.sysId})
-          .then(({data}) => {
-            if (data.success) {
-              let list = data.data ? data.data : []
-              for (let i = 0; i < list.length; i++) {
-                //TODO 这里为什么要把隐藏的菜单去掉？？
-                //if (list[i].data.status == 1) {
-                this.menuData.push(list[i])
-                //}
-              }
-            }
-            this.treaLoading = false
-          })
+      const {data} = await this.$http.post('/sysmenu/menutree', {all: true, sysId: this.sysId})
+      if (data.success) {
+        let list = data.data ? data.data : []
+        for (let i = 0; i < list.length; i++) {
+          //TODO 这里为什么要把隐藏的菜单去掉？？
+          //if (list[i].data.status == 1) {
+          this.menuData.push(list[i])
+          //}
+        }
+      }
+      this.treaLoading = false
     },
     editMenuParent(menu) {
       let formData = {

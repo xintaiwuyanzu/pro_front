@@ -6,6 +6,7 @@
  * 子系统管理
  */
 export default {
+  name: 'sys',
   role: ['admin'],
   data() {
     return {

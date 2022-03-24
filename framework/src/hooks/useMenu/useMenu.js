@@ -8,68 +8,52 @@ import {MENU_KEY} from "./index";
 export const useMenu = () => {
     const menu = inject(MENU_KEY)
     /**
-     * 添加tab
-     * @param tab
-     */
-    const addTab = tab => {
-        let old = menu.tabs.find(m => m.id === tab.id)
-        if (!old) {
-            old = tab
-            menu.tabs.push(old)
-        }
-        menu.currentMenu = tab
-    }
-    /**
-     * 删除tab
+     * 关闭指定的tab
      * @param id
      */
-    const removeTab = id => {
-        let index = -1
-        menu.tabs = menu.tabs.filter((t, i) => {
-            if (t.id === id) {
-                index = i
-                return false
-            }
-            return true
-        })
-        if (id === menu.currentMenu.id) {
-            if (index === menu.tabs.length) {
-                index--
-            }
-            if (index >= 0) {
-                menu.currentMenu = menu.tabs[index]
+    const removeTab = (id) => {
+        let index = menu.tabs.findIndex(t => t.id === id)
+        if (index > 0) {
+            menu.tabs.splice(index, 1)
+            if (id === menu.currentTab.id) {
+                if (index >= menu.tabs.length) {
+                    index = index - 1
+                }
+                if (index < 0) {
+                    index = 0
+                }
+                menu.currentTab = menu.tabs[index]
             }
         }
     }
     /**
-     * 清空所有tab
+     * 关闭所有的tab
      */
-    const clearTab = (useCurrent) => {
-        if (useCurrent) {
-            menu.tabs = menu.tabs.filter(t => t.id === menu.currentMenu.id)
-        } else {
-            menu.tabs.splice(0, menu.tabs.length)
-            menu.currentMenu = {data: {url: '/home'}}
-        }
-    }
-    /**
-     *切换tab
-     * @param id
-     */
-    const activeTab = (id) => {
-        const tab = menu.tabs.find(m => m.id === id)
-        if (tab) {
-            menu.currentMenu = tab
-        } else if (id === '/home') {
-            menu.currentMenu = {data: {url: '/home'}}
-        }
+    const removeAll = () => {
+        menu.tabs.splice(1, menu.menu.length - 1)
+        menu.currentTab = menu.tabs[0]
     }
 
+    /**
+     * 关闭其他tab
+     */
+    const removeOthers = () => {
+        menu.tabs = menu.tabs.filter(v => v.fix || v.id === menu.currentTab.id)
+    }
+    /**
+     * 设置当前tab的名称
+     * @param name
+     */
+    const setName = (name) => {
+        if (name) {
+            menu.currentTab.label = name
+        }
+    }
     return {
         menuData: menu,
-        addTab,
         removeTab,
-        activeTab,
-        clearTab
+        removeAll,
+        removeOthers,
+        setName
     }
 }

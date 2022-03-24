@@ -1,8 +1,10 @@
-@import "../../styles/var";
-
 .root {
   height: 100%;
   overflow: auto;
+
+  .left {
+    padding: 0px
+  }
 
   .main {
     overflow: auto;
