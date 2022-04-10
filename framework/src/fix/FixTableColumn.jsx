@@ -79,11 +79,11 @@ export default {
                 let i = $index + 1;
                 const index = column.index;
                 if (typeof index === 'number') {
-                    i = parseInt($index) + parseInt(index);
+                    i = $index + index;
                 } else if (typeof index === 'function') {
-                    i = parseInt(index($index));
+                    i = index($index);
                 } else if (this.page && this.page.index && this.page.size) {
-                    i = (parseInt(this.page.index) - 1) * parseInt(this.page.size) + parseInt($index) + 1
+                    i = (this.page.index - 1) * this.page.size + i
                 }
                 return <span>{i}</span>;
             }

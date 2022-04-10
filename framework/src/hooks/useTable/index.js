@@ -43,7 +43,7 @@ export const useTable = (args, context) => {
             }
             tableData.data = data
 
-            tableData.page.index = resultData.start / resultData.size + 1
+            tableData.page.index = parseInt(resultData.start / resultData.size) + 1
             tableData.page.size = resultData.size
             tableData.page.total = resultData.total
         }
