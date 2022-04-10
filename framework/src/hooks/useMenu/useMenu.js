@@ -44,8 +44,8 @@ export const useMenu = () => {
      * 设置当前tab的名称
      * @param name
      */
-    const setName = (name) => {
-        if (name) {
+    const setName = (name, path) => {
+        if (name && menu.currentTab.path === path) {
             menu.currentTab.label = name
         }
     }

@@ -141,6 +141,11 @@ export const useMenuContext = (menuLoader = defaultMenuLoader) => {
         }
         //拦截之前
         router.beforeEach((to, from, next) => {
+            if (to.path === '/login') {
+                //这个跳到登录页面了，不知道需不需要清空缓存
+                next()
+                return
+            }
             if (routeType === RouteTYPE.NONE) {
                 const tab = {query: to.query, name: to.name, path: to.path, params: to.params}
                 //根据路径获取菜单信息

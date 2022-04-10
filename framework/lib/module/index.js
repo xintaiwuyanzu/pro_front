@@ -1,8 +1,7 @@
 import utils from "@dr/auto/lib/utils";
 
-const isPromise = (v) => {
-    return v instanceof Promise || typeof v.then === 'function'
-}
+const isPromise = (v) => v instanceof Promise || typeof v.then === 'function'
+
 
 /**
  * 全局变量
@@ -15,20 +14,23 @@ const moduleMap = {}
  * @param modulePath 模块空间
  * @param moduleName 模块名称
  * @param module 模块对象
+ * @param params 额外参数
  */
-export function register(modulePath, moduleName, module) {
+export function register(modulePath, moduleName, module, params) {
     //先从全局对象获取子模块对象
     const pathObject = moduleMap[modulePath] = moduleMap[modulePath] || {}
     if (module) {
         const component = isPromise(module) ? utils.makeSync(module) : module
         pathObject[moduleName] = {
             name: moduleName,
-            component
+            component,
+            ...params
         }
     } else {
         const component = isPromise(moduleName.component) ? utils.makeSync(moduleName.component) : moduleName.component
         pathObject[moduleName.name] = {
-            ...moduleName,
+            ...module,
+            ...params,
             component
         }
     }

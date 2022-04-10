@@ -3,6 +3,7 @@ import {useMenu} from "../../hooks/useMenu";
 import {useRouter} from "@u3u/vue-hooks";
 import {Breadcrumb, BreadcrumbItem} from 'element-ui'
 import {onBeforeUnmount, watch} from "vue-demi";
+import {trimUrl} from "../../hooks/useMenu/utils";
 
 export default {
     name: 'nacInfo',
@@ -22,13 +23,13 @@ export default {
     },
     setup(props, context) {
         const {menuData, setName} = useMenu()
-        const {router} = useRouter()
+        const {router, route} = useRouter()
         let isRunning = true
         onBeforeUnmount(() => isRunning = false)
 
         const checkAndSetName = () => {
             if (props.title && isRunning) {
-                setName(props.title)
+                setName(props.title, trimUrl(route.value.path))
             }
         }
         watch(() => props.title, checkAndSetName)

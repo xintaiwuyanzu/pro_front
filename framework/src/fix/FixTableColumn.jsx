@@ -27,7 +27,7 @@ export default {
         /**
          * 当类型是text的时候，跳转路由查询参数的key
          */
-        queryProp: {type: [String, Array], default: 'id'},
+        queryProp: {type: [String, Array, Function], default: 'id'},
         //text属性完毕
         /**
          * 分页参数，分页组件和index组件用到了
@@ -79,13 +79,13 @@ export default {
                 let i = $index + 1;
                 const index = column.index;
                 if (typeof index === 'number') {
-                    i = $index + index;
+                    i = parseInt($index) + parseInt(index);
                 } else if (typeof index === 'function') {
-                    i = index($index);
+                    i = parseInt(index($index));
                 } else if (this.page && this.page.index && this.page.size) {
-                    i = (this.page.index - 1) * this.page.size + $index + 1
+                    i = (parseInt(this.page.index) - 1) * parseInt(this.page.size) + parseInt($index) + 1
                 }
-                return <div>{i}</div>;
+                return <span>{i}</span>;
             }
         },
         fixColumn(column) {
@@ -103,16 +103,32 @@ export default {
                     if (this.component === 'text') {
                         const on = {}
                         if (this.route) {
-                            const query = {};
-                            if (Array.isArray(this.queryProp)) {
-                                this.queryProp.forEach(p => query[p] = row[p])
-                            } else {
-                                query[this.queryProp] = row[this.queryProp]
+                            on.click = async () => {
+                                const query = {};
+                                if (Array.isArray(this.queryProp)) {
+                                    this.queryProp.forEach(p => {
+                                        if (typeof p === 'string') {
+                                            //如果是字符串，则从row中取数据
+                                            query[p] = row[p]
+                                        } else {
+                                            //如果是对象，则追加请求参数
+                                            Object.assign(query, p)
+                                        }
+                                    })
+                                } else if (typeof this.queryProp === 'function') {
+                                    //如果是回调函数，则回调
+                                    const callBackQuery = await this.queryProp(row, this.page, $index)
+                                    if (callBackQuery) {
+                                        Object.assign(query, callBackQuery)
+                                    }
+                                } else {
+                                    query[this.queryProp] = row[this.queryProp]
+                                }
+                                await this.$router.push({
+                                    path: this.routerPath || `${this.$route.path}/edit`,
+                                    query
+                                })
                             }
-                            on.click = () => this.$router.push({
-                                path: this.routerPath || `${this.$route.path}/edit`,
-                                query
-                            })
                         }
                         return (<el-button type='text'{...{on}}>{renderValue}</el-button>)
                     } else {
