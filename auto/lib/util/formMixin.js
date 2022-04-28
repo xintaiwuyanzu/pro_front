@@ -55,7 +55,7 @@ export default {
                 this.loading = true
                 const valid = await this.$refs.form.validate()
                 if (valid) {
-                    let path = this.apiPath()
+                    let path = this.fixPath(this.apiPath())
                     if (this.form.id) {
                         path = path + '/update'
                     } else {

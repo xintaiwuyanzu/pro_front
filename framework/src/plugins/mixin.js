@@ -21,6 +21,10 @@ export default (vue) => {
             }
         },
         methods: {
+            /**
+             * 后台基础访问路径
+             * @returns {string}
+             */
             apiPath() {
                 let path = this.path
                 if (!path) {
@@ -28,6 +32,22 @@ export default (vue) => {
                     path = routePath[routePath.length - 1]
                 }
                 return path
+            },
+            /**
+             *去掉路径最后面的/
+             * @param p
+             * @returns {string|*}
+             */
+            fixPath(p) {
+                if (p) {
+                    if (p.endsWith('/')) {
+                        return p.substring(0, p.length - 1)
+                    } else {
+                        return p
+                    }
+                } else {
+                    return p
+                }
             }
         }
     })

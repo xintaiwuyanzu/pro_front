@@ -104,8 +104,7 @@ export default {
       this.form.parentId = id
     },
     saveParentForm() {
-
-      let path = this.apiPath()
+      let path = this.fixPath(this.apiPath())
       if (this.form.id) {
         path = path + '/update'
       } else {

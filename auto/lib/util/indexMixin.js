@@ -39,7 +39,7 @@ export default {
             if (useSearchForm && this.$refs.form && this.$refs.form.getSearchForm) {
                 params = this.$refs.form.getSearchForm(params)
             }
-            const result = await this.$http.post(this.apiPath() + '/page', {pageSize: this.page.size, ...params})
+            const result = await this.$http.post(this.fixPath(this.apiPath()) + '/page', {pageSize: this.page.size, ...params})
             const data = result.data
             if (data && data.success) {
                 this.data = data.data.data
@@ -70,7 +70,7 @@ export default {
                 }
                 if (ids.length > 0) {
                     this.loading = true
-                    this.$post(this.apiPath() + '/delete', {id: ids.join(',')})
+                    this.$post(this.fixPath(this.apiPath()) + '/delete', {id: ids.join(',')})
                         .then(({data}) => {
                             if (data.success) {
                                 this.$message.success('删除成功！')
@@ -85,7 +85,6 @@ export default {
                     this.$message.warning('请选择要删除的数据列！')
                 }
             })
-
         },
         handleTableSelect(row) {
             this.selectIds = row.map(r => r.id)

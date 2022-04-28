@@ -5,9 +5,21 @@ import {onMounted, reactive} from "vue-demi";
 import {http} from "../../plugins/http";
 import {Message, MessageBox} from "element-ui";
 
-export const useTable = (args, context) => {
-    const {basePath, pagePath, deletePath, dataWrapper, autoLoadData = true} = args
+const fixPath = p => {
+    if (p) {
+        if (p.endsWith('/')) {
+            return p.substring(0, p.length - 1)
+        } else {
+            return p
+        }
+    } else {
+        return p
+    }
+}
 
+export const useTable = (args, context) => {
+    const {pagePath, deletePath, dataWrapper, autoLoadData = true} = args
+    const basePath = fixPath(args.basePath)
     const tableData = reactive({
         data: [],
         loading: false,

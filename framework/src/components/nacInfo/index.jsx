@@ -21,6 +21,11 @@ export default {
          */
         back: Boolean
     },
+    provide() {
+        return {
+            nacInfo: this
+        };
+    },
     setup(props, context) {
         const {menuData, setName} = useMenu()
         const {router, route} = useRouter()
