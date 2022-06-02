@@ -37,8 +37,12 @@ export default {
         beforeSubmit: {type: Function}
     },
     data() {
-        //保存状态
-        return {saving: false}
+        return {
+            //保存状态
+            saving: false,
+            //日期类型的字段
+            dateFields: new Set()
+        }
     },
     methods: {
         ...functionUtils('form', formFunctions),
@@ -64,6 +68,11 @@ export default {
                             let value = formData[k]
                             if (Array.isArray(value)) {
                                 value = value.join(',')
+                            } else if (this.dateFields.has(k)) {
+                                if (!value) {
+                                    //过滤日期类型的数据，没设置填上0
+                                    value = 0
+                                }
                             }
                             parsedFormData[k] = value
                         })
@@ -88,6 +97,10 @@ export default {
                 }
             }
         }
+    },
+    created() {
+        //监听日期类型字段渲染
+        this.$on('dateFields', v => this.dateFields.add(v))
     },
     render() {
         const vSlots = new vNodeSlots(this.$slots.default)

@@ -208,7 +208,7 @@ export default {
             await this.loadData(this.searchFormModel)
         }
     },
-    mounted() {
+    async mounted() {
         if (this.delete || this.deleteMulti) {
             //监听数据删除事件，刷新数据
             this.$on('remove', async id => {
@@ -217,7 +217,18 @@ export default {
                 }
             })
         }
-        this.reload()
+        //初始化搜索表单
+        let initParam = {}
+        if (this.defaultSearchForm) {
+            if (typeof this.defaultSearchForm === 'function') {
+                initParam = await this.defaultSearchForm()
+            } else {
+                initParam = this.defaultSearchForm
+            }
+        }
+        Object.keys(initParam).forEach(k => this.$set(this.searchFormModel, k, initParam[k]))
+        //加载数据
+        await this.reload()
     },
     async activated() {
         if (this.deactivated) {

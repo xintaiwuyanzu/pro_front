@@ -99,6 +99,7 @@ export const defaultFields = {
      * @return {JSX.Element}
      */
     date(props, context) {
+        context.$emit('dateFields', props.prop)
         const args = computeArgs(props, context, true)
         return (<DatePicker value-format='timestamp' {...args}  />)
     },
@@ -109,6 +110,7 @@ export const defaultFields = {
      * @return {JSX.Element}
      */
     time(props, context) {
+        context.$emit('dateFields', props.prop)
         const args = computeArgs(props, context, true)
         return (<TimeSelect value-format='timestamp' {...args}  />)
     },
@@ -119,6 +121,7 @@ export const defaultFields = {
      * @return {JSX.Element}
      */
     dateTime(props, context) {
+        context.$emit('dateFields', props.prop)
         const args = computeArgs(props, context, true)
         return (<DatePicker value-format='timestamp' {...args} type='datetime'/>)
     },
