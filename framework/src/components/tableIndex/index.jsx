@@ -55,7 +55,7 @@ function renderSearchForm(fields, ctx) {
         btnChildren.push(() =>
             (<Button type='primary'
                      loading={ctx.data.loading}
-                     onClick={() => ctx.loadData(ctx.searchFormModel)}>
+                     onClick={() => ctx.loadData(ctx.filterFormModel())}>
                 搜 索
             </Button>)
         )
@@ -214,10 +214,10 @@ function renderTable(columns, ctx) {
         on: {
             ...ctx.$listeners,
             'selection-change': v => (ctx.tableSelection = v),
-            'page-current-change': v => (ctx.loadData({pageIndex: v - 1, ...ctx.searchFormModel})),
+            'page-current-change': v => (ctx.loadData({pageIndex: v - 1, ...ctx.filterFormModel()})),
             'size-change': s => {
                 ctx.data.page.size = s
-                ctx.loadData(ctx.searchFormModel)
+                ctx.reload()
             }
         }
     }

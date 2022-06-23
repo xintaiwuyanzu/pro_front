@@ -205,7 +205,25 @@ export default {
          * @returns {Promise<void>}
          */
         async reload() {
-            await this.loadData(this.searchFormModel)
+            await this.loadData(this.filterFormModel())
+        },
+        /**
+         * 过滤纯粹的表单数据
+         */
+        filterFormModel() {
+            if (this.searchForm && this.searchForm.$refs && this.searchForm.$refs.form) {
+                //过滤出来查询表单有的字段值
+                const result = {}
+                const fields = this.searchForm.$refs.form.fields
+                for (let i in fields) {
+                    const prop = fields[i].prop
+                    if (prop) {
+                        result[prop] = this.searchFormModel[prop]
+                    }
+                }
+                return result
+            }
+            return this.searchFormModel
         }
     },
     async mounted() {
@@ -232,7 +250,8 @@ export default {
     },
     async activated() {
         if (this.deactivated) {
-            await this.reload()
+            //重新打开页面的时候保留分页参数
+            await this.loadData({...this.filterFormModel(), pageIndex: this.data.page.index - 1})
         }
     },
     deactivated() {
