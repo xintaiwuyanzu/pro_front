@@ -11,7 +11,7 @@ export default {
         const {menuData} = useMenu()
         const selectedKeys = reactive({selectedKeys: []})
         watchEffect(() => {
-            if (menuData.currentMenu?.id) {
+            if (menuData.currentMenu && menuData.currentMenu.id) {
                 selectedKeys.selectedKeys = [menuData.currentMenu.id]
             } else {
                 selectedKeys.selectedKeys = []

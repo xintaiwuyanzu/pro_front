@@ -108,8 +108,10 @@ export default {
     async doShow() {
       await this.loadResource(this.form.type, this.form.groupId)
       if (this.resources.length > 0) {
-        this.$refs.tree?.$init(this.form.code)
-        this.dialogShow = true
+        if (this.$refs.tree && this.$refs.tree.$init) {
+          this.$refs.tree.$init(this.form.code)
+          this.dialogShow = true
+        }
       } else {
         this.$message.warning('未找到指定权限和分组的资源')
       }

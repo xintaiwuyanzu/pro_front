@@ -59,7 +59,7 @@ export const useRoleContext = async (roleLoader) => {
             if (comp.default) {
                 comp = comp.default
             }
-            if (comp?.role) {
+            if (comp && comp.role) {
                 if (hasRole(comp.role, role)) {
                     next()
                 } else {
