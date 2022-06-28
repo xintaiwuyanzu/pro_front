@@ -152,7 +152,7 @@ const parseOptions = (api, options) => {
  * 则尝试使用环境变量定义默认的browserslist
  */
 const checkBrowserList = () => {
-    if (readPkg().browserslist) {
+    if (readPkg.sync().browserslist) {
         return
     }
     const fs = require('fs')
