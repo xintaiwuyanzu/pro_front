@@ -110,8 +110,8 @@ export default {
       if (this.resources.length > 0) {
         if (this.$refs.tree && this.$refs.tree.$init) {
           this.$refs.tree.$init(this.form.code)
-          this.dialogShow = true
         }
+        this.dialogShow = true
       } else {
         this.$message.warning('未找到指定权限和分组的资源')
       }
