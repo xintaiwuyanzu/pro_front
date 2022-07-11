@@ -1,7 +1,6 @@
-import {reactive} from "vue-demi";
-import {inject, provide} from "vue-demi/lib";
+import {reactive, inject, provide} from "vue-demi";
 import {http} from "../../plugins/http";
-import {useRouter} from "@u3u/vue-hooks";
+import {useRouter} from "@dr/auto/lib";
 
 /**
  *工具方法

@@ -1,7 +1,7 @@
 import {onBeforeUnmount, onUpdated, watch} from "vue-demi";
 import {trimUrl} from "../../hooks/useMenu/utils";
 import {useMenu} from "../../hooks/useMenu";
-import {useRouter} from "@u3u/vue-hooks";
+import {useRouter} from "@dr/auto/lib";
 
 function isAsyncPlaceholder(node) {
     return node.isComment && node.asyncFactory
@@ -49,9 +49,8 @@ export default {
             delete caches[k]
             delete cacheKey[k]
         }
-
         //监听tabs数据，动态销毁实例
-        watch(() => menuData.tabs, (n) => {
+        watch(menuData.tabs, (n) => {
             const ids = n.map(t => t.path)
             Object.keys(caches)
                 .forEach(k => {
@@ -61,12 +60,12 @@ export default {
                 })
         })
 
-        const {route} = useRouter()
+        const {router} = useRouter()
         //延迟缓存vNode对象
         const cacheNode = () => {
             if (vNodeToCache) {
                 const ids = menuData.tabs.map(t => t.path)
-                const path = trimUrl(route.value.path)
+                const path = trimUrl(router.currentRoute.path)
                 if (ids.includes(path)) {
                     caches[path] = vNodeToCache.componentInstance
                     const key = getNodeKey(vNodeToCache)
@@ -81,7 +80,7 @@ export default {
             if (slots.default) {
                 const vNode = getFirstComponentChild(slots.default())
                 const key = getNodeKey(vNode)
-                const path = trimUrl(route.value.path)
+                const path = trimUrl(router.currentRoute.path)
                 if (path === menuData.currentTab.path && cacheKey[path] === key && caches[path]) {
                     vNode.componentInstance = caches[path]
                 } else {

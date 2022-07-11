@@ -1,7 +1,7 @@
 /**
  * 提供table查询常用的方法
  */
-import {onMounted, reactive} from "vue-demi";
+import {onMounted, ref, reactive} from "vue-demi";
 import {http} from "../../plugins/http";
 import {Message, MessageBox} from "element-ui";
 
@@ -49,7 +49,7 @@ export const useTable = (args, context) => {
         let resultData = result.data
         if (resultData && resultData.success) {
             resultData = resultData.data
-            const data = reactive(resultData.data)
+            const data = ref(resultData.data)
             if (dataWrapper) {
                 await dataWrapper(data)
             }

@@ -2,7 +2,7 @@ import {computed, onMounted, provide, reactive, watch} from "vue-demi";
 import {pathName, RouteTYPE, tabId, trimUrl} from "./utils";
 import {MENU_KEY} from "./index";
 import {http} from "../../plugins/http";
-import {useRouter} from "@u3u/vue-hooks";
+import {useRouter} from "@dr/auto/lib";
 import qs from "qs";
 
 /**
@@ -35,7 +35,7 @@ export const useMenuContext = (menuLoader = defaultMenuLoader) => {
         //当前选中的tab组件
         currentTab: homeTab
     })
-    const {router, route} = useRouter()
+    const {router} = useRouter()
 
     //有改变就写到前端缓存中
     watch(() => menu.collapse, (v) => localStorage.setItem('collapse', v))
@@ -69,7 +69,7 @@ export const useMenuContext = (menuLoader = defaultMenuLoader) => {
         if (item.data && item.data.url) {
             const url = trimUrl(item.data.url)
             //过滤重复跳转
-            if (trimUrl(route.value.path) === url) {
+            if (trimUrl(router.currentRoute.path) === url) {
                 return
             }
             //额外的请求参数
@@ -123,7 +123,7 @@ export const useMenuContext = (menuLoader = defaultMenuLoader) => {
         } else {
             //点击tab切换路由
             routeType = RouteTYPE.TAB
-            if (trimUrl(route.value.path) !== trimUrl(tab.path)) {
+            if (trimUrl(router.currentRoute.path) !== trimUrl(tab.path)) {
                 router.push(tab)
             }
         }

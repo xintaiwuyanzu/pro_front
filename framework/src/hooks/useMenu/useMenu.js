@@ -1,4 +1,4 @@
-import {inject} from "vue-demi/lib";
+import {inject} from "vue-demi";
 import {MENU_KEY} from "./index";
 
 /**
@@ -30,16 +30,15 @@ export const useMenu = () => {
      * 关闭所有的tab
      */
     const removeAll = () => {
-        menu.tabs.splice(1, menu.menu.length - 1)
+        menu.tabs.splice(1, menu.tabs.length - 1)
         menu.currentTab = menu.tabs[0]
     }
 
     /**
      * 关闭其他tab
      */
-    const removeOthers = () => {
-        menu.tabs = menu.tabs.filter(v => v.fix || v.id === menu.currentTab.id)
-    }
+    const removeOthers = () => menu.tabs = menu.tabs.filter(v => v.fix || v.id === menu.currentTab.id)
+
     /**
      * 设置当前tab的名称
      * @param name

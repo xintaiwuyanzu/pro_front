@@ -1,5 +1,5 @@
 import {onMounted, reactive} from "vue-demi";
-import {useStore} from "@u3u/vue-hooks";
+import {useStore} from "@dr/auto/lib";
 import {dictUtil} from "../../plugins/dict/dictStore";
 
 /**
@@ -9,7 +9,7 @@ import {dictUtil} from "../../plugins/dict/dictStore";
  */
 export const useDict = (dictKey) => {
     let dict = reactive({loading: false, key: dictKey, data: []});
-    const store = useStore().value
+    const store = useStore()
     const loadFunction = dictUtil(store)
     //数据加载方法
     const load = async () => {

@@ -3,6 +3,8 @@ import store from "./store";
 import utils from "./utils";
 import {plugins} from '@dr/auto'
 
+let routerInstance
+let storeInstance
 /**
  * 启动方法
  * @param opt 启动参数
@@ -14,9 +16,9 @@ const start = (opt) => {
         throw new Error(`请传入vue对象`)
     }
     //构造router
-    const routerInstance = router.router(opt)
+    routerInstance = router.router(opt)
     //构造store
-    const storeInstance = store.store(opt)
+    storeInstance = store.store(opt)
     const makePromise = plugin => Promise.resolve(plugin.value.default(vue, routerInstance, storeInstance, opt))
     //回调所有的plugin
     Promise.all(plugins.map(makePromise))
@@ -34,6 +36,14 @@ const start = (opt) => {
             ).$mount(opt.el ? opt.el : '#app')
         })
 }
+
+
+export const useRouter = () => {
+    return {router: routerInstance}
+}
+
+export const useStore = () => storeInstance
+
 export default {
     ...utils,
     /**
