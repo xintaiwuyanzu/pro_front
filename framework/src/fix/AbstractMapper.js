@@ -155,13 +155,14 @@ export const AbstractMapper = {
          * @param value
          */
         const simpleMapper = (value) => {
-            if (value && mapperData) {
+            const hasValue = (value || value === 0)
+            if (hasValue && mapperData) {
                 if (props.multiple) {
                     return value.split(props.multipleSplit).map(findValue)
                 } else {
                     return findValue(value)
                 }
-            } else if (value && props.dateFormat) {
+            } else if (hasValue && props.dateFormat) {
                 //没有自定义映射参数，额外定义了日期格式化的参数，尝试使用dayjs格式化日期
                 const fmt = (typeof props.dateFormat === 'boolean') ? 'YYYY-MM-DD' : props.dateFormat
                 try {
@@ -230,13 +231,14 @@ export const AbstractMapper = {
          * @return {{value: *}|{showType: *|String|Object|Function|undefined, value: *}|*}
          */
         const simpleMapperWithShowType = (value, row, page, index, column) => {
-            if (value && mapperData) {
+            const hasValue = (value || value === 0)
+            if (hasValue && mapperData) {
                 if (props.multiple) {
                     return value.split(props.multipleSplit).map(v => findValueWithShowType(v, row, page, index))
                 } else {
                     return findValueWithShowType(value, row, page, index)
                 }
-            } else if (value && props.dateFormat) {
+            } else if (hasValue && props.dateFormat) {
                 //没有自定义映射参数，额外定义了日期格式化的参数，尝试使用dayjs格式化日期
                 const fmt = (typeof props.dateFormat === 'boolean') ? 'YYYY-MM-DD' : props.dateFormat
                 try {
@@ -245,7 +247,7 @@ export const AbstractMapper = {
                     /*eslint-disable-next-line no-console*/
                     console.error(`尝试使用${fmt}格式化日期数据：${value}失败`, e)
                 }
-            } else if (value && props.formatter) {
+            } else if (hasValue && props.formatter) {
                 return {value: props.formatter(row, column, value, index), showType: 'info'}
             }
             return {value, showType: 'info'}

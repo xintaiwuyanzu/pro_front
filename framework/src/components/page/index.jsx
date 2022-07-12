@@ -11,24 +11,20 @@ export default {
          */
         page: {type: Object}
     },
-    setup(prop, context) {
-        //TODO 这里的page是可以直接发送事件的
-        return () => {
-            const args = {
-                props: {
-                    layout: `total, prev, pager, next${prop.page.sizes ? ',sizes' : ''}`,
-                    ...context.attrs,
-                    total: prop.page.total
-                },
-                on: {
-                    //TODO vue 3.0版本有问题
-                    ...context.listeners
-                }
+    render() {
+        const args = {
+            props: {
+                layout: `total, prev, pager, next${this.page.sizes ? ',sizes' : ''}`,
+                ...this.$attrs,
+                total: this.page.total
+            },
+            on: {
+                ...this.$listeners
             }
-            args.props['current-page'] = prop.page.index
-            args.props['page-size'] = prop.page.size
-            args.props['page-sizes'] = prop.page.sizes
-            return <el-pagination {...args}/>
         }
+        args.props['current-page'] = this.page.index
+        args.props['page-size'] = this.page.size
+        args.props['page-sizes'] = this.page.sizes
+        return (<el-pagination {...args}/>)
     }
 }

@@ -35,6 +35,7 @@ const defaultSelector = (type, name, arr) => {
 const readLibs = (pkg, arr, rootIndex = 0, libNameArr) => {
     if (pkg && pkg.dependencies) {
         Object.keys(pkg.dependencies)
+            .filter(v => v !== 'vuex')
             .map(p => readPkg.sync({cwd: moduleDir(p)}))
             .filter(p => p.dlib)
             .forEach((p, index) => {
