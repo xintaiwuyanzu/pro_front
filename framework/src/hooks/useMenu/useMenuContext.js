@@ -1,4 +1,4 @@
-import {computed, onMounted, provide, reactive, watch} from "vue-demi";
+import {computed, onMounted, provide, reactive, watch} from "vue";
 import {pathName, RouteTYPE, tabId, trimUrl} from "./utils";
 import {MENU_KEY} from "./index";
 import {http} from "../../plugins/http";

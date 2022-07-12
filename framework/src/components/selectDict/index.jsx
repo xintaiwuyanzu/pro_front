@@ -1,6 +1,6 @@
 import {useDict} from "../../hooks/useDict";
 import {Option, Select} from 'element-ui'
-import {watch} from "vue-demi";
+import {watch} from "vue";
 
 export default {
     inheritAttrs: false,

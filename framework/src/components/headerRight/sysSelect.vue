@@ -14,7 +14,7 @@
  * 系统切换功能
  */
 import {useMenu} from "../../hooks/useMenu";
-import {onMounted, reactive} from "vue-demi";
+import {onMounted, reactive} from "vue";
 import {http} from "../../plugins/http";
 
 export default {

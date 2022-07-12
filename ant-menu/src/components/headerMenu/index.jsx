@@ -3,7 +3,7 @@
  */
 import {useMenu} from "@dr/framework/src/hooks/useMenu";
 import Menu from "ant-design-vue/es/menu";
-import {reactive, watchEffect} from 'vue-demi'
+import {reactive, watchEffect} from 'vue'
 import "./style.less";
 //TODO 需要全局统一菜单和router，监听手动push的情况
 export default {

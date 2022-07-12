@@ -1,4 +1,4 @@
-import {onMounted, reactive} from "vue-demi";
+import {onMounted, reactive} from "vue";
 import {useStore} from "@dr/auto/lib";
 import {dictUtil} from "../../plugins/dict/dictStore";
 

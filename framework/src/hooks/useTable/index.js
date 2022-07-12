@@ -1,7 +1,7 @@
 /**
  * 提供table查询常用的方法
  */
-import {onMounted, ref, reactive} from "vue-demi";
+import {onMounted, ref, reactive} from "vue";
 import {http} from "../../plugins/http";
 import {Message, MessageBox} from "element-ui";
 

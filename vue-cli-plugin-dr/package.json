@@ -31,7 +31,6 @@
     "sass": "^1.49.8",
     "sass-loader": "^12.6.0",
     "uppercamelcase": "^3.0.0",
-    "vue-demi": "^0.13.2",
     "webpack": "^5.73.0",
     "write-json-file": "^4.3.0"
   }

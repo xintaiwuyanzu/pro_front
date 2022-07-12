@@ -2,7 +2,7 @@
  *抽象父类，用来声明value需要转换显示的参数
  * @type {{props: {}}}
  */
-import {reactive, watch, watchEffect} from "vue-demi";
+import {reactive, watch, watchEffect} from "vue";
 import {useDict} from "../hooks/useDict";
 import {getPropByPath} from 'element-ui/src/utils/util';
 import {http} from "../plugins/http";

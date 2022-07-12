@@ -1,4 +1,4 @@
-import {reactive, inject, provide} from "vue-demi";
+import {reactive, inject, provide} from "vue";
 import {http} from "../../plugins/http";
 import {useRouter} from "@dr/auto/lib";
 

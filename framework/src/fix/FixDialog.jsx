@@ -1,5 +1,5 @@
 import {Dialog} from 'element-ui'
-import {getCurrentInstance, nextTick, onMounted, onUnmounted, toRefs, watch} from "vue-demi";
+import {getCurrentInstance, nextTick, onMounted, onUnmounted, toRefs, watch} from "vue";
 
 function getWindowHeight() {
     return window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;

@@ -2,7 +2,7 @@ import './nac.scss'
 import {useMenu} from "../../hooks/useMenu";
 import {useRouter} from "@dr/auto/lib";
 import {Breadcrumb, BreadcrumbItem} from 'element-ui'
-import {onBeforeUnmount, watch} from "vue-demi";
+import {onBeforeUnmount, watch} from "vue";
 import {trimUrl} from "../../hooks/useMenu/utils";
 
 export default {

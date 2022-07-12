@@ -1,4 +1,4 @@
-import {onBeforeUnmount, onUpdated, watch} from "vue-demi";
+import {onBeforeUnmount, onUpdated, watch} from "vue";
 import {trimUrl} from "../../hooks/useMenu/utils";
 import {useMenu} from "../../hooks/useMenu";
 import {useRouter} from "@dr/auto/lib";
