@@ -4,6 +4,7 @@ import {MENU_KEY} from "./index";
 import {http} from "../../plugins/http";
 import {useRouter} from "@dr/auto/lib";
 import qs from "qs";
+import {Message} from "element-ui";
 
 /**
  * 是否拦截了路由
@@ -45,11 +46,12 @@ export const useMenuContext = (menuLoader = defaultMenuLoader) => {
         const {data} = await menuLoader(menu.sys.id)
         if (data.success) {
             menu.menu = data.data
+            //这里强制跳转home页面
+            routeByTab(homeTab)
         } else {
             menu.menu = []
+            Message.warning('加载菜单失败：' + data.message)
         }
-        routeByTab(homeTab)
-        //这里强制跳转home页面
         menu.menuLoading = false
     })
 

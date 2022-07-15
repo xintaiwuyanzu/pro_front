@@ -76,7 +76,7 @@ export default (vue, router, store) => {
                     response.status === 403)
                 && router.currentRoute.path !== '/login'
             ) {
-
+                util.cleanToken()
                 Message.warning("用户未登录！")
                 router.replace({path: '/login', query: {redirect: router.currentRoute.fullPath}})
             } else {
@@ -85,7 +85,7 @@ export default (vue, router, store) => {
         },
         err => {
             //routeLogin(options)
-            let message = `服务器错误【${err}】`
+            let message = `网络请求失败【${err}】`
             if (err && err.message.startsWith('timeout')) {
                 message = `网络请求超时，请稍候重试！`
             }
