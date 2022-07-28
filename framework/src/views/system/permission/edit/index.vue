@@ -71,7 +71,7 @@ export default {
           disabled: !!this.id,
           label: '权限分组',
           required: true,
-          show: this.groups.length > 0,
+          show: this.groups.length > 1,
           fieldType: 'select',
           mapper: this.groups,
           valueKey: 'id',
