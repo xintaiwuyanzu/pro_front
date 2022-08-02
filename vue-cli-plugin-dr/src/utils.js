@@ -173,7 +173,16 @@ const checkBrowserList = () => {
  * @param mod
  * @return {string}
  */
-const moduleDir = (mod) => `${path.dirname(require.resolve(`${mod}/package.json`))}/`
+const moduleDir = (mod) => {
+    try {
+        return `${path.dirname(require.resolve(`${mod}/package.json`))}/`
+    } catch {
+        const index = require.resolve(mod)
+        const splitArr = index.split('node_modules')
+        splitArr[splitArr.length - 1] = `/${mod}`
+        return `${path.join(splitArr.join('node_modules'))}/`
+    }
+}
 /**
  * 获取指定模块的指定文件路径
  * @param mod
