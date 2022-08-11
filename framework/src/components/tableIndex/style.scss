@@ -1,8 +1,16 @@
+
 .table_index {
   padding: 10px 15px;
 
-  .table-wrapper {
-    padding: 15px;
-    background-color: $--color-white;
+  .table_index_container {
+    flex: 1;
+    display: flex;
+    overflow: auto;
+
+    .table-wrapper {
+      padding: 15px;
+      background-color: $--color-white;
+    }
   }
+
 }

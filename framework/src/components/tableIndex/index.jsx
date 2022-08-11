@@ -300,11 +300,43 @@ export default {
         }
         //添加编辑弹窗
         const dialogChild = renderEditDialog(fields, this, loadingArgs)
+
+        //计算上下左右其他组件
+        const topChild = []
+        const leftChild = []
+        const rightChild = []
+        const bottomChild = []
+        for (let i = 0; i < otherChild.length; i++) {
+            const child = otherChild[i]
+            let indexAlign = 'bottom'
+            if (child.data && child.data.attrs) {
+                indexAlign = child.data.attrs['index-align']
+            }
+            switch (indexAlign) {
+                case 'top':
+                    topChild.push(child)
+                    break
+                case 'left':
+                    leftChild.push(child)
+                    break
+                case 'right':
+                    rightChild.push(child)
+                    break
+                default:
+                    bottomChild.push(child)
+                    break
+            }
+        }
         return (
             <section class='table_index' {...loadingArgs}>
                 {nacChild}
-                {tableChild}
-                {otherChild}
+                {topChild}
+                <section class='table_index_container'>
+                    {leftChild}
+                    {tableChild}
+                    {rightChild}
+                </section>
+                {bottomChild}
                 {dialogChild}
             </section>
         )
