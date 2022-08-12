@@ -66,8 +66,8 @@ export default {
             watch(visible, appendBodyStyle)
             onMounted(() => {
                 const currentInstance = getCurrentInstance()
-                if (currentInstance && currentInstance.$refs) {
-                    dialog = currentInstance.$refs.dialog
+                if (currentInstance && currentInstance.proxy && currentInstance.proxy.$refs) {
+                    dialog = currentInstance.proxy.$refs.dialog
                 }
                 window.addEventListener('resize', appendBodyStyle)
             })
