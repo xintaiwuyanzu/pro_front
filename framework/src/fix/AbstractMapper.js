@@ -155,7 +155,7 @@ export const AbstractMapper = {
          * @param value
          */
         const simpleMapper = (value) => {
-            const hasValue = (value || value === 0)
+            const hasValue = (value || value === 0 || value === false)
             if (hasValue && mapperData) {
                 if (props.multiple) {
                     return value.split(props.multipleSplit).map(findValue)
@@ -231,7 +231,7 @@ export const AbstractMapper = {
          * @return {{value: *}|{showType: *|String|Object|Function|undefined, value: *}|*}
          */
         const simpleMapperWithShowType = (value, row, page, index, column) => {
-            const hasValue = (value || value === 0)
+            const hasValue = (value || value === 0 || value === false)
             if (hasValue && mapperData) {
                 if (props.multiple) {
                     return value.split(props.multipleSplit).map(v => findValueWithShowType(v, row, page, index))
