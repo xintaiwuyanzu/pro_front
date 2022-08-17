@@ -48,6 +48,8 @@ export default {
     menuLoader: {type: Function},
     //用户加载方法
     userLoader: {type: Function},
+    //默认系统信息加载方法
+    defaultSysLoader: {type: Function},
     //角色加载方法
     roleLoader: {type: Function}
   },
@@ -57,7 +59,7 @@ export default {
     //角色上下文
     const role = useRoleContext(props.roleLoader)
     //菜单上下文
-    const menu = useMenuContext(props.menuLoader)
+    const menu = useMenuContext(props.menuLoader, props.defaultSysLoader)
     return {menu, role}
   },
   data() {

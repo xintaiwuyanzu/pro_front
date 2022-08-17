@@ -14,7 +14,7 @@ export default {
     render() {
         const args = {
             props: {
-                layout: `total, prev, pager, next${this.page.sizes ? ',sizes' : ''}`,
+                layout: `total, prev, pager, next,jumper${this.page.sizes ? ',sizes' : ''}`,
                 ...this.$attrs,
                 total: this.page.total
             },

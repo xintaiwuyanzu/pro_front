@@ -15,8 +15,8 @@ let routerModified = false
  * 默认菜单加载
  */
 export const defaultMenuLoader = (sysId) => http().post('/sysmenu/menutree', {sysId})
-
-export const useMenuContext = (menuLoader = defaultMenuLoader) => {
+export const defaultSysIdLoader = () => ({id: 'default', sysName: document.title})
+export const useMenuContext = (menuLoader = defaultMenuLoader, sysLoader = defaultSysIdLoader) => {
     const collapse = JSON.parse(localStorage.getItem('collapse') || false)
     const homeTab = {label: '首页', id: '/home', path: '/home', fix: true}
     const menu = reactive({
@@ -41,11 +41,18 @@ export const useMenuContext = (menuLoader = defaultMenuLoader) => {
     //有改变就写到前端缓存中
     watch(() => menu.collapse, (v) => localStorage.setItem('collapse', v))
     //监听系统菜单编码，重新加载菜单数据
-    watch(() => menu.sys, async () => {
+    watch(() => menu.sys.id, async () => {
         menu.menuLoading = true
+        const sysInfo = await http().post('/subsys/detail', {id: menu.sys.id})
+        if (sysInfo.data.success) {
+            menu.sys = sysInfo.data.data
+            const title = menu.sys.sysName || menu.sys.shortName
+            document.title = title
+        }
         const {data} = await menuLoader(menu.sys.id)
         if (data.success) {
             menu.menu = data.data
+            menu.tabs = [homeTab]
             //这里强制跳转home页面
             routeByTab(homeTab)
         } else {
@@ -55,10 +62,8 @@ export const useMenuContext = (menuLoader = defaultMenuLoader) => {
         menu.menuLoading = false
     })
 
-    onMounted(() => {
-        //这里的系统名称可以从环境变量获取
-        const sysConfig = process.env.sys;
-        menu.sys = {id: sysConfig.sysCode || 'default', sysName: document.title}
+    onMounted(async () => {
+        menu.sys = await sysLoader()
     })
     provide(MENU_KEY, menu);
 

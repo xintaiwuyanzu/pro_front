@@ -1,11 +1,11 @@
 <template>
-  <el-dropdown type="primary" @command="changeSys">
+  <el-dropdown type="primary" @command="changeSys" v-show="hasRole('admin')&&sys.subSys.length>0">
     <section class="top_icon">
       <icon icon="chrome"/>
     </section>
     <el-dropdown-menu slot="dropdown">
       <el-dropdown-item v-for="s in sys.subSys" :key="s.id" :command="s.id">
-        {{ s.sysName || s.shortName }}
+        {{ s.label || s.data.shortName }}
       </el-dropdown-item>
     </el-dropdown-menu>
   </el-dropdown>
@@ -23,11 +23,11 @@ export default {
     const {menuData} = useMenu()
     const sys = reactive({subSys: []})
     onMounted(async () => {
-      const {data} = await http().post('/subsys/page', {page: false})
+      const {data} = await http().post('/sysResource/personResource', {type: 'subsys'})
       sys.subSys = data.data
     })
     const changeSys = (sysCode) => {
-      menuData.sys = sys.subSys.find(s => s.id === sysCode)
+      menuData.sys = sys.subSys.find(s => s.id === sysCode).data
     }
     return {
       changeSys,

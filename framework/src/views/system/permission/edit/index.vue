@@ -56,6 +56,7 @@ export default {
           label: '权限类型',
           required: true,
           disabled: !!this.id,
+          filterable: true,
           fieldType: 'select',
           mapper: this.providers,
           valueKey: 'type',
@@ -74,6 +75,7 @@ export default {
           show: this.groups.length > 1,
           fieldType: 'select',
           mapper: this.groups,
+          filterable: true,
           valueKey: 'id',
           labelKey: 'name',
         }

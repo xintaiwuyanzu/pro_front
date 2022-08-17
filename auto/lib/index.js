@@ -37,6 +37,12 @@ const start = (opt) => {
         })
 }
 
+export const setRouterInstance = (ins) => {
+    routerInstance = ins
+}
+export const setStoreInstance = (ins) => {
+    storeInstance = ins
+}
 
 export const useRouter = () => {
     return {router: routerInstance}
