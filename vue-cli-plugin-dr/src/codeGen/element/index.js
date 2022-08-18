@@ -67,7 +67,11 @@ module.exports = (cacheDirectory) => {
             const cssPath = path.resolve(elementThemePath, `${e.css}.scss`).split('\\').join('/')
             const ePath = e.path.split('\\').join('/')
             if (fs.existsSync(cssPath)) {
-                return {name: e.name, css: `element-ui/packages/theme-chalk/src/${e.css}.scss`, path: ePath}
+                if (e.name === 'ElIcon') {
+                    return {name: e.name, css: `element-ui/lib/theme-chalk/icon.css`, path: ePath}
+                } else {
+                    return {name: e.name, css: `element-ui/packages/theme-chalk/src/${e.css}.scss`, path: ePath}
+                }
             } else {
                 return {name: e.name, path: ePath}
             }
