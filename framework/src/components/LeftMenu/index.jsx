@@ -28,11 +28,17 @@ export default {
 const createSubMenu = (m, menuData, menuClick) => {
     return m.map(item => {
         if (item.children) {
+            const subClick = () => {
+                if (item.children.length === 1) {
+                    menuClick(item.children[0])
+                }
+            }
             return (
                 <Submenu index={item.id}
                          popperOptions={{boundariesPadding: 0, gpuAcceleration: false}}
                          boundariesPadding={0}
                          showTimeout={200}
+                         nativeOnClick={subClick}
                          popperClass="left-menu-pop">
                     <template slot="title">
                         <icon icon={item.data.icon} title={item.label}/>
