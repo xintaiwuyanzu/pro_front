@@ -14,18 +14,18 @@
     <el-dropdown class="dropBtn" :show-timeout="100" @command="dropDownCmd">
       <span>
         <icon icon="more-vertical"/>
-        <el-dropdown-menu>
-          <el-dropdown-item command='closeOthers'>
-            关闭其他选项卡
-          </el-dropdown-item>
-          <el-dropdown-item command='closeAll'>
-            关闭所有选项卡
-          </el-dropdown-item>
-          <el-dropdown-item v-for="tab in menuData.tabs" :key="tab.id" :command='tab.id' :divided="tab.fix">
-            {{ tab.label || tab.path }}
-          </el-dropdown-item>
-        </el-dropdown-menu>
       </span>
+      <el-dropdown-menu slot="dropdown">
+        <el-dropdown-item command='closeOthers'>
+          关闭其他选项卡
+        </el-dropdown-item>
+        <el-dropdown-item command='closeAll'>
+          关闭所有选项卡
+        </el-dropdown-item>
+        <el-dropdown-item v-for="tab in menuData.tabs" :key="tab.id" :command='tab.id' :divided="tab.fix">
+          {{ tab.label || tab.path }}
+        </el-dropdown-item>
+      </el-dropdown-menu>
     </el-dropdown>
   </section>
 </template>
