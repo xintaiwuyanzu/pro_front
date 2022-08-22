@@ -1,7 +1,6 @@
 import {elements} from '@dr/auto'
 import utils from '@dr/auto/lib/utils'
 import {InfiniteScroll, Loading, Message, MessageBox, Notification} from 'element-ui'
-import 'element-ui/packages/theme-chalk/src/common/transition.scss'
 
 export default (vue, router, store, opt = {}) => {
     vue.prototype.$ELEMENT = {

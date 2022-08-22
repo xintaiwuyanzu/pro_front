@@ -11,11 +11,9 @@
       </el-aside>
       <el-main :class="mainClassName">
         <tabs/>
-        <transition name="fade-transform" mode="out-in">
-          <router-alive>
-            <router-view class="main-container"/>
-          </router-alive>
-        </transition>
+        <router-alive>
+          <router-view class="main-container"/>
+        </router-alive>
         <slot/>
       </el-main>
     </el-container>
