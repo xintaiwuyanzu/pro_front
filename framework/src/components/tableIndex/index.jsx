@@ -9,7 +9,7 @@ import {Button} from "element-ui";
 import FormItem from '../../fix/FixFormItem'
 import TableColumn from '../../fix/FixTableColumn'
 import './style.scss'
-import {makeArray} from "../tableRender/utils";
+import {getVNodeData, makeArray} from "../tableRender/utils";
 import nacInfo from "../nacInfo";
 
 /**
@@ -191,8 +191,9 @@ function renderTable(columns, ctx) {
                             bVs = [bVs]
                         }
                         bVs.forEach(node => {
-                            if (node.data.attrs.width) {
-                                computeWidth += parseInt(node.data.attrs.width)
+                            const data = getVNodeData(node)
+                            if (data && data.attrs && data.attrs.width) {
+                                computeWidth += parseInt(data.attrs.width)
                             }
                             btnVNodes.push(node)
                         })
@@ -309,8 +310,9 @@ export default {
         for (let i = 0; i < otherChild.length; i++) {
             const child = otherChild[i]
             let indexAlign = 'bottom'
-            if (child.data && child.data.attrs) {
-                indexAlign = child.data.attrs['index-align']
+            const data = getVNodeData(child)
+            if (data && data.attrs) {
+                indexAlign = data.attrs['index-align']
             }
             switch (indexAlign) {
                 case 'top':

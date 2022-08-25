@@ -52,11 +52,13 @@ export const useMenuContext = (menuLoader = defaultMenuLoader, sysLoader = defau
         const {data} = await menuLoader(menu.sys.id)
         if (data.success) {
             menu.menu = data.data
-            menu.tabs = [homeTab]
+            menu.tabs.splice(0, menu.tabs.length)
+            menu.tabs.push(homeTab)
             //这里强制跳转home页面
             routeByTab(homeTab)
         } else {
             menu.menu = []
+            menu.tabs.splice(0, menu.tabs.length)
             Message.warning('加载菜单失败：' + data.message)
         }
         menu.menuLoading = false
@@ -150,7 +152,7 @@ export const useMenuContext = (menuLoader = defaultMenuLoader, sysLoader = defau
         router.beforeEach((to, from, next) => {
             if (to.path === '/login') {
                 //这个跳到登录页面了，不知道需不需要清空缓存
-                menu.tabs = []
+                menu.tabs.splice(0, menu.tabs.length)
                 next()
                 return
             }

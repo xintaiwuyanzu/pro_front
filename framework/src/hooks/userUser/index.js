@@ -19,7 +19,11 @@ export const useUserContext = (userLoader) => {
     //程序启动加载登录用户信息
     onMounted(async () => {
         const {data} = await userLoader()
-        user.user = data.data
+        if (data.success) {
+            user.user = data.data
+        } else {
+            user.user = {}
+        }
     })
 
     provide(userProviderKey, user)

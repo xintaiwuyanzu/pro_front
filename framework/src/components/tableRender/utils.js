@@ -33,6 +33,14 @@ export const functionUtils = (refId, functionArr) => {
     }, {})
 }
 
+export function getVNodeData(vNode) {
+    if (vNode.data) {
+        return vNode.data
+    } else {
+        return vNode.asyncMeta
+    }
+}
+
 /**
  * 用来过滤排序slots
  */
@@ -65,8 +73,9 @@ export class vNodeSlots {
                     if (prop) {
                         //有prop属性
                         this._props.push(prop)
-                        if (vNode.data && vNode.data.attrs) {
-                            const attrs = vNode.data.attrs
+                        const data = getVNodeData(vNode)
+                        if (data && data.attrs) {
+                            const attrs = data.attrs
                             if (attrs.before) {
                                 const beforeKey = attrs.before
                                 const arrs = this._before[beforeKey] = this._before[beforeKey] || []

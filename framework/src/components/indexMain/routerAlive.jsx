@@ -42,6 +42,7 @@ export default {
         const cacheKey = {}
         let vNodeToCache = undefined
         const destroyVm = k => {
+            //TODO 这里还有没清空的数据
             const value = caches[k]
             if (value && value.$destroy) {
                 value.$destroy()

@@ -24,7 +24,11 @@ export default {
     const sys = reactive({subSys: []})
     onMounted(async () => {
       const {data} = await http().post('/sysResource/personResource', {type: 'subsys'})
-      sys.subSys = data.data
+      if (data.success) {
+        sys.subSys = data.data
+      } else {
+        sys.subSys = []
+      }
     })
     const changeSys = (sysCode) => {
       menuData.sys = sys.subSys.find(s => s.id === sysCode).data
