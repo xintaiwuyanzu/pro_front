@@ -1,4 +1,4 @@
-import {onBeforeUnmount, onUpdated, watch} from "vue";
+import {onBeforeUnmount, onUpdated, watchPostEffect} from "vue";
 import {trimUrl} from "../../hooks/useMenu/utils";
 import {useMenu} from "../../hooks/useMenu";
 import {useRouter} from "@dr/auto/lib";
@@ -50,15 +50,16 @@ export default {
             delete cacheKey[k]
         }
         //监听tabs数据，动态销毁实例
-        watch(menuData.tabs, (n) => {
-            const ids = n.map(t => t.path)
-            Object.keys(caches)
-                .forEach(k => {
-                    if (!ids.includes(k)) {
-                        destroyVm(k)
-                    }
-                })
-        })
+        watchPostEffect(() => {
+                const ids = menuData.tabs.map(t => t.path)
+                Object.keys(caches)
+                    .forEach(k => {
+                        if (!ids.includes(k)) {
+                            destroyVm(k)
+                        }
+                    })
+            }
+        )
 
         const {router} = useRouter()
         //延迟缓存vNode对象

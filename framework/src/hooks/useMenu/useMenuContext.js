@@ -150,6 +150,7 @@ export const useMenuContext = (menuLoader = defaultMenuLoader, sysLoader = defau
         router.beforeEach((to, from, next) => {
             if (to.path === '/login') {
                 //这个跳到登录页面了，不知道需不需要清空缓存
+                menu.tabs = []
                 next()
                 return
             }

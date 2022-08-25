@@ -1,5 +1,5 @@
 import {Dialog} from 'element-ui'
-import {getCurrentInstance, nextTick, onMounted, onUnmounted, toRefs, watch} from "vue";
+import {getCurrentInstance, nextTick, onMounted, onUnmounted, watch} from "vue";
 
 function getWindowHeight() {
     return window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
@@ -22,7 +22,6 @@ export default {
         //ref dialog htmlElement对象，使用ref(null)获取不到
         let dialog = null
         if (prop.autoHeight) {
-            const {visible} = toRefs(prop)
             /**
              * 动态计算dialog body的最大高度
              */
@@ -50,7 +49,7 @@ export default {
                             bodyMaxHeight -= dialogFooterEl.clientHeight
                         }
                         //TODO 这个值不知道是怎么漏掉的
-                        bodyMaxHeight -= 70;
+                        bodyMaxHeight -= 60;
                         dialogBodyEl.style.setProperty('overflow', 'auto')
                         //设置最高高度
                         dialogBodyEl.style.setProperty('max-height', parseFloat(bodyMaxHeight).toFixed(2) + 'px')
@@ -63,7 +62,7 @@ export default {
                     nextTick(doAppend)
                 }
             }
-            watch(visible, appendBodyStyle)
+            watch(() => prop.visible, appendBodyStyle)
             onMounted(() => {
                 const currentInstance = getCurrentInstance()
                 if (currentInstance && currentInstance.proxy && currentInstance.proxy.$refs) {

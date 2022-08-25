@@ -1,5 +1,5 @@
 <template>
-  <el-table :data="resources" row-key="id" border default-expand-all height="400px" class="resourceSelect">
+  <el-table :data="resources" row-key="id" border default-expand-all class="resourceSelect">
     <el-table-column prop="label" label="资源名称" header-align="center" show-overflow-tooltip min-width="100px"/>
     <el-table-column label="权限" width="50" align="center">
       <template v-slot="scope">
