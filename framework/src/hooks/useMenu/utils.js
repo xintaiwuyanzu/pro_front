@@ -39,7 +39,6 @@ export function trimUrl(path) {
  * @type {Readonly<{ROUTE: symbol, TAB: symbol, BACK: symbol, NONE: symbol}>}
  */
 export const RouteTYPE = Object.freeze({
-    ROUTE: Symbol('route'),
     TAB: Symbol('tab'),
     BACK: Symbol('back'),
     NONE: Symbol('none')

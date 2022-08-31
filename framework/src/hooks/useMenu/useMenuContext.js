@@ -1,4 +1,4 @@
-import {computed, onMounted, provide, reactive, watch} from "vue";
+import {computed, nextTick, onMounted, provide, reactive, watch} from "vue";
 import {pathName, RouteTYPE, tabId, trimUrl} from "./utils";
 import {MENU_KEY} from "./index";
 import {http} from "../../plugins/http";
@@ -6,11 +6,6 @@ import {useRouter} from "@dr/auto/lib";
 import qs from "qs";
 import {Message} from "element-ui";
 
-/**
- * 是否拦截了路由
- * @type {boolean}
- */
-let routerModified = false
 /**
  * 默认菜单加载
  */
@@ -126,28 +121,25 @@ export const useMenuContext = (menuLoader = defaultMenuLoader, sysLoader = defau
      * @param tab
      */
     const routeByTab = (tab) => {
-        if (routeType === RouteTYPE.ROUTE || routeType === RouteTYPE.BACK) {
-            //代码路由，路由完成后，恢复NONE
-            routeType = RouteTYPE.NONE
-        } else {
+        if (trimUrl(router.currentRoute.path) !== trimUrl(tab.path)) {
             //点击tab切换路由
             routeType = RouteTYPE.TAB
-            if (trimUrl(router.currentRoute.path) !== trimUrl(tab.path)) {
-                router.push(tab)
-            }
+            router.push(tab)
         }
         if (tab.id !== menu.currentMenu.id) {
             menu.currentMenu = {id: tab.id, label: tab.label}
         }
     }
+
     //拦截修改router
-    if (!routerModified) {
+    if (!router.$routerModified) {
         const originBack = router.back
         //拦截返回方法
         router.back = () => {
             routeType = RouteTYPE.BACK
             originBack.call(router)
         }
+        router.afterEach(() => routeType = RouteTYPE.NONE)
         //拦截之前
         router.beforeEach((to, from, next) => {
             if (to.path === '/login') {
@@ -157,6 +149,7 @@ export const useMenuContext = (menuLoader = defaultMenuLoader, sysLoader = defau
                 return
             }
             if (routeType === RouteTYPE.NONE) {
+                //直接使用路由跳转页面的，需要恢复成
                 const tab = {query: to.query, name: to.name, path: to.path, params: to.params}
                 //根据路径获取菜单信息
                 const pathMenu = menu.pathName[tab.path]
@@ -164,6 +157,7 @@ export const useMenuContext = (menuLoader = defaultMenuLoader, sysLoader = defau
                     tab.label = pathMenu.label
                     tab.id = pathMenu.id
                 } else {
+                    //不是菜单配置的路径，则设置当前tab名称
                     tab.label = menu.currentTab.label
                     tab.id = tabId(tab)
                 }
@@ -171,24 +165,25 @@ export const useMenuContext = (menuLoader = defaultMenuLoader, sysLoader = defau
                 if (oldTab) {
                     oldTab.query = tab.query
                     oldTab.params = tab.params
-                    menu.currentTab = oldTab
+                    nextTick(() => menu.currentTab = oldTab)
                 } else {
-                    menu.currentTab = tab
-                    menu.tabs.push(tab)
+                    nextTick(() => {
+                        menu.currentTab = tab
+                        menu.tabs.push(tab)
+                    })
                 }
-                routeType = RouteTYPE.ROUTE
-            } else if (routeType === RouteTYPE.TAB) {
-                routeType = RouteTYPE.NONE
             } else if (routeType === RouteTYPE.BACK) {
                 const toTab = menu.tabs.find(t => t.path === to.path)
                 if (toTab) {
-                    menu.tabs.splice(menu.tabs.indexOf(menu.currentTab), 1)
-                    menu.currentTab = toTab
+                    nextTick(() => {
+                        menu.tabs.splice(menu.tabs.indexOf(menu.currentTab), 1)
+                        menu.currentTab = toTab
+                    })
                 }
             }
             next()
         })
-        routerModified = true
+        router.$routerModified = true
     }
     //监听菜单
     watch(() => menu.currentMenu, routeByMenu)
