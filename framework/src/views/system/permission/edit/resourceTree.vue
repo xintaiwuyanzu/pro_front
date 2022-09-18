@@ -3,19 +3,19 @@
     <el-table-column prop="label" label="资源名称" header-align="center" show-overflow-tooltip min-width="100px"/>
     <el-table-column label="权限" width="50" align="center">
       <template v-slot="scope">
-        <el-checkbox :indeterminate="matcher[scope.row.id]?matcher[scope.row.id].length!==parts.length:false"
+        <el-checkbox :indeterminate="matcher[scope.row.id]?matcher[scope.row.id].length!==renderParts.length:false"
                      :value="!!matcher[scope.row.id]"
                      @change="v=>changAll(scope.row.id,v)"/>
       </template>
     </el-table-column>
-    <el-table-column label="功能" header-align="center" v-if="parts.length>0">
-      <el-table-column :label="part.label" v-for="part in parts"
+    <el-table-column label="功能" header-align="center">
+      <el-table-column :label="part.label" v-for="part in renderParts"
                        :key="part.code"
                        :width="part.label.length*25"
                        align="center">
-        <template slot-scope="scope">
+        <template v-slot="scope">
           <el-checkbox @change="v=>change(scope.row.id,v,part.code)"
-                       :value=" matcher[scope.row.id]?!!(matcher[scope.row.id].indexOf(part.code)+1):false"/>
+                       :value="matcher[scope.row.id]?!!(matcher[scope.row.id].indexOf(part.code)+1):false"/>
         </template>
       </el-table-column>
     </el-table-column>
@@ -30,13 +30,21 @@
 export default {
   props: {
     resources: {type: Array, default: () => []},
-    //parts: {type: Array, default: () => []},
+    parts: {type: Array, default: () => []},
     code: {type: String, default: ''}
   },
   data() {
     return {
-      parts: [{code: 'test', label: '测试'}],
       matcher: {}
+    }
+  },
+  computed: {
+    renderParts() {
+      if (this.parts && this.parts.length === 0) {
+        return [{code: 'test', label: '测试'}]
+      } else {
+        return this.parts
+      }
     }
   },
   methods: {
@@ -54,7 +62,7 @@ export default {
     },
     changAll(id, t) {
       if (t) {
-        this.$set(this.matcher, id, this.parts.map(p => p.code))
+        this.$set(this.matcher, id, this.renderParts.map(p => p.code))
       } else {
         this.$delete(this.matcher, id)
       }
