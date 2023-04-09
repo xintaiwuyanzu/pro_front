@@ -19,7 +19,15 @@ export default {
         /**
          * 是否显示返回按钮
          */
-        back: Boolean
+        back: Boolean,
+        /**
+         * 是否添加折叠功能
+         */
+        fold: {type: Boolean, default: false},
+        /**
+         * 是否默认展开
+         */
+        foldOpen: {type: Boolean, default: false}
     },
     provide() {
         return {
@@ -57,10 +65,13 @@ export default {
                 </Breadcrumb>
                 : ''
             return (
-                <section class="breadcrumb-container">
-                    {title}
-                    <section class="slot">
-                        {children}
+                <section>
+                    <section class={props.fold && !props.foldOpen ?
+                        "breadcrumb-container breadcrumb-fold" : "breadcrumb-container"}>
+                        {title}
+                        <section class="slot">
+                            {children}
+                        </section>
                     </section>
                 </section>
             )

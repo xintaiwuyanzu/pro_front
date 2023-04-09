@@ -1,5 +1,6 @@
 import {useTable} from "../../hooks/useTable";
 import {useMenu} from "../../hooks/useMenu";
+import {reactive, watch} from "vue";
 
 export default {
     props: {
@@ -90,7 +91,15 @@ export default {
         /**
          * 是否有返回按钮
          */
-        back: {type: Boolean, default: false}
+        back: {type: Boolean, default: false},
+        /**
+         * 是否添加折叠功能
+         */
+        fold: {type: Boolean, default: false},
+        /**
+         * 是否默认展开
+         */
+        foldOpen: {type: Boolean, default: false}
     },
     data() {
         return {
@@ -161,7 +170,14 @@ export default {
             dataWrapper: props.dataWrapper,
             autoLoadData: false
         }, context)
-        return {...result, menuData}
+
+        //不能直接改参数，内部计算出来一套新的参数
+        const computeOpen = reactive({fold: props.fold, foldOpen: props.foldOpen})
+
+        watch(() => props.fold, () => computeOpen.fold = props.fold)
+        watch(() => props.foldOpen, () => computeOpen.foldOpen = props.foldOpen)
+
+        return {...result, menuData, computeOpen}
     },
     methods: {
         /**

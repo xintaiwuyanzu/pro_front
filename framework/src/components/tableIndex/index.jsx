@@ -50,6 +50,16 @@ function renderSearchForm(fields, ctx) {
     }
     //计算操作按钮
     const btnChildren = []
+    if (ctx.computeOpen.fold){
+        //更多按钮
+        btnChildren.push(() =>
+            (<Button type='primary'
+                     loading={ctx.data.loading}
+                     onClick={() => ctx.computeOpen.foldOpen=!ctx.computeOpen.foldOpen}>
+                {ctx.computeOpen.foldOpen?'收起':'展开'}
+            </Button>)
+        )
+    }
     if (fields.length > 0) {
         //搜索按钮
         btnChildren.push(() =>
@@ -93,8 +103,9 @@ function renderSearchForm(fields, ctx) {
     if (ctx.back) {
         btnChildren.push(() => (<Button type='primary' onClick={() => ctx.$router.back()}>返 回</Button>))
     }
+    const btn_Children = []
     if (btnChildren.length > 0) {
-        slotChildren.push(<FormItem>{btnChildren.map(b => b(ctx.searchFormModel))}</FormItem>)
+        btn_Children.push(<FormItem>{btnChildren.map(b => b(ctx.searchFormModel))}</FormItem>)
     }
     const searchFormArgs = {
         ref: 'searchForm',
@@ -110,10 +121,15 @@ function renderSearchForm(fields, ctx) {
         },
         on: {...ctx.$listeners}
     }
-    if (slotChildren.length === 0) {
+    if (btn_Children.length === 0) {
         return []
     } else {
-        return (<formRender {...searchFormArgs}>{slotChildren}</formRender>)
+        return (
+            <div class="slot_content">
+                <div class="show_search"><formRender {...searchFormArgs}>{slotChildren}</formRender></div>
+                <div class="show_btn"><formRender>{btn_Children}</formRender></div>
+            </div>
+        )
     }
 }
 
@@ -297,7 +313,8 @@ export default {
         //如果导航栏啥都没有，则不显示
         let nacChild = ''
         if (this.showTitle || (formChild && Object.keys(formChild).length > 0)) {
-            nacChild = (<nacInfo title={this.title} showTitle={this.showTitle}>{formChild}</nacInfo>)
+            nacChild = (<nacInfo title={this.title} showTitle={this.showTitle}
+                                 fold={this.computeOpen.fold} foldOpen={this.computeOpen.foldOpen}>{formChild}</nacInfo>)
         }
         //添加编辑弹窗
         const dialogChild = renderEditDialog(fields, this, loadingArgs)

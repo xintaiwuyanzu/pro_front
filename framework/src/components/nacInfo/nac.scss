@@ -2,9 +2,18 @@
 
 .breadcrumb-container {
   display: flex;
-  align-items: center;
+  //align-items: center;
   min-height: $--nav-height;
   margin-bottom: 10px;
+
+  .el-breadcrumb {
+    display: flex;
+    padding-top: 12px;
+  }
+
+  .el-breadcrumb__item {
+    white-space: nowrap;
+  }
 
   .title {
     margin-left: 10px;
@@ -14,11 +23,51 @@
     letter-spacing: 1px;
     color: #373c45;
     min-width: 80px;
+    margin-right: 20px;
   }
 
   .slot {
+    flex: 1;
     padding: 4px 6px;
-    margin-left: auto;
+    //margin-left: auto;
+
+    .slot_content {
+      display: flex;
+      justify-content: right;
+    }
+
+    .show_search {
+      .el-form {
+        display: flex;
+        justify-content: right;
+        flex-wrap: wrap;
+      }
+
+      .el-form-item {
+        margin-bottom: 3px;
+      }
+
+      .el-form-item__label {
+        width: 100px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+
+    .show_btn {
+      margin-left: 30px;
+
+      .el-form-item__content {
+        display: flex;
+        justify-content: right;
+        flex-wrap: wrap;
+      }
+
+      .el-button {
+        margin-bottom: 4px;
+      }
+    }
 
     .el-button {
       padding: $--button-small-padding-vertical $--button-small-padding-horizontal;
@@ -40,4 +89,19 @@
       }
     }
   }
+}
+
+.myfold {
+  height: 35px;
+  text-align: center;
+  font-size: 14px;
+  color: #999;
+  line-height: 26px;
+  cursor: pointer;
+}
+
+.breadcrumb-fold {
+  height: $--nav-height - 4px;
+  min-height: $--nav-height - 4px;
+  overflow: hidden;
 }
