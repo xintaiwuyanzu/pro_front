@@ -9,7 +9,8 @@
         <el-button type="primary" @click="editForm()" size="mini">添 加</el-button>
       </el-form-item>
     </el-form>
-    <el-dialog :visible.sync="edit" :title="(form.id?'编辑':'添加')+'人员'+(form.id?'':'(默认密码123456)')" width="60%">
+    <el-dialog :visible.sync="edit" :title="(form.id?'编辑':'添加')+'人员'+(form.id?'':'(默认密码123456)')" width="60%"
+               :close-on-click-modal="false">
       <el-form :model="form" :rules="rules" ref="form" label-width="100px">
         <el-form-item label="用户姓名" prop="userName" required>
           <el-input v-model="form.userName" placeholder="请输入用户姓名" clearable/>
@@ -23,10 +24,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="职务" prop="duty">
-          <el-select v-model="form.duty" placeholder="请选择职务">
-            <el-option label="负责人" key="负责人" value="fuzeren"/>
-            <el-option label="科员" key="科员" value="keyuan"/>
-          </el-select>
+          <select-dict type="org.type" v-model="form.duty" placeholder="请选择职务" style="width: 190px"/>
         </el-form-item>
         <el-form-item label="用户类型" prop="userCode">
           <el-input v-model="form.personType" placeholder="请输入用户类型" clearable/>
@@ -67,14 +65,14 @@ export default {
   data() {
     return {
       form: {
-        id: ''
+        id: '',
+        status: '1'
       },
       autoClose: true,
       searchForm: {
         userName: "",
         userCode: "",
         personType: "",
-        status: "1"
       },
       defaultForm: {
         key: '',

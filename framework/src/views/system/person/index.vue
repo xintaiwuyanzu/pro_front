@@ -1,5 +1,5 @@
 <template>
-  <section>
+  <section class="system_person_id">
     <nac-info>
       <config-form ref="form"
                    @func="getMsgFromForm"
@@ -18,7 +18,8 @@
                      :data="menuData"
                      default-expand-all
                      @node-click="click"
-                     ref="menuTree">
+                     ref="menuTree"
+                     style="flex: 1;overflow: auto;">
               <div style="flex: 1;margin: 2px; " slot-scope="{ node, data }">
                 <span v-if="organiseId==data.data.id" style=" color: red;font-family: 等线">{{ data.label }}</span>
                 <span v-if="organiseId!=data.data.id" style=" color: #409EFF;font-family: 等线">{{ data.label }}</span>
@@ -295,48 +296,48 @@ export default {
   }
 }
 </script>
-<style lang="scss">
-.person_main {
+<style lang="scss" scoped>
+.system_person_id {
+  display: flex;
   flex: 1;
 
-  .el-row {
+  .person_main {
     flex: 1;
 
-    .el-col {
-      display: flex;
-      flex-direction: column;
+    .el-row {
+      height: 100%;
       flex: 1;
-    }
 
-    .el-card {
-      display: flex;
-      flex: 1;
-      flex-direction: column;
-
-      .el-card__body {
-        flex: 1;
-        overflow: auto;
+      .el-col {
+        height: 100%;
         display: flex;
+        flex-direction: column;
+        flex: 1;
+      }
 
-        .table-wrapper {
+      .el-card {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+
+        .el-tree {
           flex: 1;
+          height: 90%;
+          overflow-y: scroll;
+        }
+
+        ::v-deep .el-card__body {
+          flex: 1;
+          overflow: auto;
+          display: flex;
+
+          .table-wrapper {
+            flex: 1;
+            height: 99%;
+          }
         }
       }
     }
-  }
-
-
-  .sysMenuTree {
-    flex: 1;
-    overflow: auto;
-  }
-
-  .el-tree-node__content {
-    height: auto;
-  }
-
-  .buttons {
-    float: right;
   }
 }
 </style>
