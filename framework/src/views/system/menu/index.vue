@@ -1,8 +1,8 @@
 <template>
   <section>
     <nac-info title="菜单管理">
-      <el-form inline style="padding-top: 5px">
-        <el-form-item label="请选择系统：" style="margin-right: 10px">
+      <el-form inline>
+        <el-form-item label="请选择系统：">
           <el-select v-model="sysId" ref="sysSelect">
             <el-option v-for="item in options" :key="item.id" :value="item.id" :label="item.sysName">
               <span style="float: left">{{ item.sysName }}</span>
@@ -10,7 +10,7 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item>
+        <el-form-item style="margin-left: 10px">
           <el-input placeholder="输入关键字进行过滤" v-model="filterText" clearable>
             <i slot="prefix" class="el-input__icon el-icon-search"/>
           </el-input>

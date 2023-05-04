@@ -3,12 +3,11 @@
     <nac-info>
       <el-form inline>
         <el-form-item v-show="menuData.length===0">
-          <el-button type="primary" icon="el-icon-plus" style="margin-right: 10px"
-                     @click="editMenu">添加机构
-          </el-button>
+          <el-button type="primary" icon="el-icon-plus" @click="editMenu">添加机构</el-button>
         </el-form-item>
         <el-form-item>
-          <el-input placeholder="输入关键字进行过滤" style="max-width: 180px" v-model="filterText" clearable>
+          <el-input placeholder="输入关键字进行过滤"
+                    style="max-width: 180px; margin-left: 10px" v-model="filterText" clearable>
             <i slot="prefix" class="el-input__icon el-icon-search"/>
           </el-input>
         </el-form-item>

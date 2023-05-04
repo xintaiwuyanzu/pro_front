@@ -13,8 +13,6 @@
       <el-form-item>
         <el-button type="primary" @click="search" size="mini">搜 索</el-button>
         <el-button @click="$refs.searchForm.resetFields()" size="mini">重 置</el-button>
-      </el-form-item>
-      <el-form-item style="float: right">
         <el-button @click="expLog" size="mini" type="primary">导出EXCEL</el-button>
       </el-form-item>
     </el-form>
@@ -44,3 +42,30 @@ export default {
   }
 }
 </script>
+<style scoped>
+.el-form {
+    display: flex;
+    justify-content: right;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+}
+
+.el-form-item {
+    margin-bottom: 3px;
+    margin-right: 0px;
+    white-space: nowrap;
+}
+
+.el-button {
+    padding: 9px 15px;
+    margin-left: 8px;
+}
+
+/deep/.el-form-item__label {
+    padding-left: 10px;
+}
+
+.el-input {
+    max-width: 200px;
+}
+</style>

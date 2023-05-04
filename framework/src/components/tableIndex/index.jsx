@@ -56,7 +56,7 @@ function renderSearchForm(fields, ctx) {
             (<Button type='primary'
                      loading={ctx.data.loading}
                      onClick={() => ctx.computeOpen.foldOpen=!ctx.computeOpen.foldOpen}>
-                {ctx.computeOpen.foldOpen?'收起':'展开'}
+                {ctx.computeOpen.foldOpen?'收 起':'展 开'}
             </Button>)
         )
     }

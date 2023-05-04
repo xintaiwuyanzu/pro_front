@@ -48,7 +48,7 @@
           :total="page.total">
       </el-pagination>
     </div>
-    <el-dialog title="用户绑定" :visible.sync="dialogShow" width="40%">
+    <el-dialog title="用户绑定" :visible.sync="dialogShow" width="750px">
       <el-transfer filterable :filter-method="filterMethod" :titles="['所有用户','选中用户']" filter-placeholder="请输入用户名称搜索"
                    v-model="rolePersons" :data="persons">
       </el-transfer>
@@ -100,3 +100,11 @@ export default {
   mixins: [indexMixin]
 }
 </script>
+<style scoped>
+.el-transfer {
+    padding: 0 25px;
+}
+/deep/.el-transfer-panel {
+    width: 250px;
+}
+</style>

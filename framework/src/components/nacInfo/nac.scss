@@ -4,7 +4,7 @@
   display: flex;
   //align-items: center;
   min-height: $--nav-height;
-  margin-bottom: 10px;
+  margin-bottom: 7px;
 
   .el-breadcrumb {
     display: flex;
@@ -23,12 +23,14 @@
     letter-spacing: 1px;
     color: #373c45;
     min-width: 80px;
-    margin-right: 20px;
+    margin-right: 26px;
   }
 
   .slot {
     flex: 1;
-    padding: 4px 6px;
+    padding: 4px 0;
+    display: flex;
+    justify-content: right;
     //margin-left: auto;
 
     .slot_content {
@@ -41,22 +43,25 @@
         display: flex;
         justify-content: right;
         flex-wrap: wrap;
-      }
 
-      .el-form-item {
-        margin-bottom: 3px;
-      }
-
-      .el-form-item__label {
-        width: 100px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
+        .el-form-item__label {
+          width: 100px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
       }
     }
 
+    >.el-form {
+      display: flex;
+      justify-content: right;
+      flex-wrap: wrap;
+    }
+
     .show_btn {
-      margin-left: 30px;
+      margin-left: 20px;
+      padding-top: 1px;
 
       .el-form-item__content {
         display: flex;
@@ -75,8 +80,9 @@
     }
 
     .el-form-item {
-      margin-bottom: 0px;
+      margin-bottom: 3px;
       margin-right: 0px;
+      white-space: nowrap;
 
       .el-form-item__label {
         padding: 0px 8px;
@@ -89,6 +95,10 @@
       }
     }
   }
+}
+
+.breadcrumb-container {
+  min-height: 45px;
 }
 
 .myfold {
@@ -104,4 +114,10 @@
   height: $--nav-height - 4px;
   min-height: $--nav-height - 4px;
   overflow: hidden;
+}
+
+.el-dialog {
+  .el-form {
+    padding-right: 16px;
+  }
 }

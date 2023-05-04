@@ -1,7 +1,7 @@
 <template>
   <section>
     <nac-info :title="(id?'编辑':'添加')+'权限'" back>
-      <el-button type="primary" @click="save">保存</el-button>
+      <el-button type="primary" @click="save">保 存</el-button>
     </nac-info>
     <div class="index_main">
       <form-render style="padding: 10px 20px" :fields="fields" :model="form" label-width="120px" ref="form">
